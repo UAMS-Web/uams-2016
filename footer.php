@@ -17,9 +17,8 @@
 
         <nav aria-label="footer links">
             <ul class="footer-links">
-<!--                 <li><a href="http://www.uw.edu/accessibility">Accessibility</a></li> -->
                 <li><a href="https://uamshealth.com/disclaimer/">Disclaimer</a></li>
-                <li><a href="https://jobs.uams.edu">Jobs</a></li>
+                <li><a href="https://jobs.uams.edu/">Jobs</a></li>
                 <li><a href="https://uamshealth.com/privacy/#legal">Copyright Statement</a></li>
                 <li><a href="https://uamshealth.com/privacy/">Privacy</a></li>
                 <li><a href="https://uamshealth.com/terms-of-use/">Terms</a></li>

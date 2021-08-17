@@ -20,9 +20,9 @@ class UAMS_Scripts
 
       'jquery' => array (
         'id'      => 'jquery',
-        'url'     => 'https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js',
+        'url'     => 'https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js',
         'deps'    => array(),
-        'version' => '1.11.3',
+        'version' => '3.5.1',
         'admin'   => false,
         'footer'  => false
       ),
