@@ -13,6 +13,8 @@
 		exit;
 
 	}
+	$keywords = '';
+	$canonical = '';
 	if ( is_singular() || null !== $post_id ) {
 		if ( get_field('seo_document_title') ) {
 			// Title is set via custom field.

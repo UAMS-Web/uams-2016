@@ -27,6 +27,15 @@ class UAMS_Scripts
         'footer'  => false
       ),
 
+      'migrate' => array (
+        'id'      => 'migrate',
+        'url'     => 'https://cdnjs.cloudflare.com/ajax/libs/jquery-migrate/3.3.2/jquery-migrate.min.js',
+        'deps'    => array( 'jquery' ),
+        'version' => '3.3.2',
+        'admin'   => false,
+        'footer'  => false
+      ),
+
       'site'   => array (
         'id'        => 'site',
         'url'       => get_bloginfo('template_directory') . '/js/site' . $this->dev_script() . '.js',
