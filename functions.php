@@ -103,11 +103,11 @@ function woocommerce_support() {
 
 
 /* Update sitemap on publish post & page */
-add_action( 'publish_post', 'sitemap' );
-add_action( 'publish_page', 'sitemap' );
+// add_action( 'publish_post', 'sitemap' );
+// add_action( 'publish_page', 'sitemap' );
 
 /* Function to create sitemap.xml */
-function sitemap() {
+/* function sitemap() {
   $sitemap ='';
   $posts = get_posts( array(
     'numberposts' => -1,
@@ -128,7 +128,7 @@ function sitemap() {
   $fop = fopen( ABSPATH . "sitemap.xml", 'w' );
   fwrite( $fop, $sitemap );
   fclose( $fop );
-}
+} */
 
 add_filter('allowed_http_origins', 'add_allowed_origins');
 
