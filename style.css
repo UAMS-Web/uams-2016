@@ -3505,7 +3505,7 @@ address {
 #uams-container #quicklinks ul#little-links li [class*=" fa-"] {
   font-size: 20px;
   color: #fff;
-  line-height: 30px;
+  line-height: 1.5;
 }
 #uams-container #quicklinks ul#little-links li a {
   font-size: 19px;
@@ -3683,7 +3683,7 @@ div.uams-slideshow > div.slide div p {
   float: left;
   width: 80%;
   font-size: 16px;
-  line-height: 20px;
+  line-height: 1.25;
   padding-top: 7px;
 }
 div.uams-slideshow .uams-slideshow-controls {
@@ -5960,7 +5960,7 @@ div[id*='tidio-chat'] iframe {
   margin-top: 6px;
   margin-bottom: 6px;
   font-size: 19px;
-  line-height: 28px;
+  line-height: 1.5;
 }
 .reddiedrops-item.reddiedrops-item li a:hover,
 .reddiedrops-item.reddiedrops-item li a:focus {
@@ -5980,7 +5980,7 @@ div[id*='tidio-chat'] iframe {
   margin-top: 6px;
   margin-bottom: 6px;
   font-size: 19px;
-  line-height: 28px;
+  line-height: 1.5;
 }
 .reddiedrops-item.reddiedrops-item li li a:hover,
 .reddiedrops-item.reddiedrops-item li li a:focus {
@@ -6460,7 +6460,7 @@ div[id*='tidio-chat'] iframe {
   position: absolute;
   bottom: 0;
   width: 280px;
-  line-height: 17px;
+  line-height: 1;
   text-align: left;
   cursor: pointer;
   padding: 14px 14px 20px 44px;
@@ -6522,7 +6522,7 @@ div[id*='tidio-chat'] iframe {
 .uams-homepage-slider-container .uams-homepage-slider div h3.slide-title,
 .uams-homepage-slider-container .uams-homepage-slider div .h3.slide-title {
   font-size: 48px;
-  line-height: 51px;
+  line-height: 1.0625;
   /* text-transform: uppercase; */
   margin: 0;
 }
@@ -6532,7 +6532,7 @@ div[id*='tidio-chat'] iframe {
 }
 .uams-homepage-slider-container .uams-homepage-slider div p {
   font-size: 21px;
-  line-height: 28px;
+  line-height: 1.333;
   font-weight: 400;
 }
 .uams-homepage-slider-container .uams-homepage-slider.lighttext div h3,
@@ -6551,11 +6551,11 @@ div[id*='tidio-chat'] iframe {
   .uams-homepage-slider-container .uams-homepage-slider div h3.slide-title,
   .uams-homepage-slider-container .uams-homepage-slider div .h3.slide-title {
     font-size: 22px;
-    line-height: 23px;
+    line-height: 1.0625;
   }
   .uams-homepage-slider-container .uams-homepage-slider div p {
     font-size: 17px;
-    line-height: 21px;
+    line-height: 1.25;
   }
   .uams-homepage-slider-container .slideshow-controls {
     position: absolute;
@@ -6594,7 +6594,7 @@ div[id*='tidio-chat'] iframe {
   .uams-homepage-slider-container .uams-homepage-slider div p {
     padding-right: 45%;
     font-size: 18px;
-    line-height: 22px;
+    line-height: 1.25;
   }
   .uams-homepage-slider-container .uams-homepage-slider div h3.slide-title .udub-slant,
   .uams-homepage-slider-container .uams-homepage-slider div .h3.slide-title .udub-slant {
@@ -6726,7 +6726,6 @@ div[id*='tidio-chat'] iframe {
     padding: 10px 0 0;
     margin: 10px 5% 0;
     font-size: 13px;
-    line-height: 14px;
     border-right: none;
   }
 }
@@ -6947,7 +6946,7 @@ a.more:after {
   color: #fff;
   font-family: "Fira Sans", sans-serif;
   font-size: 50px;
-  line-height: 55px;
+  line-height: 1.1;
   font-weight: 500;
   -webkit-font-smoothing: antialiased;
 }
@@ -7005,7 +7004,7 @@ span.next-page a {
   margin-bottom: 25px;
   margin-right: 55px;
   z-index: 1;
-  line-height: 24px;
+  line-height: 1.72222;
   font-size: 14px;
   -webkit-border-radius: 0;
   -moz-border-radius: 0;
@@ -7183,7 +7182,17 @@ img.attachment-post-thumbnail.wp-post-image.blogroll-img,
   }
 }
 .widget {
-  padding: 10px 0 0 40px;
+  padding: 0;
+}
+@media only screen and (min-width: 768px) {
+  .widget {
+    padding: 10px 0 0;
+  }
+}
+@media only screen and (min-width: 992px) {
+  .widget {
+    padding: 10px 0 0 40px;
+  }
 }
 @media only screen and (max-width: 1600px) {
   .info-box {
@@ -7191,9 +7200,6 @@ img.attachment-post-thumbnail.wp-post-image.blogroll-img,
   }
 }
 @media only screen and (max-width: 767px) {
-  .widget {
-    padding: 0;
-  }
   .info-box {
     margin-left: 0;
     width: 100%;
@@ -8310,42 +8316,157 @@ img {
   max-width: 100%;
   height: auto;
 }
-.alignleft {
-  margin: 20px 50px 50px 0;
+.alignright,
+div.alignright,
+.alignleft,
+div.alignleft,
+.aligncenter,
+div.aligncenter,
+.alignnone,
+div.alignnone {
+  margin: 0 0 50px;
+  clear: both;
 }
-.alignleft.size-large {
+@media only screen and (max-width: 767px) {
+  .alignright,
+  div.alignright,
+  .alignleft,
+  div.alignleft,
+  .aligncenter,
+  div.aligncenter,
+  .alignnone,
+  div.alignnone {
+    width: 100% !important;
+    height: auto;
+  }
+}
+.alignright:first-child,
+div.alignright:first-child,
+.alignleft:first-child,
+div.alignleft:first-child,
+.aligncenter:first-child,
+div.aligncenter:first-child,
+.alignnone:first-child,
+div.alignnone:first-child {
+  margin-top: 0;
+}
+.alignright :last-child,
+div.alignright :last-child,
+.alignleft :last-child,
+div.alignleft :last-child,
+.aligncenter :last-child,
+div.aligncenter :last-child,
+.alignnone :last-child,
+div.alignnone :last-child {
+  margin-bottom: 0;
+}
+.alignright img,
+div.alignright img,
+.alignleft img,
+div.alignleft img,
+.aligncenter img,
+div.aligncenter img,
+.alignnone img,
+div.alignnone img {
+  display: block;
+}
+@media only screen and (max-width: 767px) {
+  .alignright img,
+  div.alignright img,
+  .alignleft img,
+  div.alignleft img,
+  .aligncenter img,
+  div.aligncenter img,
+  .alignnone img,
+  div.alignnone img {
+    margin-right: auto;
+    margin-left: auto;
+  }
+}
+@media only screen and (max-width: 767px) {
+  .alignright .wp-caption-text,
+  div.alignright .wp-caption-text,
+  .alignleft .wp-caption-text,
+  div.alignleft .wp-caption-text,
+  .aligncenter .wp-caption-text,
+  div.aligncenter .wp-caption-text,
+  .alignnone .wp-caption-text,
+  div.alignnone .wp-caption-text {
+    width: 28.875em;
+    max-width: 100%;
+    margin-right: auto;
+    margin-left: auto;
+    text-align: center;
+  }
+}
+@media only screen and (min-width: 768px) {
+  .alignright,
+  div.alignright,
+  .alignleft,
+  div.alignleft {
+    max-width: 50%;
+  }
+}
+@media only screen and (min-width: 768px) {
+  .alignleft,
+  div.alignleft {
+    margin: 0 50px 50px 0;
+    float: left;
+  }
+}
+.alignleft.size-large,
+div.alignleft.size-large {
   height: auto;
 }
-.alignleft {
-  float: left;
+@media only screen and (min-width: 768px) {
+  .alignright,
+  div.alignright {
+    margin: 0 0 50px 60px;
+    float: right;
+  }
 }
-.alignright {
-  float: right;
-  margin: 20px 20px 50px 60px;
+@media only screen and (min-width: 768px) {
+  .alignnone,
+  div.alignnone {
+    margin: 0 0 50px;
+  }
 }
-.alignnone {
-  margin: 20px 0 50px;
-}
-.aligncenter {
-  clear: both;
+.aligncenter,
+div.aligncenter {
   display: block;
-  margin-left: auto;
+  width: 100% !important;
   margin-right: auto;
+  margin-left: auto;
   text-align: center;
 }
-.textwidget .alignleft {
+.aligncenter img,
+div.aligncenter img {
+  margin-right: auto;
+  margin-left: auto;
+}
+.aligncenter .wp-caption-text,
+div.aligncenter .wp-caption-text {
+  width: 28.875em;
+  max-width: 100%;
+  margin-right: auto;
+  margin-left: auto;
+  text-align: center;
+}
+.textwidget .alignleft,
+.textwidget div.alignleft {
   margin-bottom: 20px;
 }
 .wp-caption-text {
+  margin-top: 1em;
+  color: #767475;
   font-size: 15px;
-  line-height: 24.61538462px;
-  margin-top: 15px;
+  line-height: 1.5;
 }
 .wp-media-credit {
   margin-left: 5px;
-  font-weight: bold;
-  font-style: italic;
   font-size: 14px;
+  font-style: italic;
+  font-weight: bold;
 }
 .gallery-item .wp-caption-text {
   display: none;
@@ -8356,23 +8477,20 @@ img {
 .attachment .uams-image-content img {
   padding: 90px 0 50px 0;
 }
-@media only screen and (max-width: 1400px) {
-  .alignleft {
-    margin: 20px 50px 50px 0px;
-  }
-  .alignleft {
-    float: left;
-  }
-}
 .uams-overlay {
   position: fixed;
   top: 0;
-  left: 0;
   right: 0;
   bottom: 0;
+  left: 0;
   z-index: 999;
-  cursor: -webkit-zoom-out;
   background-color: rgba(255, 255, 255, 0.95);
+  cursor: pointer;
+}
+@media only screen and (min-width: 1024px) {
+  .uams-overlay {
+    cursor: -webkit-zoom-out;
+  }
 }
 .uams-overlay div.wrapper {
   position: absolute;
@@ -8380,31 +8498,12 @@ img {
   left: 50%;
 }
 .uams-overlay div.wrapper p {
+  margin-top: 15px;
   font-size: 15px;
   line-height: 22px;
-  margin-top: 15px;
 }
 .uams-overlay div.wrapper img {
   border: 1px solid #ECECEC;
-}
-@media only screen and (max-width: 1024px) {
-  .uams-overlay {
-    cursor: pointer;
-  }
-}
-@media only screen and (max-width: 767px) {
-  .uams-overlay {
-    cursor: pointer;
-  }
-  .alignright,
-  .alignleft,
-  .aligncenter,
-  .alignnone {
-    float: none;
-    margin: 20px 20px 20px 0px;
-    width: 100% !important;
-    height: auto;
-  }
 }
 .logged-in img[alt=""],
 .logged-in img:not([alt]) {
@@ -8819,7 +8918,7 @@ div#carousel-reblog-box {
 #carousel-reblog-box .canceltext {
   color: #A3A2A3;
   font-size: 11px;
-  line-height: 24px;
+  line-height: 2.1875;
 }
 #carousel-reblog-box .canceltext a {
   color: #fff;
@@ -9561,268 +9660,6 @@ textarea#jp-carousel-comment-form-comment-field:focus::-webkit-input-placeholder
 .checkbox + .checkbox {
   margin-top: 10px;
 }
-.fui-radio-unchecked:before,
-.fui-radio-checked:before {
-  background: url(assets/svg/uams-sprite.svg) no-repeat 0 0 rgba(0, 0, 0, 0);
-  content: "";
-  width: 22px;
-  height: 22px;
-  top: 2px;
-  left: 0;
-  position: absolute;
-}
-.fui-radio-unchecked:before {
-  background-position: -480px -25px;
-}
-.fui-radio-checked:before {
-  background-position: -480px -25px;
-}
-.checked .fui-radio-unchecked:before {
-  background-position: -479px -25px;
-}
-.checked .fui-radio-checked:before {
-  background-position: -504px 0px;
-}
-.checkbox:focus .icons .first-icon,
-.radio:focus .icons .first-icon {
-  opacity: 0;
-  filter: alpha(opacity=0);
-}
-.checkbox:focus .icons .second-icon,
-.radio:focus .icons .second-icon {
-  opacity: 1;
-  filter: alpha(opacity=100);
-}
-.fui-checkbox-unchecked:before,
-.fui-checkbox-checked:before {
-  background: url(assets/svg/uams-sprite.svg) no-repeat 0 0 rgba(0, 0, 0, 0);
-  content: "";
-  width: 22px;
-  height: 22px;
-  top: 2px;
-  left: 0;
-  position: absolute;
-}
-.fui-checkbox-unchecked:before {
-  background-position: -537px -25px;
-}
-.fui-checkbox-checked:before {
-  background-position: -537px -25px;
-}
-.checked .fui-checkbox-unchecked:before {
-  background-position: -537px -25px;
-}
-.checked .fui-checkbox-checked:before {
-  background-position: -537px 0px;
-}
-.checkbox:focus .icons .first-icon,
-.radio:focus .icons .first-icon {
-  opacity: 0;
-  filter: alpha(opacity=0);
-}
-.checkbox:focus .icons .second-icon,
-.radio:focus .icons .second-icon {
-  opacity: 1;
-  filter: alpha(opacity=100);
-}
-.checkbox .fui-radio-unchecked:before,
-.checkbox .fui-radio-checked:before {
-  background: url(assets/svg/uams-sprite.svg) no-repeat 0 0 rgba(0, 0, 0, 0);
-  content: "";
-  width: 22px;
-  height: 22px;
-  top: 2px;
-  left: 0;
-  position: absolute;
-}
-.checkbox .fui-radio-unchecked:before {
-  background-position: -537px -25px;
-}
-.checkbox .fui-radio-checked:before {
-  background-position: -537px -25px;
-}
-.checkbox.checked .fui-radio-unchecked:before {
-  background-position: -537px 1px;
-}
-.checkbox.checked .fui-radio-checked:before {
-  background-position: -537px 1px;
-}
-.checkbox .fui-checkbox-unchecked:before,
-.checkbox .fui-checkbox-checked:before {
-  background: url(assets/svg/uams-sprite.svg) no-repeat 0 0 rgba(0, 0, 0, 0);
-  content: "";
-  width: 22px;
-  height: 22px;
-  top: 2px;
-  left: 0;
-  position: absolute;
-}
-.checkbox .fui-checkbox-unchecked:before {
-  background-position: -537px -25px;
-}
-.checkbox .fui-checkbox-checked:before {
-  background-position: -537px -25px;
-}
-.checkbox.checked .fui-checkbox-unchecked:before {
-  background-position: -537px 0px;
-}
-.checkbox.checked .fui-checkbox-checked:before {
-  background-position: -537px 0px;
-}
-.checkbox input,
-.radio input {
-  display: block;
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 20px;
-  height: 20px;
-  padding: 0;
-  margin: 0;
-  outline: 0!important;
-  opacity: 0;
-}
-.gform_wrapper input[type=checkbox]:focus + .icons .fui-checkbox-unchecked,
-.gform_wrapper input[type=radio]:focus + .icons .fui-radio-unchecked {
-  border-color: #9D2235;
-}
-.fui-checkbox-unchecked,
-.fui-radio-unchecked {
-  border: 1px solid #fff;
-  border-radius: 3px;
-  width: 24px;
-  height: 24px;
-  margin-bottom: -6px;
-  display: inline-block;
-}
-.wpcf7 .fui-radio-unchecked:before,
-.wpcf7 .fui-radio-checked:before {
-  display: none;
-}
-.wpProQuiz_content .wpProQuiz_questionListItem {
-  position: relative;
-}
-.wpProQuiz_content .wpProQuiz_questionListItem label {
-  position: relative;
-}
-.wpProQuiz_content .wpProQuiz_questionListItem input[type="checkbox"],
-.wpProQuiz_content .wpProQuiz_questionListItem input[type="radio"] {
-  opacity: 0;
-}
-.wpProQuiz_quiz .fui-radio-unchecked,
-.wpProQuiz_quiz .fui-radio-checked {
-  border: none;
-}
-.gform_wrapper .gfield:not(.no-format) .gfield_radio .icons,
-.gform_wrapper .gfield:not(.no-format) .gfield_checkbox .icons {
-  width: 30px;
-  display: inline-block;
-  vertical-align: top;
-}
-.gform_wrapper .gfield:not(.no-format) li.gfield fieldset legend.gfield_label {
-  font-size: 19px;
-  font-weight: 700;
-  margin-bottom: 20px;
-}
-.gform_wrapper .gfield:not(.no-format) input[type="checkbox"],
-.gform_wrapper .gfield:not(.no-format) input[type="radio"] {
-  margin-top: 0 !important;
-  display: block;
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 22px;
-  height: 22px;
-  padding: 0;
-  margin: 0;
-  outline: 0!important;
-  opacity: 0;
-  z-index: 1000;
-  cursor: pointer;
-}
-.gform_wrapper .gfield.no-format .gfield_radio .icons,
-.gform_wrapper .gfield.no-format .gfield_checkbox .icons,
-.gform_wrapper .gfield.no-format .gsurvey-likert-choice .icons,
-.gform_wrapper .gfield.no-format .ginput_container_consent .icons {
-  display: none;
-}
-.gform_wrapper .gfield.no-format .gfield_radio .icons .fui-radio-unchecked,
-.gform_wrapper .gfield.no-format .gfield_checkbox .icons .fui-radio-unchecked,
-.gform_wrapper .gfield.no-format .gsurvey-likert-choice .icons .fui-radio-unchecked,
-.gform_wrapper .gfield.no-format .ginput_container_consent .icons .fui-radio-unchecked,
-.gform_wrapper .gfield.no-format .gfield_radio .icons .fui-radio-checked,
-.gform_wrapper .gfield.no-format .gfield_checkbox .icons .fui-radio-checked,
-.gform_wrapper .gfield.no-format .gsurvey-likert-choice .icons .fui-radio-checked,
-.gform_wrapper .gfield.no-format .ginput_container_consent .icons .fui-radio-checked,
-.gform_wrapper .gfield.no-format .gfield_radio .icons .fui-checkbox-unchecked,
-.gform_wrapper .gfield.no-format .gfield_checkbox .icons .fui-checkbox-unchecked,
-.gform_wrapper .gfield.no-format .gsurvey-likert-choice .icons .fui-checkbox-unchecked,
-.gform_wrapper .gfield.no-format .ginput_container_consent .icons .fui-checkbox-unchecked,
-.gform_wrapper .gfield.no-format .gfield_radio .icons .fui-checkbox-checked,
-.gform_wrapper .gfield.no-format .gfield_checkbox .icons .fui-checkbox-checked,
-.gform_wrapper .gfield.no-format .gsurvey-likert-choice .icons .fui-checkbox-checked,
-.gform_wrapper .gfield.no-format .ginput_container_consent .icons .fui-checkbox-checked {
-  border: 0;
-}
-.gform_wrapper .gfield.no-format .gfield_radio .icons .fui-radio-unchecked:before,
-.gform_wrapper .gfield.no-format .gfield_checkbox .icons .fui-radio-unchecked:before,
-.gform_wrapper .gfield.no-format .gsurvey-likert-choice .icons .fui-radio-unchecked:before,
-.gform_wrapper .gfield.no-format .ginput_container_consent .icons .fui-radio-unchecked:before,
-.gform_wrapper .gfield.no-format .gfield_radio .icons .fui-radio-checked:before,
-.gform_wrapper .gfield.no-format .gfield_checkbox .icons .fui-radio-checked:before,
-.gform_wrapper .gfield.no-format .gsurvey-likert-choice .icons .fui-radio-checked:before,
-.gform_wrapper .gfield.no-format .ginput_container_consent .icons .fui-radio-checked:before,
-.gform_wrapper .gfield.no-format .gfield_radio .icons .fui-checkbox-unchecked:before,
-.gform_wrapper .gfield.no-format .gfield_checkbox .icons .fui-checkbox-unchecked:before,
-.gform_wrapper .gfield.no-format .gsurvey-likert-choice .icons .fui-checkbox-unchecked:before,
-.gform_wrapper .gfield.no-format .ginput_container_consent .icons .fui-checkbox-unchecked:before,
-.gform_wrapper .gfield.no-format .gfield_radio .icons .fui-checkbox-checked:before,
-.gform_wrapper .gfield.no-format .gfield_checkbox .icons .fui-checkbox-checked:before,
-.gform_wrapper .gfield.no-format .gsurvey-likert-choice .icons .fui-checkbox-checked:before,
-.gform_wrapper .gfield.no-format .ginput_container_consent .icons .fui-checkbox-checked:before {
-  display: none;
-}
-.gform_wrapper .gfield.no-format .gfield_checkbox li input[type="checkbox"],
-.gform_wrapper .gfield.no-format .gfield_radio li input[type="radio"] {
-  margin-top: 0px;
-  margin-right: 6px;
-}
-.uams-body .gform_wrapper .gfield:not(.no-format) ul.gfield_checkbox li input[type=checkbox],
-.uams-body .gform_wrapper .gfield:not(.no-format) ul.gfield_radio li input[type=radio] {
-  width: 22px !important;
-}
-@media only screen and (max-width: 641px) {
-  .gform_wrapper .gfield:not(.no-format) .gfield_radio .icons,
-  .gform_wrapper .gfield:not(.no-format) .gfield_checkbox .icons,
-  .fui-checkbox-unchecked,
-  .fui-radio-unchecked,
-  .fui-checkbox-checked,
-  .fui-radio-checked {
-    display: inline-block !important;
-    margin-bottom: 0 !important;
-  }
-}
-.tm-extra-product-options .tm-epo-field.tmcp-checkbox,
-.tm-extra-product-options .tm-epo-field.tmcp-radio {
-  margin-top: 0 !important;
-  display: block;
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 20px;
-  height: 20px;
-  padding: 0;
-  margin: 0;
-  outline: 0!important;
-  opacity: 0;
-}
-.tm-extra-product-options ul.tmcp-ul-wrap.tm-extra-product-options-checkbox li.tmcp-field-wrap .tm-label,
-.tm-extra-product-options ul.tmcp-ul-wrap.tm-extra-product-options-radio li.tmcp-field-wrap .tm-label {
-  padding-left: 30px !important;
-}
-.tm-extra-product-options .tmcp-field-wrap > label {
-  display: inline-block;
-}
 .uams-body a.uams-btn,
 .uams-body .widget a.uams-btn,
 a.uams-btn {
@@ -9839,7 +9676,7 @@ a.uams-btn {
   margin-bottom: 25px;
   margin-right: 65px;
   z-index: 1;
-  line-height: 24px;
+  line-height: 1.4;
   font-size: 17px;
 }
 .uams-body a.uams-btn.btn-sm,
@@ -10633,7 +10470,7 @@ label.screen-reader {
   color: #fff;
   font-weight: 500;
   font-size: 1.1em;
-  line-height: 23px;
+  line-height: 1.1;
   margin: 0 0 30px;
   width: 70%;
 }
@@ -12230,7 +12067,7 @@ a.icon-email {
   font-family: "Fira Sans", sans-serif;
   color: #9D2235;
   font-size: 18px;
-  font-weight: 800;
+  font-weight: 500;
   line-height: 1.4;
   overflow: hidden;
   display: block;
