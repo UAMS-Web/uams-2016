@@ -10,12 +10,11 @@
 
       <?php uams_site_title(); ?>
 
-      <?php get_template_part('menu', 'mobile'); ?>
+      <?php get_template_part( 'menu', 'mobile' ); ?>
 
       <?php get_template_part( 'breadcrumbs' ); ?>
 
       <div id='main_content' class="uams-body-copy" tabindex="-1">
-
 
         <?php
           if ( have_posts() ) :
@@ -23,18 +22,17 @@
               get_template_part( 'content', 'archive' );
             endwhile;
           else :
-            echo '<h3 class=\'no-results\'>Sorry, no results matched your criteria.</h3>';
+            echo "<h3 class='no-results'>Sorry, no results matched your criteria.</h3>";
           endif;
         ?>
 
-
-        <?php posts_nav_link(' '); ?>
+        <?php posts_nav_link( ' ' ); ?>
 
       </div>
 
     </div>
 
-    <?php get_sidebar() ?>
+    <?php get_sidebar(); ?>
 
   </div>
 

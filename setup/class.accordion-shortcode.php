@@ -22,16 +22,18 @@ class UAMS_AccordionShortcode
         add_shortcode('subsection', array($this, 'subsection_handler'));
     }
 
-    function wpex_fix_shortcodes($content){
-        $array = array (
-            '<p>[' => '[',
-            ']</p>' => ']',
-            ']<br />' => ']'
-        );
-
-        $content = strtr($content, $array);
-        return $content;
+    function wpex_fix_shortcodes( $content ) {
+    if ( empty( $content ) || ! is_string( $content ) ) {
+        return (string) $content;
     }
+    $array = array(
+        '<p>['    => '[',
+        ']</p>'   => ']',
+        ']<br />' => ']',
+    );
+
+    return strtr( $content, $array );
+}
 
     function accordion_handler( $atts, $content )
     {

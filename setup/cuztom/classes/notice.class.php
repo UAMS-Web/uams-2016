@@ -1,47 +1,33 @@
 <?php
 
-if( ! defined( 'ABSPATH' ) ) exit;
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
 
 /**
  * Cuztom notice class, to easily handle admin notices
  *
  * @author  Gijs Jorissen
- * @since  	2.3
+ * @since   2.3
  */
+#[\AllowDynamicProperties]
 class Cuztom_Notice
 {
-	var $notice;
-	var $type;
+	public $notice;
+	public $type;
 
-	/**
-	 * Constructor
-	 * 
-	 * @param  	string 	$notice 
-	 * @param 	string 	$type
-	 *
-	 * @author  Gijs Jorissen
-	 * @since   2.3
-	 * 
-	 */
-	function __construct( $notice, $type = 'updated' )
+	public function __construct( $notice, $type = 'updated' )
 	{
-		$this->notice 	= $notice;
-		$this->type 	= $type;
+		$this->notice = $notice;
+		$this->type   = $type;
 
-		add_action( 'admin_notices', array( &$this, 'add_admin_notice' ) );
+		add_action( 'admin_notices', array( $this, 'add_admin_notice' ) );
 	}
 
-	/**
-	 * Adds the admin notice
-	 *
-	 * @author 	Gijs Jorissen
-	 * @since   2.3
-	 * 
-	 */
-	function add_admin_notice()
+	public function add_admin_notice()
 	{
-		echo '<div class="' . $this->type . '">';
-			echo '<p>' . $this->notice . '</p>';
-    	echo '</div>';
+		echo '<div class="' . esc_attr( $this->type ) . '">';
+		echo '<p>' . wp_kses_post( $this->notice ) . '</p>';
+		echo '</div>';
 	}
 }
