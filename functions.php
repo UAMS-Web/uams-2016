@@ -103,11 +103,11 @@ function woocommerce_support() {
 
 
 /* Update sitemap on publish post & page */
-add_action( 'publish_post', 'sitemap' );
-add_action( 'publish_page', 'sitemap' );
+// add_action( 'publish_post', 'sitemap' );
+// add_action( 'publish_page', 'sitemap' );
 
 /* Function to create sitemap.xml */
-function sitemap() {
+/* function sitemap() {
   $sitemap ='';
   $posts = get_posts( array(
     'numberposts' => -1,
@@ -128,7 +128,7 @@ function sitemap() {
   $fop = fopen( ABSPATH . "sitemap.xml", 'w' );
   fwrite( $fop, $sitemap );
   fclose( $fop );
-}
+} */
 
 add_filter('allowed_http_origins', 'add_allowed_origins');
 
@@ -179,15 +179,18 @@ add_action( 'gform_after_submission', 'access_entry_via_field', 10, 2 );
 };
 
 add_filter( 'embed_oembed_html', 'wrap_oembed_html', 99, 4 );
-add_filter( 'video_embed_html', 'wrap_oembed_html' ); // Jetpack
-function wrap_oembed_html( $cached_html, $url, $attr, $post_id ) {
-    if ( false !== strpos( $url, "://youtube.com") ||
-         false !== strpos( $url, "://www.youtube.com") ||
-         false !== strpos( $url, "://youtu.be") ||
-         false !== strpos( $url, "://www.youtu.be" ) ||
-         false !== strpos( $url, "://vimeo.com" ))
-        {
+add_filter( 'video_embed_html', 'wrap_oembed_html', 10, 4 ); // Pass all 4 expected args
+function wrap_oembed_html( $cached_html, $url = '', $attr = array(), $post_id = 0 ) {
+    if ( empty( $url ) || ! is_string( $url ) ) {
+        return $cached_html;
+    }
+
+    if ( false !== strpos( $url, '://youtube.com' ) ||
+         false !== strpos( $url, '://www.youtube.com' ) ||
+         false !== strpos( $url, '://youtu.be' ) ||
+         false !== strpos( $url, '://www.youtu.be' ) ||
+         false !== strpos( $url, '://vimeo.com' ) ) {
             $cached_html = '<div class="nc-video-player" role="region" aria-label="video" tabindex="-1"><div class="tube-wrapper">' . $cached_html . '</div></div>';
-        }
+    }
     return $cached_html;
 }

@@ -8,62 +8,66 @@
 
 class UAMS_Button
 {
+    private static $types = array( 'plus', 'go', 'external', 'play' );
 
-    private static $types = array('plus', 'go', 'external', 'play');
-
-    function __construct()
+    public function __construct()
     {
-        add_shortcode('button', array($this, 'button_handler'));
+        add_shortcode( 'button', array( $this, 'button_handler' ) );
     }
 
-    function button_handler($atts, $content)
+    public function button_handler( $atts, $content = null )
     {
-        $attributes = (object) $atts;
-
-        $classes = array('uams-btn');
-
-        $btnColors = shortcode_atts( array(
+        $atts = shortcode_atts( array(
             'color' => 'none',
-        ), $atts );
+            'type'  => '',
+            'url'   => '#',
+            'size'  => '',
+            'small' => null,
+            'text'  => '',
+        ), $atts, 'button' );
 
+        $classes = array( 'uams-btn' );
+        $color   = 'btn-' . sanitize_html_class( $atts['color'] );
 
-        $color = 'btn-' . $btnColors['color'];
-
-        if(empty($content) && empty($attributes->text)){
-            echo 'No text in this button';
-            return;
+        if ( empty( $content ) && empty( $atts['text'] ) ) {
+            return 'No text in this button';
         }
 
-        if (isset($attributes->type)){
-            $type = strtolower($attributes->type);
-            if (in_array($type, $this::$types)){
-                array_push($classes, 'btn-' . $type);
+        if ( ! empty( $atts['type'] ) ) {
+            $type = strtolower( trim( $atts['type'] ) );
+            if ( in_array( $type, self::$types, true ) ) {
+                $classes[] = 'btn-' . $type;
             }
         }
 
-        $url = '#';
-        if (isset($attributes->url)){
-            $url = $attributes->url;
+        $url = ! empty( $atts['url'] ) ? esc_url( $atts['url'] ) : '#';
+
+        if ( null !== $atts['small'] ) {
+            $classes[] = 'btn-sm';
         }
 
-        if (property_exists($attributes, 'small')){
-            array_push($classes, 'btn-sm');
-        }
-
-        if (isset($attributes->size)){
-            if (in_array($attributes->size, array('small', 'sm'))){
-                array_push($classes, 'btn-sm');
-            } elseif (in_array($attributes->size, array('large', 'lg'))) {
-                array_push($classes, 'btn-lg');
+        if ( ! empty( $atts['size'] ) ) {
+            if ( in_array( $atts['size'], array( 'small', 'sm' ), true ) ) {
+                $classes[] = 'btn-sm';
+            } elseif ( in_array( $atts['size'], array( 'large', 'lg' ), true ) ) {
+                $classes[] = 'btn-lg';
             }
         }
 
-        if (isset($attributes->text)){
-            $content = $attributes->text;
+        if ( ! empty( $atts['text'] ) ) {
+            $content = $atts['text'];
         }
 
-        $class_string = implode($classes, ' ');
+        $class_string = implode( ' ', array_unique( $classes ) );
 
-        return sprintf('<a class="%s %s" href="%s">%s</a>', $class_string, $color, $url, $content);
+        return sprintf(
+            '<a class="%s %s" href="%s">%s</a>',
+            esc_attr( $class_string ),
+            esc_attr( $color ),
+            $url,
+            esc_html( $content )
+        );
     }
 }
+
+new UAMS_Button();

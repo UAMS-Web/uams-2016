@@ -3,6 +3,10 @@
 </div>
 
 <div id="markdown" style="display:none;">
-  <?php include( get_template_directory() . '/README.md'); ?>
+  <?php
+  $readme_path = get_template_directory() . '/README.md';
+  if ( file_exists( $readme_path ) ) {
+      echo esc_html( file_get_contents( $readme_path ) );
+  }
+  ?>
 </div>
-

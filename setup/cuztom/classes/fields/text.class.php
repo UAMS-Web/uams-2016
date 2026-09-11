@@ -1,27 +1,31 @@
 <?php
 
-if( ! defined( 'ABSPATH' ) ) exit;
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
 
+#[\AllowDynamicProperties]
 class Cuztom_Field_Text extends Cuztom_Field
 {
-	var $_supports_repeatable 	= true;
-	var $_supports_bundle		= true;
-	var $_supports_ajax			= true;
+	public $_supports_repeatable = true;
+	public $_supports_bundle     = true;
+	public $_supports_ajax       = true;
 
-	var $css_classes			= array( 'cuztom-input' );
+	public $css_classes = array( 'cuztom-input' );
 
-	function save_value( $value )
+	public function save_value( $value )
 	{
-		if( is_array( $value ) )
-			array_walk_recursive( $value, array( &$this, 'do_htmlspecialchars' ) );
-		else
-			$value = htmlspecialchars( $value );
+		if ( is_array( $value ) ) {
+			array_walk_recursive( $value, array( $this, 'do_htmlspecialchars' ) );
+		} else {
+			$value = htmlspecialchars( (string) $value );
+		}
 
 		return $value;
 	}
 
-	function do_htmlspecialchars( &$value )
+	public function do_htmlspecialchars( &$value )
 	{
-		$value = htmlspecialchars( $value );
+		$value = htmlspecialchars( (string) $value );
 	}
 }
