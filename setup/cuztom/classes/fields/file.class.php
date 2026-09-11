@@ -1,61 +1,47 @@
 <?php
 
-if( ! defined( 'ABSPATH' ) ) exit;
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
 
+#[\AllowDynamicProperties]
 class Cuztom_Field_File extends Cuztom_Field
 {
-	var $_supports_ajax			= true;
-	var $_supports_bundle		= true;
+	public $_supports_ajax   = true;
+	public $_supports_bundle = true;
 
-	var $css_classes 			= array( 'cuztom-hidden', 'cuztom-input' );
-	
-	function _output( $value )
+	public $css_classes = array( 'cuztom-hidden', 'cuztom-input' );
+
+	public function _output( $value, $object = null )
 	{
-		$output = '';
+		$file = '';
 
-		if( ! empty( $value ) )
-		{
+		if ( ! empty( $value ) ) {
 			$attachment = self::get_attachment_by_url( $value );
-			$mime = '';
-            $name = '';
+			$mime       = '';
+			$name       = '';
 
-			if( is_object( $attachment ) )
-			{
-				$mime = str_replace( '/', '_', $attachment->post_mime_type );
+			if ( is_object( $attachment ) ) {
+				$mime = str_replace( '/', '_', (string) $attachment->post_mime_type );
 				$name = $attachment->post_title;
 			}
 
-			$file = '<span class="cuztom-mime mime-' . $mime . '"><a target="_blank" href="' . $value . '">' . $name . '</a></span>';
+			$file = '<span class="cuztom-mime mime-' . esc_attr( $mime ) . '"><a target="_blank" href="' . esc_url( $value ) . '">' . esc_html( $name ) . '</a></span>';
 		}
-		else 
-		{
-			$file = '';
-		}
-	
-		$output .= '<input type="hidden" ' . $this->output_name() . ' ' . $this->output_id() . ' ' . $this->output_css_class() . ' value="' . ( ! empty( $value ) ? $value : '' ) . '" />';
-		$output .= sprintf( '<input id="upload-file-button" type="button" class="button js-cuztom-upload" data-cuztom-media-type="file" value="%s" />', __( 'Select file', 'cuztom' ) );
-		$output .= ( ! empty( $value ) ? sprintf( '<a href="#" class="js-cuztom-remove-media cuztom-remove-media">%s</a>', __( 'Remove current file', 'cuztom' ) ) : '' );
 
+		$output  = '<input type="hidden" ' . $this->output_name() . ' ' . $this->output_id() . ' ' . $this->output_css_class() . ' value="' . esc_attr( ! empty( $value ) ? $value : '' ) . '" />';
+		$output .= sprintf( '<input id="upload-file-button" type="button" class="button js-cuztom-upload" data-cuztom-media-type="file" value="%s" />', esc_attr__( 'Select file', 'cuztom' ) );
+		$output .= ( ! empty( $value ) ? sprintf( '<a href="#" class="js-cuztom-remove-media cuztom-remove-media">%s</a>', esc_html__( 'Remove current file', 'cuztom' ) ) : '' );
 		$output .= '<span class="cuztom-preview">' . $file . '</span>';
-
 		$output .= $this->output_explanation();
 
 		return $output;
 	}
 
-
-	/**
-	 * Get attachment by given url
-	 * 
-	 * @param  string 			$url
-	 * @return integer
-	 */
-	function get_attachment_by_url( $url ) 
+	public static function get_attachment_by_url( $url )
 	{
 		global $wpdb;
-		
-		$attachment = $wpdb->get_row( $wpdb->prepare( "SELECT ID,post_title,post_mime_type FROM " . $wpdb->prefix . "posts" . " WHERE guid=%s;", $url ) );
 
-		return $attachment;
+		return $wpdb->get_row( $wpdb->prepare( "SELECT ID, post_title, post_mime_type FROM {$wpdb->posts} WHERE guid = %s LIMIT 1;", (string) $url ) );
 	}
 }
