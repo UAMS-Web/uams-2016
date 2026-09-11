@@ -1,211 +1,164 @@
 <?php
 
-if( ! defined( 'ABSPATH' ) ) exit;
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
 
 /**
- * Registers the meta boxes
+ * Registers the term meta
  *
- * @author 	Gijs Jorissen
- * @since 	2.5
- *
+ * @author  Gijs Jorissen
+ * @since   2.5
  */
+#[\AllowDynamicProperties]
 class Cuztom_Term_Meta extends Cuztom_Meta
 {
-	var $taxonomies;
-	var $data;
-	var $fields;
-	var $locations;
+	public $taxonomies = array();
+	public $data;
+	public $fields     = array();
+	public $locations  = array();
 
-	/**
-	 * Construct the term meta
-	 *
-	 * @param 	string|array 	$taxonomy
-	 * @param 	array  			$data
-	 *
-	 * @author 	Gijs Jorissen
- 	 * @since 	2.5
-	 */
-	function __construct( $taxonomy, $data = array(), $locations = array( 'add_form', 'edit_form' ) )
+	public function __construct( $taxonomy, $data = array(), $locations = array( 'add_form', 'edit_form' ) )
 	{
-		$this->taxonomies 	= (array) $taxonomy;
-		$this->locations 	= (array) $locations;
+		$this->taxonomies = (array) $taxonomy;
+		$this->locations  = (array) $locations;
 
-		// Build the meta box and fields
 		$this->data = $this->build( $data );
 
-		foreach( $this->taxonomies as $taxonomy )
-		{
-			if( in_array( 'add_form', $this->locations ) )
-			{
-				add_action( $taxonomy . '_add_form_fields', array( &$this, 'add_form_fields' ) );
-				add_action( 'created_' . $taxonomy, array( &$this, 'save_term' ) );
+		foreach ( $this->taxonomies as $tax ) {
+			if ( in_array( 'add_form', $this->locations, true ) ) {
+				add_action( $tax . '_add_form_fields', array( $this, 'add_form_fields' ) );
+				add_action( 'created_' . $tax, array( $this, 'save_term' ) );
 			}
 
-			if( in_array( 'edit_form', $this->locations ) )
-			{
-				add_action( $taxonomy . '_edit_form_fields', array( &$this, 'edit_form_fields' ) );
-				add_action( 'edited_' . $taxonomy, array( &$this, 'save_term' ) );
+			if ( in_array( 'edit_form', $this->locations, true ) ) {
+				add_action( $tax . '_edit_form_fields', array( $this, 'edit_form_fields' ) );
+				add_action( 'edited_' . $tax, array( $this, 'save_term' ) );
 			}
 
-			add_filter( 'manage_edit-' . $taxonomy . '_columns', array( &$this, 'add_column' ) );
-			add_filter( 'manage_' . $taxonomy . '_custom_column', array( &$this, 'add_column_content' ), 10, 3 );
+			add_filter( 'manage_edit-' . $tax . '_columns', array( $this, 'add_column' ) );
+			add_filter( 'manage_' . $tax . '_custom_column', array( $this, 'add_column_content' ), 10, 3 );
 		}
 	}
 
-	/**
-	 * Add fields to the add term form
-	 *
-	 * @param 	string 		$taxonomy
-	 *
-	 * @author 	Gijs Jorissen
- 	 * @since 	2.5
-	 */
-	function add_form_fields( $taxonomy )
+	public function add_form_fields( $taxonomy )
 	{
 		echo '<input type="hidden" name="cuztom[__activate]" />';
 
-		/* Loop through $data */
-		foreach( $this->data as $id_name => $field )
-		{
-			$value = '';
+		if ( ! empty( $this->data ) && is_array( $this->data ) ) {
+			foreach ( $this->data as $id_name => $field ) {
+				$value = '';
 
-			if( ! $field instanceof Cuztom_Field_Hidden )
-			{
-				echo '<div class="form-field">';
-					echo '<label for="' . $id_name . '" class="cuztom_label">' . $field->label . '</label>';
+				if ( ! ( $field instanceof Cuztom_Field_Hidden ) ) {
+					echo '<div class="form-field">';
+					echo '<label for="' . esc_attr( $id_name ) . '" class="cuztom_label">' . esc_html( $field->label ) . '</label>';
 					echo $field->output( $value );
 
-					if( ! empty( $field->description ) ) echo '<p class="cuztom-description">' . $field->description . '</p>';
-				echo '</div>';
-			}
-			else
-			{
-				echo $field->output( $value );
+					if ( ! empty( $field->description ) ) {
+						echo '<p class="cuztom-description">' . wp_kses_post( $field->description ) . '</p>';
+					}
+					echo '</div>';
+				} else {
+					echo $field->output( $value );
+				}
 			}
 		}
 	}
 
-	/**
-	 * Add fields to the edit term form
-	 *
-	 * @param 	string 		$term
-	 *
-	 * @author 	Gijs Jorissen
- 	 * @since 	2.5
-	 */
-	function edit_form_fields( $term )
+	public function edit_form_fields( $term )
 	{
-		$value = get_cuztom_term_meta( $term->term_id, $term->taxonomy );
+		$value = function_exists( 'get_cuztom_term_meta' ) ? get_cuztom_term_meta( $term->term_id, $term->taxonomy ) : array();
+		$value = is_array( $value ) ? $value : array();
 
 		echo '<input type="hidden" name="cuztom[__activate]" />';
 
-		/* Loop through $data */
-		foreach( $this->data as $id_name => $field )
-		{
-			$value[$id_name] = isset( $value[$id_name] ) ? $value[$id_name] : '';
+		if ( ! empty( $this->data ) && is_array( $this->data ) ) {
+			foreach ( $this->data as $id_name => $field ) {
+				$field_value = isset( $value[ $id_name ] ) ? $value[ $id_name ] : '';
 
-			if( ! $field instanceof Cuztom_Field_Hidden )
-			{
-				echo '<tr class="cuztom form-field">';
+				if ( ! ( $field instanceof Cuztom_Field_Hidden ) ) {
+					echo '<tr class="cuztom form-field">';
 					echo '<th scope="row" valign="top">';
-						echo '<label for="' . $id_name . '" class="cuztom_label">' . $field->label . '</label>';
+					echo '<label for="' . esc_attr( $id_name ) . '" class="cuztom_label">' . esc_html( $field->label ) . '</label>';
 					echo '</th>';
 					echo '<td class="cuztom-td">';
-						echo $field->output( $value[$id_name] );
-						if( ! empty( $field->description ) ) echo '<p class="description cuztom-description">' . $field->description . '</p>';
+					echo $field->output( $field_value );
+					if ( ! empty( $field->description ) ) {
+						echo '<p class="description cuztom-description">' . wp_kses_post( $field->description ) . '</p>';
+					}
 					echo '</td>';
-				echo '</tr>';
-			}
-			else
-			{
-				echo $field->output( $value );
+					echo '</tr>';
+				} else {
+					echo $field->output( $field_value );
+				}
 			}
 		}
 	}
 
-	/**
-	 * Save the term
-	 *
-	 * @param 	int 		$term_id
-	 *
-	 * @author 	Gijs Jorissen
- 	 * @since 	2.5
-	 */
-	function save_term( $term_id )
+	public function save_term( $term_id )
 	{
-		// Loop through each meta box
-		if( ! empty( $this->data ) && isset( $_POST['cuztom'] ) )
-		{
-			$data 		= array();
-			$values 	= isset( $_POST['cuztom'] ) ? wp_unslash( $_POST['cuztom'] ) : '';
-			$taxonomy 	= $_POST['taxonomy'];
+		if ( ! empty( $this->data ) && isset( $_POST['cuztom'] ) && is_array( $_POST['cuztom'] ) ) {
+			$data     = array();
+			$values   = wp_unslash( $_POST['cuztom'] );
+			$taxonomy = isset( $_POST['taxonomy'] ) ? sanitize_key( $_POST['taxonomy'] ) : '';
 
-			foreach( $this->fields as $id_name => $field )
-			{
-				$data[$id_name] = $field->save_value( $values[$field->id] );
+			if ( empty( $taxonomy ) ) {
+				$term = get_term( (int) $term_id );
+				if ( $term && ! is_wp_error( $term ) ) {
+					$taxonomy = $term->taxonomy;
+				}
 			}
 
-			update_option( 'term_meta_' . $taxonomy . '_' . $term_id, $data );
+			if ( ! empty( $this->fields ) && is_array( $this->fields ) ) {
+				foreach ( $this->fields as $id_name => $field ) {
+					$val            = isset( $values[ $field->id ] ) ? $values[ $field->id ] : '';
+					$data[ $id_name ] = $field->save_value( $val );
+				}
+			}
+
+			if ( ! empty( $taxonomy ) ) {
+				update_option( 'term_meta_' . $taxonomy . '_' . (int) $term_id, $data );
+			}
 		}
 	}
 
-	/**
-	 * Used to add a column head to the Taxonomy's List Table
-	 *
-	 * @param 	array 			$columns
-	 * @return 	array
-	 *
-	 * @author 	Gijs Jorissen
-	 * @since 	1.1
-	 *
-	 */
-	function add_column( $columns )
+	public function add_column( $columns )
 	{
-		foreach( $this->fields as $id_name => $field )
-			if( $field->show_admin_column ) $columns[$id_name] = $field->label;
+		$columns = is_array( $columns ) ? $columns : array();
+
+		if ( ! empty( $this->fields ) && is_array( $this->fields ) ) {
+			foreach ( $this->fields as $id_name => $field ) {
+				if ( ! empty( $field->show_admin_column ) ) {
+					$columns[ $id_name ] = $field->label;
+				}
+			}
+		}
 
 		return $columns;
 	}
 
-	/**
-	 * Used to add the column content to the column head
-	 *
-	 * @param 	string 			$row
-	 * @param 	integer 		$column
-	 * @param 	integer 		$term_id
-	 * @return 	mixed
-	 *
-	 * @author 	Gijs Jorissen
-	 * @since 	1.1
-	 *
-	 */
-	function add_column_content( $row, $column, $term_id )
+	public function add_column_content( $row, $column, $term_id )
 	{
-		$screen 	= get_current_screen();
+		$screen = get_current_screen();
 
-		if( $screen )
-		{
-			$taxonomy 	= $screen->taxonomy;
+		if ( $screen && ! empty( $screen->taxonomy ) ) {
+			$taxonomy = $screen->taxonomy;
+			$meta     = function_exists( 'get_cuztom_term_meta' ) ? get_cuztom_term_meta( $term_id, $taxonomy, $column ) : '';
 
-			$meta = get_cuztom_term_meta( $term_id, $taxonomy, $column );
-
-			foreach( $this->fields as $id_name => $field )
-			{
-				if( $column == $id_name )
-				{
-					if( $field->repeatable && $field->_supports_repeatable )
-					{
-						echo implode( $meta, ', ' );
+			if ( ! empty( $this->fields ) && is_array( $this->fields ) ) {
+				foreach ( $this->fields as $id_name => $field ) {
+					if ( $column === $id_name ) {
+						if ( ! empty( $field->repeatable ) && ! empty( $field->_supports_repeatable ) ) {
+							echo esc_html( implode( ', ', (array) $meta ) );
+						} else {
+							if ( $field instanceof Cuztom_Field_Image ) {
+								echo wp_get_attachment_image( (int) $meta, array( 100, 100 ) );
+							} else {
+								echo esc_html( (string) $meta );
+							}
+						}
+						break;
 					}
-					else
-					{
-						if( $field instanceof Cuztom_Field_Image )
-							echo wp_get_attachment_image( $meta, array( 100, 100 ) );
-						else
-							echo $meta;
-					}
-
-					break;
 				}
 			}
 		}
