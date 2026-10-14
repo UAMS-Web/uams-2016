@@ -1,116 +1,119 @@
 <?php
-/*
-Template Name: Sitemap
-*/
-?>
-<?php get_header();
-   $sidebar = get_post_meta($post->ID, "sidebar");
-   $breadcrumbs = get_post_meta($post->ID, "breadcrumb");
- ?>
+/**
+ * Template Name: Sitemap
+ */
 
-<?php get_template_part( 'header', 'image' ); ?>
+get_header();
 
-<!--<div class="col-md-12 mobile-menu"> <?php get_template_part( 'menu', 'mobile' ); ?> </div>-->
+$post_id     = get_the_ID();
+$sidebar     = get_post_meta( $post_id, 'sidebar', true );
+$breadcrumbs = get_post_meta( $post_id, 'breadcrumb', true );
+$has_sidebar = ( 'on' !== $sidebar );
+
+get_template_part( 'header', 'image' ); ?>
+
 <div class="container uams-body">
 
   <div class="row">
 
-    <div class="col-md-<?php echo ((!isset($sidebar[0]) || $sidebar[0]!="on") ? "8" : "12" ) ?> uams-content" role='main'>
-
-      <?php //uams_page_title(); ?>
-
-      <?php //get_template_part( 'menu', 'mobile' ); ?>
+    <div class="col-md-<?php echo $has_sidebar ? '8' : '12'; ?> uams-content" role="main">
 
       <?php
-	      if((!isset($breadcrumbs[0]) || $breadcrumbs[0]!="on")) {
-	      	get_template_part( 'breadcrumbs' );
-	      }
-	  ?>
+      if ( empty( $breadcrumbs ) || 'on' !== $breadcrumbs ) {
+          get_template_part( 'breadcrumbs' );
+      }
+      ?>
 
-	  <?php  // Add mobile sidebar, if necessary ?>
-      <div id='main_content' class="uams-body-copy" tabindex="-1">
+      <div id="main_content" class="uams-body-copy" tabindex="-1">
 
-	      <div id="mobile-sidebar">
+        <div id="mobile-sidebar">
 
-				<button id="mobile-sidebar-menu" class="visible-xs" aria-hidden="true" tabindex="1">
+          <button id="mobile-sidebar-menu" class="visible-xs" aria-hidden="true" tabindex="1">
 
-			    	<div aria-hidden="true" id="ham">
-					    <span></span>
-						<span></span>
-						<span></span>
-						<span></span>
-				    </div>
-					<div id="mobile-sidebar-title" class="page_item">
+              <div aria-hidden="true" id="ham">
+                  <span></span>
+                  <span></span>
+                  <span></span>
+                  <span></span>
+              </div>
+              <div id="mobile-sidebar-title" class="page_item">
 
-						<?php
-					        //limitation of the characters
-					        $text = get_the_title();
-					        echo text_cut($text, 27, true);
-							function text_cut($text, $length, $dots) {
-							//$text =get_the_title();
-							$text = trim(preg_replace('#[\s\n\r\t]{2,}#', ' ', $text));
-							$text_temp = $text;
-							   while (substr($text, $length, 1) != " ") {
-									$length--;
-								  	if ($length > strlen($text)) {
-									  	break;
-									}
-								}
-							    $text = substr($text, 0, $length);
-							    return $text . ( ( $dots == true && $text != '' && strlen($text_temp) > $length ) ? '...' : '');
-							}
-						?>
+                  <?php
+                  if ( ! function_exists( 'text_cut' ) ) {
+                      function text_cut( $text, $length = 27, $dots = true ) {
+                          $text      = trim( preg_replace( '#[\s\n\r\t]{2,}#', ' ', (string) $text ) );
+                          $text_temp = $text;
 
-				  	</div>
-				</button>
-				<div id="mobile-sidebar-links" aria-hidden="true">  <?php uams_sidebar_menu(); ?></div>
-			</div>
+                          if ( strlen( $text ) > $length ) {
+                              while ( $length > 0 && substr( $text, $length, 1 ) !== ' ' ) {
+                                  $length--;
+                              }
+                              $text = substr( $text, 0, $length );
+                          }
+
+                          return $text . ( ( $dots && $text !== '' && strlen( $text_temp ) > $length ) ? '...' : '' );
+                      }
+                  }
+
+                  echo esc_html( text_cut( get_the_title(), 27, true ) );
+                  ?>
+
+              </div>
+          </button>
+          <div id="mobile-sidebar-links" aria-hidden="true"><?php uams_sidebar_menu(); ?></div>
+        </div>
 
         <h2 id="pages">Pages</h2>
-				<ul>
-				<?php
-				// Add pages you'd like to exclude in the exclude here
-				wp_list_pages(
-					array(
-						'exclude' => '',
-						'title_li' => '',
-					)
-				);
-				?>
-				</ul>
+        <ul>
+          <?php
+          wp_list_pages( array(
+              'exclude'  => '',
+              'title_li' => '',
+          ) );
+          ?>
+        </ul>
 
-				<h2 id="posts">Posts</h2>
-				<ul>
-					<?php
-					// Add categories you'd like to exclude in the exclude here
-					$cats = get_categories('exclude=');
-					foreach ($cats as $cat) {
-						echo "<li><h3>".$cat->cat_name."</h3>";
-						echo "<ul>";
-						query_posts('posts_per_page=-1&cat='.$cat->cat_ID);
-						while(have_posts()) {
-							the_post();
-							$category = get_the_category();
-							// Only display a post link once, even if it's in multiple categories
-							if ($category[0]->cat_ID == $cat->cat_ID) {
-								echo '<li><a href="'.get_permalink().'">'.get_the_title().'</a></li>';
-							}
-						}
-						echo "</ul>";
-						echo "</li>";
-					}
-					?>
-				</ul>
+        <h2 id="posts">Posts</h2>
+        <ul>
+          <?php
+          $cats = get_categories( array( 'hide_empty' => true ) );
+          foreach ( $cats as $cat ) {
+              echo '<li><h3>' . esc_html( $cat->name ) . '</h3>';
+              echo '<ul>';
+
+              $cat_posts = new WP_Query( array(
+                  'posts_per_page'      => -1,
+                  'cat'                 => $cat->term_id,
+                  'ignore_sticky_posts' => true,
+                  'no_found_rows'       => true,
+              ) );
+
+              if ( $cat_posts->have_posts() ) {
+                  while ( $cat_posts->have_posts() ) {
+                      $cat_posts->the_post();
+                      $categories = get_the_category();
+                      if ( ! empty( $categories ) && (int) $categories[0]->term_id === (int) $cat->term_id ) {
+                          echo '<li><a href="' . esc_url( get_permalink() ) . '">' . esc_html( get_the_title() ) . '</a></li>';
+                      }
+                  }
+                  wp_reset_postdata();
+              }
+
+              echo '</ul>';
+              echo '</li>';
+          }
+          ?>
+        </ul>
 
       </div>
 
     </div>
 
-    <div id="sidebar"><?php
-      if(!isset($sidebar[0]) || $sidebar[0]!="on"){
-        get_sidebar();
-      }
-    ?></div>
+    <?php if ( $has_sidebar ) : ?>
+    <div id="sidebar">
+      <?php get_sidebar(); ?>
+    </div>
+    <?php endif; ?>
 
   </div>
 

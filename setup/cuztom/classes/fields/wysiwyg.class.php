@@ -1,30 +1,43 @@
 <?php
 
-if( ! defined( 'ABSPATH' ) ) exit;
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
 
+#[\AllowDynamicProperties]
 class Cuztom_Field_Wysiwyg extends Cuztom_Field
 {
-	var $_supports_ajax			= true;
-	var $_supports_bundle		= true;
-	
-	function __construct( $field, $parent )
+	public $_supports_ajax   = true;
+	public $_supports_bundle = true;
+
+	public function __construct( $field, $parent )
 	{
 		parent::__construct( $field, $parent );
 
-		$this->args = array_merge( 
+		$this->args = array_merge(
 			array(
 				'textarea_name' => 'cuztom[' . $this->id . ']',
-				'editor_class'	=> ''
+				'editor_class'  => '',
 			),
-			$this->args
+			(array) $this->args
 		);
-		
+
 		$this->args['editor_class'] .= ' cuztom-input';
 	}
 
-	function _output( $value )
+	public function _output( $value, $object = null )
 	{
 		$this->args['textarea_name'] = 'cuztom' . $this->pre . '[' . $this->id . ']' . $this->after;
-		return wp_editor( ( ! empty( $value ) ? $value : $this->default_value ), $this->pre_id . $this->id . $this->after_id, $this->args ) . $this->output_explanation();
+
+		$editor_id      = sanitize_key( $this->pre_id . $this->id . $this->after_id );
+		$editor_content = ( ! empty( $value ) ? $value : $this->default_value );
+
+		ob_start();
+		wp_editor( (string) $editor_content, $editor_id, $this->args );
+		$output = ob_get_clean();
+
+		$output .= $this->output_explanation();
+
+		return $output;
 	}
 }

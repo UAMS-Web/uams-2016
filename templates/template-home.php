@@ -1,215 +1,198 @@
 <?php
 /**
-  * Template Name: Home
-  */
-?>
-<?php get_header(); ?>
+ * Template Name: Home
+ */
 
+get_header();
 
-<?php
-	$sidebar = get_post_meta($post->ID, "sidebar");
-	$breadcrumbs = get_post_meta($post->ID, "breadcrumb");
-	$first = true; // used to write class on first slide
-	$i = 0;
-	$slidecolor = array();
-    if ( ( get_field('home_page_slider') == 'slide' ) && have_rows('home_slides') ) : //$loop->have_posts() ) : ?>
+$post_id     = get_the_ID();
+$sidebar     = get_post_meta( $post_id, 'sidebar', true );
+$breadcrumbs = get_post_meta( $post_id, 'breadcrumb', true );
+$has_sidebar = ( 'on' !== $sidebar );
+
+$first       = true;
+$i           = 0;
+$slidecolor  = array();
+$slider_type = function_exists( 'get_field' ) ? get_field( 'home_page_slider' ) : '';
+
+if ( 'slide' === $slider_type && function_exists( 'have_rows' ) && have_rows( 'home_slides' ) ) : ?>
+
 <div class="uams-homepage-slider-container" role="region" aria-label="homepage-slides">
-	<?php
-      while ( have_rows('home_slides') ): the_row();
+  <?php
+  while ( have_rows( 'home_slides' ) ) : the_row();
+      $desktopimage   = get_sub_field( 'home_slide_desktop' );
+      $mobileimage    = get_sub_field( 'home_slide_mobile' );
+      $dt_url         = is_array( $desktopimage ) && ! empty( $desktopimage['url'] ) ? $desktopimage['url'] : ( is_string( $desktopimage ) ? $desktopimage : '' );
+      $mob_url        = is_array( $mobileimage ) && ! empty( $mobileimage['url'] ) ? $mobileimage['url'] : ( is_string( $mobileimage ) ? $mobileimage : '' );
+      $hasmobileimage = ! empty( $mob_url );
 
-				$desktopimage = get_sub_field( "home_slide_desktop" );
-				$mobileimage = get_sub_field("home_slide_mobile");
-				$hasmobileimage = false;
-				if( !empty($mobileimage) && $mobileimage['url'] !== "") {
-							$mobileimage = $mobileimage['url'];
-					$hasmobileimage = true;
-				}
-				$buttonlink = get_sub_field( "home_slide_internal_link" ); //Default interal link
-				if ( get_sub_field( "home_slide_external" ) && get_sub_field( "home_slide_external_link" ) ) { // Make it external
-						$buttonlink = get_sub_field( "home_slide_external_link" );
-				}
-				$textcolor = get_sub_field( "home_slide_text_color" );
-
-      ?>
-
-    <div data-mobimg="<?php echo ($hasmobileimage ? $mobileimage : $desktopimage['url']); ?>" data-dtimg="<?php echo $desktopimage['url']; ?>" class="uams-hero-image uams-homepage-slider <?php echo ($textcolor ? $textcolor : 'lighttext' ); ?> <?php echo ($first ? 'activeslide' : '' ); ?>" style="background-position: center center; background-image:url('<?php echo $desktopimage["url"]; ?>');">
-		<div>
-			<h3 class="slide-title" id="slide-title-<?php echo $i; ?>"><?php the_sub_field( "home_slide_title" ); ?></a><span class="udub-slant"><span></span></span></h3>
-			<p class="slide-content"><?php the_sub_field( 'home_slide_text' ); ?></p>
-			<p><a class="uams-btn btn-sm btn-none" href="<?php echo $buttonlink; ?>" aria-describedby="slide-title-<?php echo $i; ?>"><?php the_sub_field( 'home_slide_button_text' ); ?></a></p>
-		</div>
-	</div>
-
-<?php
-	$first = false;
-	$slidecolor[$i] = $textcolor;
-	$i++;
-	endwhile;
-	?>
-	<?php if ($i > 1) { ?>
-	<div class="slideshow-controls <?php echo $slidecolor[0]; ?>">
-		<button class="next-headline">
-			<span class="uwn-slideshow-next-text">NEXT</span>
-			<span class="uwn-slideshow-next-title">NEXT TITLE HERE</span>
-			<span class="udub-slant" style="margin-top: 10px;"><span></span></span>
-		</button>
-	</div>
-	<?php } ?>
-</div>
-	<?php
-	else :
-
-	$url = wp_get_attachment_url( get_post_thumbnail_id($post->ID) );
-      if(!$url){
-        $url = get_site_url() . "/wp-content/themes/uams-2016/assets/headers/uams-pattern-grey.png";
+      $buttonlink = get_sub_field( 'home_slide_internal_link' );
+      if ( get_sub_field( 'home_slide_external' ) && get_sub_field( 'home_slide_external_link' ) ) {
+          $buttonlink = get_sub_field( 'home_slide_external_link' );
       }
-      $darktext = get_post_meta($post->ID, "home_image_dark_text");
-      $hasdarktext =( in_array('1',$darktext) ? ' hero-text-dark' : '');
-      //$mobileimage = get_post_meta($post->ID, "home_image_mobile");
-      $hasmobileimage = '';
-      $mobileimage = get_field('home_image_mobile');
-      $hasmobileimage = ( !empty($mobileimage) ? ' hero-mobile-image' : '' );
-      ?>
+      $textcolor        = get_sub_field( 'home_slide_text_color' );
+      $slidecolor[ $i ] = $textcolor ? $textcolor : 'lighttext';
+  ?>
+    <div data-mobimg="<?php echo esc_url( $hasmobileimage ? $mob_url : $dt_url ); ?>" data-dtimg="<?php echo esc_url( $dt_url ); ?>" class="uams-hero-image uams-homepage-slider <?php echo esc_attr( $slidecolor[ $i ] ); ?> <?php echo $first ? 'activeslide' : ''; ?>" style="background-position: center center; background-image:url('<?php echo esc_url( $dt_url ); ?>');">
+      <div>
+        <h3 class="slide-title" id="slide-title-<?php echo (int) $i; ?>"><?php echo esc_html( get_sub_field( 'home_slide_title' ) ); ?><span class="udub-slant"><span></span></span></h3>
+        <p class="slide-content"><?php echo esc_html( get_sub_field( 'home_slide_text' ) ); ?></p>
+        <p><a class="uams-btn btn-sm btn-none" href="<?php echo esc_url( $buttonlink ); ?>" aria-describedby="slide-title-<?php echo (int) $i; ?>"><?php echo esc_html( get_sub_field( 'home_slide_button_text' ) ); ?></a></p>
+      </div>
+    </div>
+  <?php
+      $first = false;
+      $i++;
+  endwhile;
+  ?>
+  <?php if ( $i > 1 ) : ?>
+  <div class="slideshow-controls <?php echo esc_attr( isset( $slidecolor[0] ) ? $slidecolor[0] : '' ); ?>">
+    <button class="next-headline">
+      <span class="uwn-slideshow-next-text">NEXT</span>
+      <span class="uwn-slideshow-next-title">NEXT TITLE HERE</span>
+      <span class="udub-slant" style="margin-top: 10px;"><span></span></span>
+    </button>
+  </div>
+  <?php endif; ?>
+</div>
 
+<?php else :
+    $thumb_id = get_post_thumbnail_id( $post_id );
+    $url      = $thumb_id ? wp_get_attachment_url( $thumb_id ) : '';
+    if ( ! $url ) {
+        $url = get_template_directory_uri() . '/assets/headers/uams-pattern-grey.png';
+    }
 
-<div class="uams-hero-image hero-height<?php echo $hasmobileimage; ?>" style="background-image: url(<?php echo $url; ?>);">
-    <?php if( get_field('home_image_mobile') ) { ?>
-    <div class="mobile-image" style="background-image: url(<?php echo $mobileimage['url']; ?>);"></div>
-    <?php } ?>
+    $darktext        = (array) get_post_meta( $post_id, 'home_image_dark_text', true );
+    $hasdarktext     = in_array( '1', $darktext, true ) ? ' hero-text-dark' : '';
+    $mobileimage_raw = function_exists( 'get_field' ) ? get_field( 'home_image_mobile' ) : '';
+    $mobileimage_url = is_array( $mobileimage_raw ) && ! empty( $mobileimage_raw['url'] ) ? $mobileimage_raw['url'] : ( is_string( $mobileimage_raw ) ? $mobileimage_raw : '' );
+    $hasmobileimage  = ! empty( $mobileimage_url ) ? ' hero-mobile-image' : '';
+    $home_title      = function_exists( 'get_field' ) && get_field( 'home_image_title' ) ? get_field( 'home_image_title' ) : get_the_title();
+    $btn_url         = function_exists( 'get_field' ) && get_field( 'home_image_external' ) ? get_field( 'home_image_external_url' ) : ( function_exists( 'get_field' ) ? get_field( 'home_image_internal_url' ) : '' );
+?>
+
+<div class="uams-hero-image hero-height<?php echo esc_attr( $hasmobileimage ); ?>" style="background-image: url('<?php echo esc_url( $url ); ?>');">
+    <?php if ( ! empty( $mobileimage_url ) ) : ?>
+    <div class="mobile-image" style="background-image: url('<?php echo esc_url( $mobileimage_url ); ?>');"></div>
+    <?php endif; ?>
     <div id="hero-bg">
       <div id="hero-container" class="container">
-        <h1 class="uams-site-title<?php echo $hasdarktext; ?>"><?php echo (get_field('home_image_title') ? get_field('home_image_title') : get_the_title()); ?></h1>
+        <h1 class="uams-site-title<?php echo esc_attr( $hasdarktext ); ?>"><?php echo esc_html( $home_title ); ?></h1>
         <span class="udub-slant"><span></span></span>
-      <?php if( get_field( 'home_image_add_button' )) { ?>
-        <a class="uams-btn btn-sm btn-none" href="<?php echo ( get_field('home_image_external') ? get_field('home_image_external_url') : get_field('home_image_internal_url') ); ?>"><?php echo get_field('home_image_button_text'); ?></a>
-      <?php } ?>
+      <?php if ( function_exists( 'get_field' ) && get_field( 'home_image_add_button' ) ) : ?>
+        <a class="uams-btn btn-sm btn-none" href="<?php echo esc_url( $btn_url ); ?>"><?php echo esc_html( get_field( 'home_image_button_text' ) ); ?></a>
+      <?php endif; ?>
       </div>
     </div>
 </div>
 
-<?php
-endif;
-?>
-<?php if( get_field( 'action_menu_active' ) && have_rows('action_menu') ) :  ?>
+<?php endif; ?>
 
+<?php if ( function_exists( 'get_field' ) && get_field( 'action_menu_active' ) && function_exists( 'have_rows' ) && have_rows( 'action_menu' ) ) : ?>
 <div class="full-bar">
-	<nav aria-label="popular links" class="container action-bar">
-		<ul class="center-block">
-<?php
-		// Get count for class
-		$rows = get_field('action_menu');
-		$row_count = count($rows);
-		// loop through the rows of data
-		while ( have_rows('action_menu') ) : the_row();
+  <nav aria-label="popular links" class="container action-bar">
+    <ul class="center-block">
+      <?php
+      $rows      = get_field( 'action_menu' );
+      $row_count = is_array( $rows ) ? count( $rows ) : 1;
 
-		// vars
-		$linktitle = get_sub_field('action_link_title');
-		$icon = get_sub_field('action_link_icon');
-		$external = get_sub_field( 'action_link' );
-		$internalurl = get_sub_field( 'action_link_page');
-		$externalurl = get_sub_field('action_link_url');
-
-?>
-			<li class="ab-1_<?php echo $row_count; ?>"><a href="<?php echo ($external ? $externalurl : $internalurl); ?>" title="<?php echo $linktitle; ?>"><span class="icon <?php echo $icon; ?>"></span><span><?php echo $linktitle; ?></span></a></li>
-<?php
-		endwhile; ?>
-		</ul>
-	</nav>
+      while ( have_rows( 'action_menu' ) ) : the_row();
+          $linktitle   = get_sub_field( 'action_link_title' );
+          $icon        = get_sub_field( 'action_link_icon' );
+          $external    = get_sub_field( 'action_link' );
+          $internalurl = get_sub_field( 'action_link_page' );
+          $externalurl = get_sub_field( 'action_link_url' );
+          $action_link = $external ? $externalurl : $internalurl;
+      ?>
+        <li class="ab-1_<?php echo (int) $row_count; ?>"><a href="<?php echo esc_url( $action_link ); ?>" title="<?php echo esc_attr( $linktitle ); ?>"><span class="icon <?php echo esc_attr( $icon ); ?>"></span><span><?php echo esc_html( $linktitle ); ?></span></a></li>
+      <?php endwhile; ?>
+    </ul>
+  </nav>
 </div>
-<?php
-	endif;
-?>
+<?php endif; ?>
 
 <div class="container uams-body">
 
   <div class="row">
 
-    <div class="hero-content col-md-<?php echo (($sidebar[0]!="on") ? "8" : "12" ); ?> uams-content" role='main'>
+    <div class="hero-content col-md-<?php echo $has_sidebar ? '8' : '12'; ?> uams-content" role="main">
 
       <?php
-	      if((!isset($breadcrumbs[0]) || $breadcrumbs[0]!="on")) {
-	      	get_template_part( 'breadcrumbs' );
-	      }
-	  ?>
+      if ( empty( $breadcrumbs ) || 'on' !== $breadcrumbs ) {
+          get_template_part( 'breadcrumbs' );
+      }
+      ?>
 
-  	    <div id="mobile-sidebar">
+      <div id="mobile-sidebar">
 
-			<button id="mobile-sidebar-menu" aria-hidden="true" tabindex="1">
+        <button id="mobile-sidebar-menu" aria-hidden="true" tabindex="1">
 
-		    	<div aria-hidden="true" id="ham">
-				    <span></span>
-					<span></span>
-					<span></span>
-					<span></span>
-			    </div>
-				<div id="mobile-sidebar-title" class="page_item">
+            <div aria-hidden="true" id="ham">
+                <span></span>
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+            <div id="mobile-sidebar-title" class="page_item">
 
-					<?php
-				        //limitation of the characters
-				        $text = get_the_title();
-				        echo text_cut($text, 27, true);
-						function text_cut($text, $length, $dots) {
-						//$text =get_the_title();
-						$text = trim(preg_replace('#[\s\n\r\t]{2,}#', ' ', $text));
-						$text_temp = $text;
-						   while (substr($text, $length, 1) != " ") {
-								$length--;
-							  	if ($length > strlen($text)) {
-								  	break;
-								}
-							}
-						    $text = substr($text, 0, $length);
-						    return $text . ( ( $dots == true && $text != '' && strlen($text_temp) > $length ) ? '...' : '');
-						}
-					?>
+                <?php
+                if ( ! function_exists( 'text_cut' ) ) {
+                    function text_cut( $text, $length = 27, $dots = true ) {
+                        $text      = trim( preg_replace( '#[\s\n\r\t]{2,}#', ' ', (string) $text ) );
+                        $text_temp = $text;
 
-			  	</div>
-			</button>
-			<div id="mobile-sidebar-links" aria-hidden="true">  <?php uams_sidebar_menu(); ?></div>
-		</div>
+                        if ( strlen( $text ) > $length ) {
+                            while ( $length > 0 && substr( $text, $length, 1 ) !== ' ' ) {
+                                $length--;
+                            }
+                            $text = substr( $text, 0, $length );
+                        }
 
-      <div id='main_content' class="uams-body-copy" tabindex="-1">
+                        return $text . ( ( $dots && $text !== '' && strlen( $text_temp ) > $length ) ? '...' : '' );
+                    }
+                }
+
+                echo esc_html( text_cut( get_the_title(), 27, true ) );
+                ?>
+
+            </div>
+        </button>
+        <div id="mobile-sidebar-links" aria-hidden="true"><?php uams_sidebar_menu(); ?></div>
+      </div>
+
+      <div id="main_content" class="uams-body-copy" tabindex="-1">
 
         <?php
-          // Start the Loop.
-          while ( have_posts() ) : the_post();
+        while ( have_posts() ) : the_post();
 
-            /*
-             * Include the post format-specific template for the content. If you want to
-             * use this in a child theme, then include a file called called content-___.php
-             * (where ___ is the post format) and that will be used instead.
-             */
+            the_content();
 
-              the_content();
-
-            // If comments are open or we have at least one comment, load up the comment template.
             if ( comments_open() || get_comments_number() ) {
-              comments_template();
+                comments_template();
             }
 
-          endwhile;
-
+        endwhile;
         ?>
 
       </div>
 
     </div>
 
-    <?php
-    if($sidebar[0]!="on") { ?>
-      <div id="sidebar">
+    <?php if ( $has_sidebar ) : ?>
+    <div id="sidebar">
       <?php get_sidebar(); ?>
-      </div> <?php
-    } ?>
+    </div>
+    <?php endif; ?>
 
   </div>
 
 </div>
 
-
 <?php
-	if ( ( get_field('home_page_slider') == 'slide' ) && have_rows('home_slides') ) {
-		wp_enqueue_script( 'script', get_template_directory_uri() . '/js/home-slider.js', array ( 'jquery' ), 1.1, true);
-	} ?>
+if ( function_exists( 'get_field' ) && 'slide' === get_field( 'home_page_slider' ) && function_exists( 'have_rows' ) && have_rows( 'home_slides' ) ) {
+    wp_enqueue_script( 'home-slider-script', get_template_directory_uri() . '/js/home-slider.js', array( 'jquery' ), '1.1', true );
+}
 
-<?php get_footer(); ?>
+get_footer();
+?>

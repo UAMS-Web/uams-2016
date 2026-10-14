@@ -1,13 +1,17 @@
 <?php
 
-if( ! defined( 'ABSPATH' ) ) exit;
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
 
+#[\AllowDynamicProperties]
 class Cuztom_Field_Hidden extends Cuztom_Field
 {
-	var $css_classes			= array( 'cuztom-input' );
+	public $css_classes = array( 'cuztom-input' );
 
-	function _output( $value )
+	public function _output( $value, $object = null )
 	{
-		return '<input type="hidden" ' . $this->output_name() . ' ' . $this->output_id() . ' ' . $this->output_css_class() . ' value="' . ( strlen( $value ) > 0 ? $value : $this->default_value ) . '" ' . $this->output_data_attributes() . ' />' . $this->output_explanation();
+		$val = ( ! is_null( $value ) && '' !== $value ) ? $value : $this->default_value;
+		return '<input type="hidden" ' . $this->output_name() . ' ' . $this->output_id() . ' ' . $this->output_css_class() . ' value="' . esc_attr( (string) $val ) . '" ' . $this->output_data_attributes() . ' />' . $this->output_explanation();
 	}
 }

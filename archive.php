@@ -18,7 +18,7 @@
 
       <h1><?php echo single_cat_title( '', false ); ?></h1>
       <?php if ( category_description() ) : // Show an optional category description ?>
-        <div class=”archive-meta”><?php echo category_description(); ?></div>
+        <div class="archive-meta"><?php echo category_description(); ?></div>
       <?php endif; ?>
       <hr>
 
@@ -33,17 +33,16 @@
              */
             get_template_part( 'content', 'archive' );
 
-
           endwhile;
         ?>
-        </br>
-        <?php posts_nav_link(' ', 'Previous page', 'Next page'); ?>
+        <br />
+        <?php posts_nav_link( ' ', 'Previous page', 'Next page' ); ?>
 
       </div>
 
     </div>
 
-    <?php get_sidebar() ?>
+    <?php get_sidebar(); ?>
 
   </div>
 

@@ -1,42 +1,57 @@
 <?php
 
-if( ! defined( 'ABSPATH' ) ) exit;
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
 
+#[\AllowDynamicProperties]
 class Cuztom_Field_Multi_Select extends Cuztom_Field
 {
-	var $_supports_bundle		= true;
+	public $_supports_bundle = true;
+	public $css_classes      = array( 'cuztom-input cuztom-select cuztom-multi-select' );
 
-	var $css_classes 			= array( 'cuztom-input cuztom-select cuztom-multi-select' );
-
-	function __construct( $field, $parent )
+	public function __construct( $field, $parent )
 	{
 		parent::__construct( $field, $parent );
 
-		$this->default_value 	= (array) $this->default_value;
-		$this->after 		   .= '[]';
+		$this->default_value = (array) $this->default_value;
+		$this->after        .= '[]';
 	}
 
-	function _output( $value )
+	public function _output( $value, $object = null )
 	{
-		$output = '<select ' . $this->output_name() . ' ' . $this->output_id() . ' ' . $this->output_css_class() . ' multiple="true">';
-			if( isset( $this->args['show_option_none'] ) )
-				$output .= '<option value="0" ' . ( is_array( $value ) ? ( in_array( 0, $value ) ? 'selected="selected"' : '' ) : ( ( $value == '-1' ) ? '' : in_array( 0, $this->default_value ) ? 'selected="selected"' : '' ) ) . '>' . $this->args['show_option_none'] . '</option>';
+		$output = '<select ' . $this->output_name() . ' ' . $this->output_id() . ' ' . $this->output_css_class() . ' multiple="multiple">';
 
-			if( is_array( $this->options ) )
-			{
-				foreach( $this->options as $slug => $name )
-				{
-					$output .= '<option value="' . $slug . '" ' . ( is_array( $value ) ? ( in_array( $slug, $value ) ? 'selected="selected"' : '' ) : ( ( $value == '-1' ) ? '' : in_array( $slug, $this->default_value ) ? 'selected="selected"' : '' ) ) . '>' . $name . '</option>';
-				}
+		if ( isset( $this->args['show_option_none'] ) ) {
+			$selected_none = false;
+			if ( is_array( $value ) ) {
+				$selected_none = in_array( '0', array_map( 'strval', $value ), true );
+			} elseif ( '-1' !== (string) $value ) {
+				$selected_none = in_array( '0', array_map( 'strval', $this->default_value ), true );
 			}
-		$output .= '</select>';
+			$output .= '<option value="0" ' . ( $selected_none ? 'selected="selected"' : '' ) . '>' . esc_html( $this->args['show_option_none'] ) . '</option>';
+		}
 
+		if ( is_array( $this->options ) ) {
+			foreach ( $this->options as $slug => $name ) {
+				$selected = false;
+				if ( is_array( $value ) ) {
+					$selected = in_array( (string) $slug, array_map( 'strval', $value ), true );
+				} elseif ( '-1' !== (string) $value ) {
+					$selected = in_array( (string) $slug, array_map( 'strval', $this->default_value ), true );
+				}
+
+				$output .= '<option value="' . esc_attr( $slug ) . '" ' . ( $selected ? 'selected="selected"' : '' ) . '>' . esc_html( $name ) . '</option>';
+			}
+		}
+
+		$output .= '</select>';
 		$output .= $this->output_explanation();
 
 		return $output;
 	}
 
-	function save_value( $value )
+	public function save_value( $value )
 	{
 		return empty( $value ) ? '-1' : $value;
 	}

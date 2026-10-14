@@ -1,53 +1,63 @@
 <?php
 
 /*
- *  YouTube shortcode allows for youtube video and/or playlist to be added to content
- *  [youtube type='type' id='video or playlist id' max-results='integer that defines max results']
- *  max_results is optional, and if not given allows the UAMS javascript object to define max_results
+ *  YouTube shortcode allows for YouTube video and/or playlist to be added to content
+ *  [youtube type='single' id='xxxx' max-results='5']
  */
 
 class UAMS_YouTube
 {
+    public static $types = array( 'playlist', 'single' );
 
-    public static $types = array('playlist', 'single');
-
-    function __construct()
+    public function __construct()
     {
-        add_shortcode('youtube', array($this, 'youtube_handler'));
+        add_shortcode( 'youtube', array( $this, 'youtube_handler' ) );
     }
 
-    function youtube_handler($atts)
+    public function youtube_handler( $atts )
     {
-        $attributes = (object) $atts;
+        $params = shortcode_atts( array(
+            'type'        => '',
+            'id'          => '',
+            'max-results' => 0,
+            'max_results' => 0,
+        ), $atts, 'youtube' );
 
-        $classes = array('uams-btn');
+        $type = strtolower( trim( $params['type'] ) );
 
-        if (isset($attributes->type)){
-            $type = strtolower($attributes->type);
-            if (!in_array($type, $this::$types)){
-                return sprintf('youtube type "%s" not supported', $type);
-            }
-        }
-        else {
+        if ( empty( $type ) ) {
             return 'required attribute "type" missing';
         }
 
-        if (isset($attributes->id)){
-            $id = $attributes->id;
+        if ( ! in_array( $type, self::$types, true ) ) {
+            return sprintf( 'youtube type "%s" not supported', esc_html( $type ) );
         }
-        else {
+
+        $id = sanitize_text_field( $params['id'] );
+        if ( empty( $id ) ) {
             return 'required attribute "id" missing';
         }
 
-        $el_id = 'uams-youtube-' . rand(0,100); //needs unique id.  Could set this in shortcode instead of generating
-        $max_results = intval($attributes->max_results);
-        if ($max_results > 0){
-            $return = sprintf('<div id="%s" class="uams-youtube" data-uams-youtube-type="%s" data-uams-youtube="%s" data-max-results="%d"></div>', $el_id, $type, $id, $max_results);
-        }
-        else {
-            $return = sprintf('<div id="%s" class="uams-youtube" data-uams-youtube-type="%s" data-uams-youtube="%s"></div>', $el_id, $type, $id);
+        $max_results = (int) ( $params['max-results'] ?: $params['max_results'] );
+        $el_id       = 'uams-youtube-' . wp_rand( 0, 1000 );
+
+        if ( $max_results > 0 ) {
+            return sprintf(
+                '<div id="%s" class="uams-youtube" data-uams-youtube-type="%s" data-uams-youtube="%s" data-max-results="%d"></div>',
+                esc_attr( $el_id ),
+                esc_attr( $type ),
+                esc_attr( $id ),
+                $max_results
+            );
         }
 
-        return $return;
+        return sprintf(
+            '<div id="%s" class="uams-youtube" data-uams-youtube-type="%s" data-uams-youtube="%s"></div>',
+            esc_attr( $el_id ),
+            esc_attr( $type ),
+            esc_attr( $id )
+        );
     }
 }
+
+new UAMS_YouTube();

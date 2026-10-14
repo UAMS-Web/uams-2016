@@ -1,84 +1,55 @@
 <?php
 
-if( ! defined( 'ABSPATH' ) ) exit;
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
 
 /**
  * Registers the meta boxes
  *
- * @author 	Gijs Jorissen
- * @since 	0.2
- *
+ * @author  Gijs Jorissen
+ * @since   0.2
  */
+#[\AllowDynamicProperties]
 class Cuztom_Meta_Box extends Cuztom_Meta
 {
-	var $context;
-	var $priority;
-	var $post_types;
-	
-	/**
-	 * Constructs the meta box
-	 *
-	 * @param   string 			$id
-	 * @param 	string|array	$title
-	 * @param 	array|string	$fields
-	 * @param 	string 			$post_type_name
-	 * @param 	string 			$context
-	 * @param 	string 			$priority
-	 *
-	 * @author 	Gijs Jorissen
-	 * @since 	0.2
-	 *
-	 */
-	function __construct( $id, $title, $post_type, $data = array(), $context = 'normal', $priority = 'default' )
+	public $context;
+	public $priority;
+	public $post_types = array();
+
+	public function __construct( $id, $title, $post_type, $data = array(), $context = 'normal', $priority = 'default' )
 	{
-		if( ! empty( $title ) )
-		{
+		if ( ! empty( $title ) ) {
 			parent::__construct( $title );
 
-			$this->id 			= $id;
-			$this->post_types 	= (array) $post_type;
-			$this->context		= $context;
-			$this->priority		= $priority;
+			$this->id         = $id;
+			$this->post_types = (array) $post_type;
+			$this->context    = $context;
+			$this->priority   = $priority;
 
-			// Chack if the class, function or method exist, otherwise use cuztom callback
-			if( Cuztom::is_wp_callback( $data ) )
-			{
+			if ( Cuztom::is_wp_callback( $data ) ) {
 				$this->callback = $data;
-			}
-			else
-			{
-				$this->callback = array( &$this, 'callback' );
+			} else {
+				$this->callback = array( $this, 'callback' );
+				$this->data     = $this->build( $data );
 
-				// Build the meta box and fields
-				$this->data = $this->build( $data );
-
-				foreach( $this->post_types as $post_type )
-				{
-					add_filter( 'manage_' . $post_type . '_posts_columns', array( &$this, 'add_column' ) );
-					add_action( 'manage_' . $post_type . '_posts_custom_column', array( &$this, 'add_column_content' ), 10, 2 );
-					add_action( 'manage_edit-' . $post_type . '_sortable_columns', array( &$this, 'add_sortable_column' ), 10, 2 );
+				foreach ( $this->post_types as $pt ) {
+					add_filter( 'manage_' . $pt . '_posts_columns', array( $this, 'add_column' ) );
+					add_action( 'manage_' . $pt . '_posts_custom_column', array( $this, 'add_column_content' ), 10, 2 );
+					add_action( 'manage_edit-' . $pt . '_sortable_columns', array( $this, 'add_sortable_column' ), 10, 2 );
 				}
 
-				add_action( 'save_post', array( &$this, 'save_post' ) );
-				add_action( 'post_edit_form_tag', array( &$this, 'edit_form_tag' ) );
+				add_action( 'save_post', array( $this, 'save_post' ) );
+				add_action( 'post_edit_form_tag', array( $this, 'edit_form_tag' ) );
 			}
-			
-			// Add the meta box
-			add_action( 'add_meta_boxes', array( &$this, 'add_meta_box' ) );
-		}	
+
+			add_action( 'add_meta_boxes', array( $this, 'add_meta_box' ) );
+		}
 	}
-	
-	/**
-	 * Method that calls the add_meta_box function
-	 *
-	 * @author 	Gijs Jorissen
-	 * @since 	0.2
-	 *
-	 */
-	function add_meta_box()
+
+	public function add_meta_box()
 	{
-		foreach( $this->post_types as $post_type )
-		{
+		foreach ( $this->post_types as $post_type ) {
 			add_meta_box(
 				$this->id,
 				$this->title,
@@ -89,143 +60,104 @@ class Cuztom_Meta_Box extends Cuztom_Meta
 			);
 		}
 	}
-	
-	/**
-	 * Hooks into the save hook for the newly registered Post Type
-	 *
-	 * @author 	Gijs Jorissen
-	 * @since 	0.1
-	 *
-	 */
-	function save_post( $post_id )
+
+	public function save_post( $post_id )
 	{
-		// Deny the wordpress autosave function
-		if( ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE ) || ( defined( 'DOING_AJAX' ) && DOING_AJAX ) ) {
+		if ( ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE ) || ( defined( 'DOING_AJAX' ) && DOING_AJAX ) ) {
 			return;
 		}
 
-		// Verify nonce
-		if( ! ( isset( $_POST['cuztom_nonce'] ) && wp_verify_nonce( $_POST['cuztom_nonce'], 'cuztom_meta' ) ) ) {
+		if ( ! ( isset( $_POST['cuztom_nonce'] ) && wp_verify_nonce( $_POST['cuztom_nonce'], 'cuztom_meta' ) ) ) {
 			return;
 		}
 
-		// Is the post from the given post type?
-		if( ! in_array( get_post_type( $post_id ), array_merge( $this->post_types, array( 'revision' ) ) ) ) {
+		$current_pt = get_post_type( $post_id );
+		if ( ! in_array( $current_pt, array_merge( $this->post_types, array( 'revision' ) ), true ) ) {
 			return;
 		}
 
-		// Is the current user capable to edit this post
-		if( ! current_user_can( get_post_type_object( get_post_type( $post_id ) )->cap->edit_post, $post_id ) ) {
+		$pt_obj = get_post_type_object( $current_pt );
+		if ( ! $pt_obj || ! current_user_can( $pt_obj->cap->edit_post, $post_id ) ) {
 			return;
 		}
 
-		$values = isset( $_POST['cuztom'] ) ? $_POST['cuztom'] : array();
+		$values = ( isset( $_POST['cuztom'] ) && is_array( $_POST['cuztom'] ) ) ? $_POST['cuztom'] : array();
 
-		if( ! empty( $values ) ) {
+		if ( ! empty( $values ) ) {
 			parent::save( $post_id, $values );
 		}
 	}
 
-	/**
-	 * Normal save method to save all the fields in a metabox
-	 *
-	 * @author 	Gijs Jorissen
-	 * @since 	2.6
-	 */
-	function save( $post_id, $values )
+	public function save( $post_id, $values )
 	{
-		foreach( $this->fields as $id => $field )
-		{
-			if( $field->in_bundle ) continue;
-			
-			$value = isset( $values[$id] ) ? $values[$id] : '';
-			$value = apply_filters( "cuztom_post_meta_save_$field->type", apply_filters( 'cuztom_post_meta_save', $value, $field, $post_id ), $field, $post_id );
+		if ( empty( $this->fields ) || ! is_array( $this->fields ) ) {
+			return;
+		}
 
-			$field->save( $post_id, $value, 'post' );
+		foreach ( $this->fields as $id => $field ) {
+			if ( ! empty( $field->in_bundle ) ) {
+				continue;
+			}
+
+			$value = isset( $values[ $id ] ) ? $values[ $id ] : '';
+			$value = apply_filters( "cuztom_post_meta_save_{$field->type}", apply_filters( 'cuztom_post_meta_save', $value, $field, $post_id ), $field, $post_id );
+
+			$field->save( $post_id, $value );
 		}
 	}
-	
-	/**
-	 * Used to add a column head to the Post Type's List Table
-	 *
-	 * @param 	array 			$columns
-	 * @return 	array
-	 *
-	 * @author 	Gijs Jorissen
-	 * @since 	1.1
-	 *
-	 */
-	function add_column( $columns )
+
+	public function add_column( $columns )
 	{
+		$columns = is_array( $columns ) ? $columns : array();
 		unset( $columns['date'] );
 
-		foreach( $this->fields as $id_name => $field )
-		{
-			if( $field->show_admin_column ) $columns[$id_name] = $field->label;
+		if ( ! empty( $this->fields ) && is_array( $this->fields ) ) {
+			foreach ( $this->fields as $id_name => $field ) {
+				if ( ! empty( $field->show_admin_column ) ) {
+					$columns[ $id_name ] = $field->label;
+				}
+			}
 		}
 
 		$columns['date'] = __( 'Date', 'cuztom' );
 		return $columns;
 	}
-	
-	/**
-	 * Used to add the column content to the column head
-	 *
-	 * @param 	string 			$column
-	 * @param 	integer 		$post_id
-	 * @return 	mixed
-	 *
-	 * @author 	Gijs Jorissen
-	 * @since 	1.1
-	 *
-	 */
-	function add_column_content( $column, $post_id )
-	{
-		$meta = get_post_meta( $post_id, $column, true );
-		
-		if( $this->fields )
-		{
-			foreach( $this->fields as $id_name => $field )
-			{
-				if( $column == $id_name )
-				{
-					if( $field->repeatable && $field->_supports_repeatable )
-					{
-						echo implode( $meta, ', ' );
-					}
-					else
-					{
-						if( $field instanceof Cuztom_Field_Image )
-							echo wp_get_attachment_image( $meta, array( 100, 100 ) );
-						elseif( $field instanceof Cuztom_Field_Radios ) {
-							echo isset( $field->options[$meta[0]] ) ? $field->options[$meta[0]] : '';
-						}
-						else
-							echo $meta;
-					}
 
+	public function add_column_content( $column, $post_id )
+	{
+		$meta = get_post_meta( (int) $post_id, $column, true );
+
+		if ( ! empty( $this->fields ) && is_array( $this->fields ) ) {
+			foreach ( $this->fields as $id_name => $field ) {
+				if ( $column === $id_name ) {
+					if ( ! empty( $field->repeatable ) && ! empty( $field->_supports_repeatable ) ) {
+						echo esc_html( implode( ', ', (array) $meta ) );
+					} else {
+						if ( $field instanceof Cuztom_Field_Image ) {
+							echo wp_get_attachment_image( (int) $meta, array( 100, 100 ) );
+						} elseif ( $field instanceof Cuztom_Field_Radios ) {
+							$option_key = is_array( $meta ) && isset( $meta[0] ) ? $meta[0] : $meta;
+							echo isset( $field->options[ $option_key ] ) ? esc_html( $field->options[ $option_key ] ) : '';
+						} else {
+							echo esc_html( (string) $meta );
+						}
+					}
 					break;
 				}
 			}
 		}
 	}
 
-	/**
-	 * Used to make all columns sortable
-	 * 
-	 * @param 	array 			$columns
-	 * @return  array
-	 *
-	 * @author  Gijs Jorissen
-	 * @since   1.4.8
-	 * 
-	 */
-	function add_sortable_column( $columns )
+	public function add_sortable_column( $columns )
 	{
-		if( $this->fields )
-		{
-			foreach( $this->fields as $id_name => $field )
-				if( $field->admin_column_sortable ) $columns[$id_name] = $field->label;
+		$columns = is_array( $columns ) ? $columns : array();
+
+		if ( ! empty( $this->fields ) && is_array( $this->fields ) ) {
+			foreach ( $this->fields as $id_name => $field ) {
+				if ( ! empty( $field->admin_column_sortable ) ) {
+					$columns[ $id_name ] = $field->label;
+				}
+			}
 		}
 
 		return $columns;

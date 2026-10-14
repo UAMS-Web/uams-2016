@@ -6,38 +6,45 @@
 
 class UAMS_Media_Caption
 {
+    public function __construct()
+    {
+        add_filter( 'img_caption_shortcode', array( $this, 'add_media_credit_to_caption_shortcode_filter' ), 10, 3 );
+    }
 
-  function UAMS_Media_Caption()
-  {
-    add_filter( 'img_caption_shortcode', array( $this, 'add_media_credit_to_caption_shortcode_filter'), 10, 3 );
-  }
+    public function add_media_credit_to_caption_shortcode_filter( $val, $attr, $content = null )
+    {
+        $atts = shortcode_atts( array(
+            'id'      => '',
+            'align'   => '',
+            'width'   => '',
+            'caption' => '',
+        ), $attr, 'caption' );
 
-  //
-  // Override the caption html - original in wp-includes/media.php
-  //
-  function add_media_credit_to_caption_shortcode_filter($val, $attr, $content = null)
-  {
-    extract(shortcode_atts(array(
-      'id'	=> '',
-      'align'	=> '',
-      'width'	=> '',
-      'caption' => ''
-    ), $attr));
+        $width   = (int) $atts['width'];
+        $caption = $atts['caption'];
+        $id      = $atts['id'];
+        $align   = $atts['align'];
 
-    if ( 1 > (int) $width || empty($caption) )
-      return $content;
+        if ( 1 > $width || empty( $caption ) ) {
+            return $content;
+        }
 
-    if ( $id ) $id = 'id="' . esc_attr($id) . '" ';
+        $id_attr = '';
+        $credit  = '';
 
-    preg_match('/([\d]+)/', $id, $match);
+        if ( ! empty( $id ) ) {
+            $id_attr = 'id="' . esc_attr( $id ) . '" ';
+            if ( preg_match( '/\d+/', $id, $match ) ) {
+                $meta_credit = get_post_meta( (int) $match[0], '_media_credit', true );
+                if ( ! empty( $meta_credit ) ) {
+                    $credit = '<span class="wp-media-credit">' . esc_html( $meta_credit ) . '</span>';
+                }
+            }
+        }
 
-    if ( $match[0] ) $credit = get_post_meta($match[0], '_media_credit', true);
-
-    if ( $credit ) $credit = '<span class="wp-media-credit">'. $credit . '</span>';
-
-    return '<div ' . $id . 'class="wp-caption ' . esc_attr($align) . '" style="width: ' . (10 + (int) $width) . 'px">'
-    . do_shortcode( $content ) . '<p class="wp-caption-text">' . $caption . $credit . '</p></div>';
-
-  }
-
+        return '<div ' . $id_attr . 'class="wp-caption ' . esc_attr( $align ) . '" style="width: ' . ( 10 + $width ) . 'px">'
+            . do_shortcode( (string) $content ) . '<p class="wp-caption-text">' . $caption . $credit . '</p></div>';
+    }
 }
+
+new UAMS_Media_Caption();

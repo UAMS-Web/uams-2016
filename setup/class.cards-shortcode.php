@@ -39,149 +39,105 @@
 
 class UAMS_CardsShortcode
 {
-
-    function __construct()
+    public function __construct()
     {
-
-      add_filter('the_content', array( $this, 'wpex_fix_shortcodes' ) );
-
-        add_shortcode('cards', array($this, 'cards_handler'));
-        add_shortcode('card', array($this, 'card_handler'));
-        // add_shortcode('card_options', array($this, 'card_options_handler'));
+        add_filter( 'the_content', array( $this, 'wpex_fix_shortcodes' ) );
+        add_shortcode( 'cards', array( $this, 'cards_handler' ) );
+        add_shortcode( 'card', array( $this, 'card_handler' ) );
     }
 
-    function wpex_fix_shortcodes($content){
-        $array = array (
-            '<p>[' => '[',
-            ']</p>' => ']',
-            ']<br />' => ']'
+    public function wpex_fix_shortcodes( $content )
+    {
+        if ( empty( $content ) || ! is_string( $content ) ) {
+            return $content;
+        }
+
+        $array = array(
+            '<p>['    => '[',
+            ']</p>'   => ']',
+            ']<br />' => ']',
         );
 
-        $content = strtr($content, $array);
-        return $content;
+        return strtr( $content, $array );
     }
 
-    function cards_handler( $atts, $content )
+    public function cards_handler( $atts, $content = null )
     {
         $cards_atts = shortcode_atts( array(
-          'name' => '',
-        ), $atts);
+            'name' => '',
+        ), $atts, 'cards' );
 
-        if ( empty( $content ) )
-            return 'No content inside the accordion element. Make sure your close your accordion element. Required stucture: [accordion][section]content[/section][/accordion]';
+        if ( empty( $content ) ) {
+            return 'No content inside the cards element. Make sure you close your cards element.';
+        }
 
         $output = do_shortcode( $content );
-        return sprintf( '<h2>%s</h2><section class="cards">%s</section>', $cards_atts['name'], $output );
+        $title  = ! empty( $cards_atts['name'] ) ? sprintf( '<h2>%s</h2>', esc_html( $cards_atts['name'] ) ) : '';
+
+        return sprintf( '%s<section class="cards">%s</section>', $title, $output );
     }
 
-    function card_handler( $atts, $content )
+    public function card_handler( $atts, $content = null )
     {
         $card_atts = shortcode_atts( array(
-          'title' => '',
-          'size' => '',
-          'image' => '',
-          'color' => '',
-          'type' => '',
-          'link' => '',
-          'alt' => '',
-          'action' => '',
-          'footer' => '',
-        ), $atts);
+            'title'  => '',
+            'size'   => '',
+            'image'  => '',
+            'color'  => '',
+            'type'   => '',
+            'link'   => '',
+            'alt'    => '',
+            'action' => '',
+            'footer' => '',
+        ), $atts, 'card' );
 
-        $size = '';
-        $type = '';
-        $color = '';
-        $image = '';
-        $alt = '';
-        $link = '';
+        $size    = ! empty( $card_atts['size'] ) ? ' ' . sanitize_html_class( $card_atts['size'] ) : '';
+        $color   = ! empty( $card_atts['color'] ) ? ' ' . sanitize_html_class( $card_atts['color'] ) : '';
+        $type    = ! empty( $card_atts['type'] ) ? ' ' . sanitize_html_class( $card_atts['type'] ) : '';
+        $link    = '';
         $endlink = '';
-        $action = '';
-        $footer = '';
-        if ( empty( $content ) ){
-          $content = 'No content for this section.  Make sure you wrap your content like this: [card]Content here[/card]';
+        $image   = '';
+        $action  = '';
+        $footer  = '';
+
+        if ( empty( $content ) ) {
+            $content = 'No content for this section. Make sure you wrap your content like this: [card]Content here[/card]';
         }
 
-        if ($card_atts['size']) {
-            $size = ' ' . $card_atts['size'];
-        }
-
-        if ($card_atts['color']) {
-            $color = ' '. $card_atts['color'];
-        }
-
-        if ($card_atts['type']) {
-            $type = ' ' . $card_atts['type'];
-        }
-
-        if ($card_atts['link']) {
-            $link = '<a href="' . $card_atts['link'] . '">';
+        if ( ! empty( $card_atts['link'] ) ) {
+            $link    = '<a href="' . esc_url( $card_atts['link'] ) . '">';
             $endlink = '</a>';
         }
 
-        if ($card_atts['alt']) {
-            $alt = ' alt="' . $card_atts['alt'] .'" ';
+        if ( ! empty( $card_atts['image'] ) ) {
+            $alt   = ! empty( $card_atts['alt'] ) ? ' alt="' . esc_attr( $card_atts['alt'] ) . '"' : ' alt=""';
+            $image = '<div class="card-image">' . $link . '<img src="' . esc_url( $card_atts['image'] ) . '"' . $alt . ' />' . $endlink . '</div>';
         }
 
-        if ($card_atts['image']) {
-            $image = '<div class="card-image">'. $link .'<img src="'. $card_atts['image'] .'"'. $alt .' />'. $endlink .'</div>';
+        if ( ! empty( $card_atts['action'] ) ) {
+            $action = '<div class="card-action">' . wp_kses_post( $card_atts['action'] ) . '</div>';
         }
 
-        if ($card_atts['action']) {
-            $action = '<div class="card-action">'. $card_atts['action'] .'</div>';
+        if ( ! empty( $card_atts['footer'] ) ) {
+            $footer = '<div class="card-footer">' . wp_kses_post( $card_atts['footer'] ) . '</div>';
         }
-
-        if ($card_atts['footer']) {
-            $footer = '<div class="card-footer">'. $card_atts['footer'] .'</div>';
-        }
-
 
         $output = do_shortcode( $content );
-        return sprintf( '<article class="card%s%s%s">%s<div class="card-stack"><div class="card-content">%s<h3>%s</h3>%s%s</div>%s%s</div></article>', $type, $size, $color, $image, $link, $card_atts['title'], $endlink, apply_filters( 'the_content', $output ), $action, $footer );
+
+        return sprintf(
+            '<article class="card%s%s%s">%s<div class="card-stack"><div class="card-content">%s<h3>%s</h3>%s%s</div>%s%s</div></article>',
+            esc_attr( $type ),
+            esc_attr( $size ),
+            esc_attr( $color ),
+            $image,
+            $link,
+            esc_html( $card_atts['title'] ),
+            $endlink,
+            apply_filters( 'the_content', $output ),
+            $action,
+            $footer
+        );
     }
-
-    // function card_options_handler( $atts, $content )
-    // {
-    //   $card_options_atts = shortcode_atts( array(
-    //     'title' => '',
-    //     'size' => '',
-    //     'image' => '',
-    //     'color' => '',
-    //     'type' => '',
-    //     'action' => '',
-    //     'footer' => '',
-    //   ), $atts);
-
-    //   $size = '';
-    //   $type = '';
-    //   $color = '';
-    //   $action = '';
-    //   $footer = '';
-    //   if ( empty( $content ) ){
-    //     $content = 'No content for this section.  Make sure you wrap your content like this: [card]Content here[/card]';
-    //   }
-
-    //   if ($card_options_atts['size']) {
-    //       $size = ' ' . $card_options_atts['size'];
-    //   }
-
-    //   if ($card_options_atts['color']) {
-    //       $color = ' '. $card_options_atts['color'];
-    //   }
-
-    //   if ($card_options_atts['type']) {
-    //       $type = ' ' . $card_options_atts['color'];
-    //   }
-
-    //   if ($card_options_atts['action']) {
-    //       $action = '<div class="card-action">'. $card_options_atts['action'] .'</div>';
-    //   }
-
-    //   if ($card_options_atts['footer']) {
-    //       $footer = '<div class="card-footer">'. $card_options_atts['footer'] .'</div>';
-    //   }
-
-
-    //   $output = do_shortcode( $content );
-    //   return sprintf( '<article class="card%s"><div class="card-image">%s</div><div class="card-stack"><div class="card-content"><h3>%s</h3>%s%s</div></div></article>', $section_atts['title'], $active, apply_filters( 'the_content', $output ) );
-    // }
 }
+
+new UAMS_CardsShortcode();

@@ -7,14 +7,14 @@
 
 class UAMS_MenuShortcode
 {
-
-    function __construct()
+    public function __construct()
     {
-        add_shortcode( "custommenu", array($this, 'vo_custom_menu_shortcode' ));
+        add_shortcode( 'custommenu', array( $this, 'vo_custom_menu_shortcode' ) );
     }
 
-    function vo_custom_menu_shortcode( $atts, $content = null ) {
-        extract( shortcode_atts(
+    public function vo_custom_menu_shortcode( $atts, $content = null )
+    {
+        $params = shortcode_atts(
             array(
                 'menu'            => '',
                 'container'       => 'div',
@@ -22,7 +22,6 @@ class UAMS_MenuShortcode
                 'container_id'    => '',
                 'menu_class'      => 'menu',
                 'menu_id'         => '',
-                'echo'            => true,
                 'fallback_cb'     => 'wp_page_menu',
                 'before'          => '',
                 'after'           => '',
@@ -30,28 +29,32 @@ class UAMS_MenuShortcode
                 'link_after'      => '',
                 'depth'           => 0,
                 'walker'          => '',
-                'theme_location'  => ''
-            ), $atts )
+                'theme_location'  => '',
+            ),
+            $atts,
+            'custommenu'
         );
 
         return wp_nav_menu(
             array(
-                'menu'            => $menu,
-                'container'       => $container,
-                'container_class' => $container_class,
-                'container_id'    => $container_id,
-                'menu_class'      => $menu_class,
-                'menu_id'         => $menu_id,
+                'menu'            => $params['menu'],
+                'container'       => $params['container'],
+                'container_class' => $params['container_class'],
+                'container_id'    => $params['container_id'],
+                'menu_class'      => $params['menu_class'],
+                'menu_id'         => $params['menu_id'],
                 'echo'            => false,
-                'fallback_cb'     => $fallback_cb,
-                'before'          => $before,
-                'after'           => $after,
-                'link_before'     => $link_before,
-                'link_after'      => $link_after,
-                'depth'           => $depth,
-                'walker'          => $walker,
-                'theme_location'  => $theme_location
+                'fallback_cb'     => $params['fallback_cb'],
+                'before'          => $params['before'],
+                'after'           => $params['after'],
+                'link_before'     => $params['link_before'],
+                'link_after'      => $params['link_after'],
+                'depth'           => (int) $params['depth'],
+                'walker'          => ! empty( $params['walker'] ) && class_exists( $params['walker'] ) ? new $params['walker']() : '',
+                'theme_location'  => $params['theme_location'],
             )
         );
     }
 }
+
+new UAMS_MenuShortcode();

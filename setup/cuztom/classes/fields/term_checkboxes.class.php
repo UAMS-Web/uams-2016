@@ -1,65 +1,67 @@
 <?php
 
-if( ! defined( 'ABSPATH' ) ) exit;
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
 
+#[\AllowDynamicProperties]
 class Cuztom_Field_Term_Checkboxes extends Cuztom_Field
 {
-	var $_supports_bundle		= true;
+	public $_supports_bundle = true;
+	public $css_classes      = array( 'cuztom-input' );
+	public $terms;
 
-	var $css_classes 			= array( 'cuztom-input' );
-	var $terms;
-
-	function __construct( $field, $parent )
+	public function __construct( $field, $parent )
 	{
 		parent::__construct( $field, $parent );
 
 		$this->args = array_merge(
 			array(
-				'taxonomy'		=> 'category',
+				'taxonomy' => 'category',
 			),
-			$this->args
+			(array) $this->args
 		);
 
 		$this->default_value = (array) $this->default_value;
-
-		add_action( 'init', array( &$this, 'get_taxonomy_terms' ) );
-
+		add_action( 'init', array( $this, 'get_taxonomy_terms' ) );
 		$this->after .= '[]';
 	}
 
-	function _output( $value )
+	public function _output( $value, $object = null )
 	{
 		$output = '<div class="cuztom-checkboxes-wrap">';
-			if( is_array( $this->terms ) )
-			{
-				foreach( $this->terms as $term )
-				{
-					$output .= '<input type="checkbox" ' . $this->output_name() . ' ' . $this->output_id( $this->id . $this->after_id . '_' . Cuztom::uglify( $term->name ) ) . ' ' . $this->output_css_class() . ' value="' . $term->term_id . '" ' . ( is_array( $value ) ? ( in_array( $term->term_id, $value ) ? 'checked="checked"' : '' ) : ( ( $value == '-1' ) ? '' : in_array( $term->term_id, $this->default_value ) ? 'checked="checked"' : '' ) ) . ' /> ';
-					$output .= '<label for="' . $this->id . $this->after_id . '_' . Cuztom::uglify( $term->name ) . '">' . $term->name . '</label>';
-					$output .= '<br />';
-				}
-			}
-		$output .= '</div>';
 
+		if ( is_array( $this->terms ) && ! is_wp_error( $this->terms ) ) {
+			foreach ( $this->terms as $term ) {
+				$checked = false;
+				if ( is_array( $value ) ) {
+					$checked = in_array( (string) $term->term_id, array_map( 'strval', $value ), true );
+				} elseif ( '-1' !== (string) $value ) {
+					$checked = in_array( (string) $term->term_id, array_map( 'strval', $this->default_value ), true );
+				}
+
+				$element_id = $this->id . $this->after_id . '_' . Cuztom::uglify( $term->name );
+
+				$output .= '<input type="checkbox" ' . $this->output_name() . ' ' . $this->output_id( $element_id ) . ' ' . $this->output_css_class() . ' value="' . esc_attr( $term->term_id ) . '" ' . checked( $checked, true, false ) . ' /> ';
+				$output .= '<label for="' . esc_attr( $element_id ) . '">' . esc_html( $term->name ) . '</label>';
+				$output .= '<br />';
+			}
+		}
+
+		$output .= '</div>';
 		$output .= $this->output_explanation();
 
 		return $output;
 	}
 
-	function save_value( $value )
+	public function save_value( $value )
 	{
 		return empty( $value ) ? '-1' : $value;
 	}
 
-	/**
-	 * Gets taxonomy terms for use in the output
-	 *
-	 * @author 	Abhinav Sood
-	 * @since 	1.6.1
-	 *
-	 */
-	function get_taxonomy_terms()
-    {
-        $this->terms = get_terms( $this->args['taxonomy'], $this->args );
-    }
+	public function get_taxonomy_terms()
+	{
+		$taxonomy    = isset( $this->args['taxonomy'] ) ? $this->args['taxonomy'] : 'category';
+		$this->terms = get_terms( array_merge( (array) $this->args, array( 'taxonomy' => $taxonomy ) ) );
+	}
 }

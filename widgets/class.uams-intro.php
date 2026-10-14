@@ -5,66 +5,67 @@
 
 class UAMS_Intro_Text extends WP_Widget
 {
+    const ID          = 'uams-intro-text';
+    const TITLE       = 'UAMS Intro Text';
+    const DESCRIPTION = 'Italicized block of intro text.';
 
-  const ID = 'uams-intro-text';
-  const TITLE = 'UAMS Intro Text';
-  const DESCRIPTION = 'Italicized block of intro text.';
+    private static $SHORTCODE_DEFAULTS = array();
 
-  private static $SHORTCODE_DEFAULTS = array();
+    public function __construct()
+    {
+        add_shortcode( 'intro', array( $this, 'intro_shortcode' ) );
 
-  function __construct()
-  {
+        parent::__construct(
+            self::ID,
+            __( self::TITLE, 'uams' ),
+            array(
+                'description' => __( self::DESCRIPTION, 'uams' ),
+                'classname'   => self::ID,
+            )
+        );
+    }
 
-    add_shortcode( 'intro', array( $this, 'intro_shortcode' ) );
+    public function widget( $args, $instance )
+    {
+        $intro_content = ! empty( $instance['introContent'] ) ? $instance['introContent'] : '';
 
-    parent::__construct(
-      $id = self::ID,
-      $name = self::TITLE,
-      $options = array(
-        'description' => __( self::DESCRIPTION ),
-        'classname'   => self::ID
-      ) );
-  }
+        if ( empty( $intro_content ) ) {
+            return;
+        }
 
-  function widget($args, $instance)
-  {
+        $before_widget = $args['before_widget'] ?? '';
+        $after_widget  = $args['after_widget'] ?? '';
 
-    extract( $args );
+        echo $before_widget;
+        echo '<p class="intro">' . esc_html( $intro_content ) . '</p>';
+        echo $after_widget;
+    }
 
-    extract( $instance );
+    public function update( $new_instance, $old_instance )
+    {
+        $instance                 = array();
+        $instance['introContent'] = sanitize_text_field( $new_instance['introContent'] ?? '' );
+        return $instance;
+    }
 
-    $content = '<p class="intro">'. $introContent . '</p>';
+    public function form( $instance )
+    {
+        $intro_content = isset( $instance['introContent'] ) ? esc_attr( $instance['introContent'] ) : '';
+        ?>
+        <p>
+            <label for="<?php echo esc_attr( $this->get_field_id( 'introContent' ) ); ?>"><?php _e( 'Intro text:', 'uams' ); ?></label>
+            <input class="widefat" id="<?php echo esc_attr( $this->get_field_id( 'introContent' ) ); ?>" name="<?php echo esc_attr( $this->get_field_name( 'introContent' ) ); ?>" type="text" value="<?php echo $intro_content; ?>" />
+        </p>
+        <?php
+    }
 
-    echo $content;
-  }
-
-  function update( $new_instance, $old_instance )
-  {
-    $instance = array();
-    $instance['introContent'] = strip_tags( $new_instance['introContent'] );
-    return $instance;
-  }
-
-  function form($instance)
-  {
-
-    $introContent = isset( $instance['introContent'] ) ? esc_attr( $instance['introContent'] ) : '';
-?>
-
-    <p><label for="<?php echo $this->get_field_id('introContent'); ?>"><?php _e('Intro text:'); ?></label>
-    <input class="widefat" id="<?php echo $this->get_field_id('introContent'); ?>" name="<?php echo $this->get_field_name('introContent'); ?>" type="text" value="<?php echo $introContent; ?>" /></p>
-
-<?php
-  }
-
-  function intro_shortcode( $atts, $content )
-  {
-    extract( shortcode_atts( self::$SHORTCODE_DEFAULTS, $atts ) );
-
-    return $content ? sprintf( '<p class="intro">%s</p>', $content ) : '';
-  }
-
-
+    public function intro_shortcode( $atts, $content = null )
+    {
+        $content = trim( (string) $content );
+        return ! empty( $content ) ? sprintf( '<p class="intro">%s</p>', esc_html( $content ) ) : '';
+    }
 }
 
-new UAMS_Intro_Text;
+add_action( 'widgets_init', function() {
+    register_widget( 'UAMS_Intro_Text' );
+} );

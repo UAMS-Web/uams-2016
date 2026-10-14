@@ -1,16 +1,19 @@
 <?php
 
-if( ! defined( 'ABSPATH' ) ) exit;
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
 
+#[\AllowDynamicProperties]
 class Cuztom_Field_Datetime extends Cuztom_Field
 {
-	var $_supports_ajax			= true;
-	var $_supports_bundle		= true;
+	public $_supports_ajax   = true;
+	public $_supports_bundle = true;
 
-	var $css_classes			= array( 'js-cuztom-datetimepicker', 'cuztom-datetimepicker', 'datetimepicker', 'cuztom-input' );
-	var $data_attributes		= array( 'time-format' => null, 'date-format' => null );
+	public $css_classes     = array( 'js-cuztom-datetimepicker', 'cuztom-datetimepicker', 'datetimepicker', 'cuztom-input' );
+	public $data_attributes = array( 'time-format' => null, 'date-format' => null );
 
-	function __construct( $field, $parent )
+	public function __construct( $field, $parent )
 	{
 		parent::__construct( $field, $parent );
 
@@ -18,94 +21,74 @@ class Cuztom_Field_Datetime extends Cuztom_Field
 		$this->data_attributes['time-format'] = $this->parse_date_format( isset( $this->args['time_format'] ) ? $this->args['time_format'] : 'H:i' );
 	}
 
-	function _output( $value )
+	public function _output( $value, $object = null )
 	{
-		return '<input type="text" ' . $this->output_name() . ' ' . $this->output_id() . ' ' . $this->output_css_class() . ' value="' . ( ! empty( $value ) ? ( isset( $this->args['date_format'] ) && isset( $this->args['time_format'] ) ? date( $this->args['date_format'] . ' ' .  $this->args['time_format'], $value ) : date( 'm/d/Y H:i', $value ) ) : $this->default_value ) . '" ' . $this->output_data_attributes() . ' />' . $this->output_explanation(); }
+		$date_val = '';
+		if ( ! empty( $value ) ) {
+			$timestamp = is_numeric( $value ) ? (int) $value : strtotime( (string) $value );
+			if ( false !== $timestamp ) {
+				$format   = ( isset( $this->args['date_format'], $this->args['time_format'] ) ) ? $this->args['date_format'] . ' ' . $this->args['time_format'] : 'm/d/Y H:i';
+				$date_val = date( $format, $timestamp );
+			}
+		}
 
-	function save_value( $value )
-	{
-		return strtotime( $value );
+		$display_val = ! empty( $date_val ) ? $date_val : $this->default_value;
+
+		return '<input type="text" ' . $this->output_name() . ' ' . $this->output_id() . ' ' . $this->output_css_class() . ' value="' . esc_attr( (string) $display_val ) . '" ' . $this->output_data_attributes() . ' />' . $this->output_explanation();
 	}
 
-	/**
-	 * Matches each symbol of PHP date format standard
-	 * with jQuery equivalent codeword
-	 * 
-	 * @param 	string 			$php_format
-	 *
-	 * @author 	Tristan Jahier
-	 * @since 	2.9
-	 * 
-	 */
-	function parse_date_format( $php_format ) 
+	public function save_value( $value )
+	{
+		if ( empty( $value ) ) {
+			return '';
+		}
+		$time = strtotime( (string) $value );
+		return false !== $time ? $time : '';
+	}
+
+	public function parse_date_format( $php_format )
 	{
 		$matching = array(
-			// Day
-			'd' => 'dd',
-			'D' => 'D',
-			'j' => 'd',
-			'l' => 'DD',
-			'N' => '',
-			'S' => '',
-			'w' => '',
-			'z' => 'o',
-			// Week
-			'W' => '',
-			// Month
-			'F' => 'MM',
-			'm' => 'mm',
-			'M' => 'M',
-			'n' => 'm',
-			't' => '',
-			// Year
-			'L' => '',
-			'o' => '',
-			'Y' => 'yy',
-			'y' => 'y',
-			// Time
-			'a' => 'tt',
-			'A' => 'TT',
-			'B' => '',
-			'g' => 'h',
-			'G' => 'H',
-			'h' => 'hh',
-			'H' => 'HH',
-			'i' => 'mm',
-			's' => 'ss',
-			'u' => 'c',
-			// ISO 8601
+			'd' => 'dd', 'D' => 'D', 'j' => 'd', 'l' => 'DD',
+			'N' => '',   'S' => '',  'w' => '', 'z' => 'o',
+			'W' => '',   'F' => 'MM','m' => 'mm','M' => 'M',
+			'n' => 'm',  't' => '',  'L' => '', 'o' => '',
+			'Y' => 'yy', 'y' => 'y',  'a' => 'tt','A' => 'TT',
+			'B' => '',   'g' => 'h', 'G' => 'H','h' => 'hh',
+			'H' => 'HH', 'i' => 'mm','s' => 'ss','u' => 'c',
 			'c' => 'Z'
 		);
 
-		$jqueryui_format 	= '';
-		$escaping 			= false;
+		$jqueryui_format = '';
+		$escaping        = false;
+		$len             = strlen( (string) $php_format );
 
-		for( $i = 0; $i < strlen( $php_format ); $i++ ) 
-		{
-			$char 	= $php_format[$i];
-			if( $char === '\\' ) 
-			{
+		for ( $i = 0; $i < $len; $i++ ) {
+			$char = $php_format[ $i ];
+			if ( '\\' === $char ) {
 				$i++;
-				if( $escaping ) $jqueryui_format 	.= $php_format[$i];
-				else $jqueryui_format 				.= '\'' . $php_format[$i];
-				
-				$escaping = true;
-			}
-			else 
-			{
-				if( $escaping ) 
-				{
-					$jqueryui_format .= "'"; 
-					$escaping = false; 
+				if ( isset( $php_format[ $i ] ) ) {
+					if ( $escaping ) {
+						$jqueryui_format .= $php_format[ $i ];
+					} else {
+						$jqueryui_format .= '\'' . $php_format[ $i ];
+					}
+					$escaping = true;
 				}
-				
-				if( isset( $matching[$char] ) )
-					$jqueryui_format .= $matching[$char];
-				else
+			} else {
+				if ( $escaping ) {
+					$jqueryui_format .= "'";
+					$escaping         = false;
+				}
+
+				if ( isset( $matching[ $char ] ) ) {
+					$jqueryui_format .= $matching[ $char ];
+				} else {
 					$jqueryui_format .= $char;
+				}
 			}
 		}
-		
+
 		return $jqueryui_format;
 	}
 }
