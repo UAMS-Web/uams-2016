@@ -49,7 +49,7 @@ class UAMS_QuickLinks
 
   function parse_menu()
   {
-    if ( isset($this->items) )
+    if ( is_array($this->items) && isset($this->items) )
       foreach( $this->items as $index=>$item )
       {
         // Only keep the necessary keys of the $item

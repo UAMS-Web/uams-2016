@@ -12,9 +12,13 @@ class UAMS_Widget_Contact extends WP_Widget
 
   const DEFAULT_LINK_TEXT = 'More';
 
-  function UAMS_Widget_Contact()
+  function __construct() //UAMS_Widget_Contact()
   {
-		parent::__construct( $id = 'uams-contact-list', $name = 'Contact list', $options = array( 'description' => 'Display important contact information', 'classname' => 'contact-widget' ) );
+		parent::__construct( 
+			'uams-contact-list', // $id
+			'Contact list', // $name
+			array( 'description' => 'Display important contact information', 'classname' => 'contact-widget' ) // $options
+		);
 
     if ( is_admin() )
       add_action('admin_enqueue_scripts', array( __CLASS__, 'scripts') );

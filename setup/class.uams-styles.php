@@ -72,7 +72,7 @@ class UAMS_Styles
       {
         $style = (object) $style;
 
-        if ( array_key_exists( 'child', $style )
+        if ( property_exists( $style, 'child' )
               && $style->child && ! $this->is_child_theme() )
           continue;
 
@@ -92,7 +92,7 @@ class UAMS_Styles
 
       $style = (object) $style;
 
-      if ( array_key_exists( 'admin', $style)
+      if ( property_exists( $style, 'admin')
             && $style->admin )
       {
         wp_register_style(
