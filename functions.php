@@ -135,7 +135,17 @@ add_filter('allowed_http_origins', 'add_allowed_origins');
 function add_allowed_origins($origins) {
     $origins[] = 'http://www.uams.edu';
     $origins[] = 'http://www.uams.dev'; //Dev URL
+    $origins[] = 'https://uamshealth.dev'; //Dev URL
     return $origins;
+}
+
+add_action('send_headers', 'add_custom_frame_allow_list_headers');
+function add_custom_frame_allow_list_headers() {
+    // Fallback for old browsers
+    header('X-Frame-Options: SAMEORIGIN');
+    
+    // Modern allow list using CSP (Replace with your actual partner domains)
+    header("Content-Security-Policy: frame-ancestors 'self' https://uamshealth.com https://uamshealth.dev;");
 }
 
 // Enqueue Font Awesome.
