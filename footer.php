@@ -22,6 +22,7 @@
                 <li><a href="https://uamshealth.com/privacy/#legal">Copyright Statement</a></li>
                 <li><a href="https://uamshealth.com/privacy/">Privacy</a></li>
                 <li><a href="https://uamshealth.com/terms-of-use/">Terms</a></li>
+                <li><a href="https://uamshealth.com/legal-notices/" target="_blank">Legal Notices</a></li>
             </ul>
         </nav>
 
