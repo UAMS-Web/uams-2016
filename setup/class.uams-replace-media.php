@@ -12,7 +12,7 @@
 class UAMS_Replace_Media
 {
 
-  function UAMS_Replace_Media()
+  function __construct()
   {
     add_filter( 'attachment_fields_to_edit', array( $this, 'uams_edit_attachment_slug'), 10, 2 );
     add_filter( 'attachment_fields_to_save', array( $this, 'uams_save_attachment_slug'), 10, 2 );

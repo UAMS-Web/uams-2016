@@ -6,7 +6,7 @@
 class UAMS_Media_Credit
 {
 
-  function UAMS_Media_Credit()
+  function __construct()
   {
 
 	add_filter( 'mce_external_plugins', array( $this, 'add_media_credit_shortcode_to_tinymce' ) );
@@ -20,8 +20,8 @@ class UAMS_Media_Credit
 
   function add_media_credit_shortcode_to_tinymce( $plugins )
   {
-     $plugin_array[ 'mediacredit' ] = get_template_directory_uri() . '/assets/admin/js/media-credit.js';
-     return $plugin_array;
+     $plugins[ 'mediacredit' ] = get_template_directory_uri() . '/assets/admin/js/media-credit.js';
+     return $plugins;
   }
 
   /**

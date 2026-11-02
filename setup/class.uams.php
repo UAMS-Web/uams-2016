@@ -75,7 +75,7 @@ class UAMS
         $this->Dropdowns         = new UAMS_Dropdowns;
         $this->Quicklinks        = new UAMS_QuickLinks;
         $this->Shortcodes        = new UAMS_Shortcodes;
-        $this->MediaCredit       = new UAMS_Media_Credit;
+        $this->MediaCredit       = new UAMS_Media_Credit();
         $this->MediaCaption      = new UAMS_Media_Caption;
         $this->ReplaceMedia      = new UAMS_Replace_Media;
         $this->TinyMCE           = new UAMS_TinyMCE;

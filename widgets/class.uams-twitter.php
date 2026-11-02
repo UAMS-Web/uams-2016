@@ -36,7 +36,7 @@ class UAMS_Widget_Twitter extends WP_Widget
       'consumer_secret'            => TWITTER_CONSUMER_SECRET
   );
 
-  function UAMS_Widget_Twitter()
+  function __construct()
   {
     parent::__construct(
       $id = self::ID,
