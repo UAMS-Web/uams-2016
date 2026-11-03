@@ -8,8 +8,9 @@
          failOnEmptyTestSuite="true"
          beStrictAboutOutputDuringTests="true">
     <!--
-        The unit suite only. No WordPress, no database: WordPress functions are
-        mocked with Brain Monkey.
+        The Unit suite only, on Pest 5. No WordPress, no database: WordPress functions are
+        mocked with Brain Monkey. The Integration suite runs in its own process from
+        tests/Integration/composer.json and tests/Integration/phpunit.xml (PHPUnit 9.6).
     -->
     <testsuites>
         <testsuite name="Unit">

@@ -11,4 +11,5 @@ assets/images/.DS_Store
 assets/images/.DS_Store
 
 /vendor/
+/tests/Integration/vendor/
 .phpunit.result.cache
