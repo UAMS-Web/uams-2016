@@ -1,0 +1,26 @@
+{
+    "name": "uams-web/uams-2016",
+    "description": "The UAMS 2016 WordPress theme. This file holds development dependencies only: nothing in it is installed on a site.",
+    "type": "wordpress-theme",
+    "license": "proprietary",
+    "require-dev": {
+        "brain/monkey": "^2.7",
+        "phpunit/phpunit": "^11.5"
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "UAMS\\Tests\\": "tests/"
+        }
+    },
+    "config": {
+        "sort-packages": true
+    },
+    "scripts": {
+        "test": "@test:unit",
+        "test:unit": "phpunit"
+    },
+    "scripts-descriptions": {
+        "test": "Run the test suite.",
+        "test:unit": "Run the unit suite: no WordPress and no database, with WordPress functions mocked by Brain Monkey."
+    }
+}

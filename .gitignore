@@ -9,3 +9,6 @@ config.codekit3
 assets/images/.DS_Store
 
 assets/images/.DS_Store
+
+/vendor/
+.phpunit.result.cache
