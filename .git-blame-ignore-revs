@@ -8,4 +8,4 @@
 # Pint reformat: adopt the laravel preset (UAMS-Web/uams-claude-skills#10).
 # This is the commit on the branch; a squash merge gives it a different hash,
 # so after merging, replace this line with the squash commit's hash.
-39e401859042d78006bcf984de926bcd1000f35e
+4502b245daff74c9e22ab009f6c410d1e7a6f7bb
