@@ -166,7 +166,7 @@ add_filter('script_loader_tag', 'add_defer_attribute', 10, 2);
  */
 function add_defer_attribute($tag, $handle)
 {
-    if (($handle === 'font-awesome-all') || ($handle === 'font-awesome-light') || ($handle === 'font-awesome-brands') || ($handle === 'font-awesome-v4')) {
+    if (in_array($handle, ['font-awesome-all', 'font-awesome-light', 'font-awesome-brands', 'font-awesome-v4'], true)) {
         return str_replace(' src', ' defer src', $tag);
     }
 
