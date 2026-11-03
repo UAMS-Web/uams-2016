@@ -1,0 +1,28 @@
+{
+    "preset": "laravel",
+    "rules": {
+        "declare_strict_types": true,
+        "method_argument_space": {
+            "on_multiline": "ensure_fully_multiline"
+        },
+        "ordered_imports": {
+            "imports_order": [
+                "class",
+                "function",
+                "const"
+            ],
+            "sort_algorithm": "alpha"
+        }
+    },
+    "exclude": [
+        "_includes",
+        "assets",
+        "docs",
+        "widgets-unused",
+        "setup/cuztom",
+        "setup/_cuztom"
+    ],
+    "notPath": [
+        "setup/class-tgm-plugin-activation.php"
+    ]
+}

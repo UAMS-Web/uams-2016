@@ -13,3 +13,5 @@ assets/images/.DS_Store
 /vendor/
 /tests/Integration/vendor/
 .phpunit.result.cache
+/.phpstan/
+.rector-cache

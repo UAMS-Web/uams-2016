@@ -1,6 +1,13 @@
+* text=auto eol=lf
 /vendor/ export-ignore
 /scripts/ export-ignore
 /tests/ export-ignore
 /phpunit.xml export-ignore
 /composer.json export-ignore
 /composer.lock export-ignore
+/rector.php export-ignore
+/rector-sweep.php export-ignore
+/phpstan.neon.dist export-ignore
+/pint.json export-ignore
+/.editorconfig export-ignore
+/.git-blame-ignore-revs export-ignore

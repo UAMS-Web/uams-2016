@@ -1327,7 +1327,6 @@ function my_acf_add_local_field_groups() {
 							'i-batman'=>'i-batman',
 							'i-darth-vader'=>'i-darth-vader',
 							'i-gus'=>'i-gus',
-							'i-reddie'=>'i-reddie',
 							'i-reddie-alt'=>'i-reddie-alt',
 						),
 						'default_value' => array (
