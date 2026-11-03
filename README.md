@@ -75,6 +75,8 @@ composer test:integration
 
 The code-quality tools run from Composer: `composer test:pint` (formatting, Pint with the `laravel` preset), `composer test:refactor` (Rector, the gating profile) and `composer stan` (PHPStan with the WordPress extension; the level in `phpstan.neon.dist` is the gate). `composer pint` and `composer refactor` apply their changes. Once per clone, tell `git blame` to skip the formatting commit: `git config blame.ignoreRevsFile .git-blame-ignore-revs`.
 
+The remote gate is [`.github/workflows/ci.yml`](.github/workflows/ci.yml), which runs on every pull request and on pushes to `dev`, `staging` and `master`. It runs the checks above (Pint, Rector, PHPStan, the Pest unit suite on Linux, Windows and macOS), the PHP 8.2 floor lint, the Grunt build, and the repository checks for synced files, emoji and the aggregate job list. Its final `CI` job is the single status to require on a branch. The integration suite needs WordPress and a database, so it runs locally only.
+
 A coverage run needs a coverage driver such as PCOV: `php -d pcov.enabled=1 vendor/bin/pest --coverage`. It measures the theme's own PHP and leaves out the vendored and unused trees (see `phpunit.xml`).
 
 ## Bugs and feature requests ##
