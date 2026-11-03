@@ -48,6 +48,18 @@ This is an overview of the custom widgets, plugins and various features it inclu
 
 Download the [UAMS 2016 theme](https://github.com/UAMS-Web/uams-2016/archive/master.zip) into the wp-content/themes folder of your local WordPress install. Next, log into the WordPress dashboard and go the Appearance -> Themes page. From here you can activate the UAMS 2016 theme. 
 
+## Running the tests ##
+ - - -
+
+The theme's PHP tests run on PHPUnit with [Brain Monkey](https://giuseppe-mazzapica.gitbook.io/brain-monkey) mocking WordPress, so they need no database and no WordPress install. The tools in `composer.json` are for development only and are not part of the deployed theme.
+
+```bash
+composer install
+composer test
+```
+
+A coverage run needs a coverage driver such as PCOV: `php -d pcov.enabled=1 vendor/bin/phpunit --coverage-text`. It measures the theme's own PHP and leaves out the vendored and unused trees (see `phpunit.xml`).
+
 ## Bugs and feature requests ##
  - - -
 
