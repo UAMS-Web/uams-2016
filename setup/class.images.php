@@ -9,72 +9,72 @@ class UAMS_Images
     // If `$show` is true it will appear in the image dropdown menu
     public $IMAGE_SIZES = [
         'mug-shot' => [
-            'name'   => 'Mug Shot',
-            'width'  => 150,
+            'name' => 'Mug Shot',
+            'width' => 150,
             'height' => 250,
-            'crop'   => true,
-            'show'   => true,
+            'crop' => true,
+            'show' => true,
         ],
         'sidebar' => [
-            'name'   => 'Sidebar',
-            'width'  => 375,
+            'name' => 'Sidebar',
+            'width' => 375,
             'height' => 9999,
-            'crop'   => false,
-            'show'   => true,
+            'crop' => false,
+            'show' => true,
         ],
         'half' => [
-            'name'   => 'Half width',
-            'width'  => 375,
+            'name' => 'Half width',
+            'width' => 375,
             'height' => 9999,
-            'crop'   => false,
-            'show'   => true,
+            'crop' => false,
+            'show' => true,
         ],
         'full-content' => [
-            'name'   => 'Content area',
-            'width'  => 750,
+            'name' => 'Content area',
+            'width' => 750,
             'height' => 9999,
-            'crop'   => false,
-            'show'   => true,
+            'crop' => false,
+            'show' => true,
         ],
         'page' => [
-            'name'   => 'Full page',
-            'width'  => 1140,
+            'name' => 'Full page',
+            'width' => 1140,
             'height' => 9999,
-            'crop'   => false,
-            'show'   => true,
+            'crop' => false,
+            'show' => true,
         ],
         'thimble' => [
-            'name'   => 'Thimble',
-            'width'  => 50,
+            'name' => 'Thimble',
+            'width' => 50,
             'height' => 50,
-            'crop'   => true,
-            'show'   => false,
+            'crop' => true,
+            'show' => false,
         ],
         'thumbnail-large' => [
-            'name'   => 'Thumbnail large',
-            'width'  => 300,
+            'name' => 'Thumbnail large',
+            'width' => 300,
             'height' => 300,
-            'crop'   => true,
-            'show'   => false,
+            'crop' => true,
+            'show' => false,
         ],
         'rss' => [
-            'name'   => 'RSS',
-            'width'  => 108,
+            'name' => 'RSS',
+            'width' => 108,
             'height' => 81,
-            'crop'   => true,
-            'show'   => false,
+            'crop' => true,
+            'show' => false,
         ],
     ];
 
     public function __construct()
     {
-        add_action( 'after_setup_theme', [ $this, 'add_uams_image_sizes' ] );
-        add_filter( 'image_size_names_choose', [ $this, 'show_image_sizes' ] );
+        add_action('after_setup_theme', [$this, 'add_uams_image_sizes']);
+        add_filter('image_size_names_choose', [$this, 'show_image_sizes']);
     }
 
     public function add_uams_image_sizes(): void
     {
-        foreach ( $this->IMAGE_SIZES as $name => $image ) {
+        foreach ($this->IMAGE_SIZES as $name => $image) {
             add_image_size(
                 $name,
                 $image['width'],
@@ -84,15 +84,15 @@ class UAMS_Images
         }
     }
 
-    public function show_image_sizes( $defaultSizes ): array
+    public function show_image_sizes($defaultSizes): array
     {
-        $defaultSizes = is_array( $defaultSizes ) ? $defaultSizes : [];
-        $imagesToShow = array_filter( $this->IMAGE_SIZES, fn(array $image): bool => ! empty( $image['show'] ) );
+        $defaultSizes = is_array($defaultSizes) ? $defaultSizes : [];
+        $imagesToShow = array_filter($this->IMAGE_SIZES, fn (array $image): bool => ! empty($image['show']));
 
-        foreach ( $imagesToShow as $id => $image ) {
-            $imagesToShow[ $id ] = $image['name'];
+        foreach ($imagesToShow as $id => $image) {
+            $imagesToShow[$id] = $image['name'];
         }
 
-        return array_merge( $imagesToShow, $defaultSizes );
+        return array_merge($imagesToShow, $defaultSizes);
     }
 }

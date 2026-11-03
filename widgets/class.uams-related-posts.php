@@ -112,7 +112,7 @@ class UAMS_Widget_Related_Posts extends WP_Widget
 
   <?php
 
-	}
+    }
 
 
 

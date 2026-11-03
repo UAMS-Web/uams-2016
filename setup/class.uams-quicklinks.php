@@ -6,51 +6,51 @@
  */
 class UAMS_QuickLinks
 {
-    const NAME         = 'Quick Links';
-    
-    const LOCATION     = 'quick-links';
-    
+    const NAME = 'Quick Links';
+
+    const LOCATION = 'quick-links';
+
     const ALLOWED_BLOG = 1;
 
     public $MULTISITE;
-    
+
     public $items = [];
 
     public function __construct()
     {
         $this->MULTISITE = is_multisite();
 
-        if ( ! $this->MULTISITE || ( $this->MULTISITE && get_current_blog_id() === self::ALLOWED_BLOG ) ) {
-            add_action( 'after_setup_theme', [ $this, 'register_quick_links_menu' ] );
+        if (! $this->MULTISITE || ($this->MULTISITE && get_current_blog_id() === self::ALLOWED_BLOG)) {
+            add_action('after_setup_theme', [$this, 'register_quick_links_menu']);
         }
 
-        add_action( 'wp_ajax_quicklinks', [ $this, 'uams_quicklinks_feed' ] );
-        add_action( 'wp_ajax_nopriv_quicklinks', [ $this, 'uams_quicklinks_feed' ] );
+        add_action('wp_ajax_quicklinks', [$this, 'uams_quicklinks_feed']);
+        add_action('wp_ajax_nopriv_quicklinks', [$this, 'uams_quicklinks_feed']);
     }
 
     public function register_quick_links_menu(): void
     {
-        register_nav_menu( self::LOCATION, __( self::NAME ) );
+        register_nav_menu(self::LOCATION, __(self::NAME));
     }
 
     public function uams_quicklinks_feed(): void
     {
-        if ( $this->MULTISITE ) {
-            switch_to_blog( self::ALLOWED_BLOG );
+        if ($this->MULTISITE) {
+            switch_to_blog(self::ALLOWED_BLOG);
         }
 
         $locations = get_nav_menu_locations();
-        if ( isset( $locations[ self::LOCATION ] ) ) {
-            $this->items = wp_get_nav_menu_items( $locations[ self::LOCATION ] );
-        } elseif ( $location = wp_get_nav_menu_object( self::LOCATION ) ) {
-            $this->items = wp_get_nav_menu_items( $location->term_id );
+        if (isset($locations[self::LOCATION])) {
+            $this->items = wp_get_nav_menu_items($locations[self::LOCATION]);
+        } elseif ($location = wp_get_nav_menu_object(self::LOCATION)) {
+            $this->items = wp_get_nav_menu_items($location->term_id);
         }
 
-        if ( $this->MULTISITE ) {
+        if ($this->MULTISITE) {
             restore_current_blog();
         }
 
-        wp_send_json( $this->parse_menu() );
+        wp_send_json($this->parse_menu());
     }
 
     /**
@@ -60,14 +60,14 @@ class UAMS_QuickLinks
     {
         $menu = [];
 
-        if ( ! empty( $this->items ) && is_array( $this->items ) ) {
-            foreach ( $this->items as $item ) {
+        if (! empty($this->items) && is_array($this->items)) {
+            foreach ($this->items as $item) {
                 $item_array = array_intersect_key(
                     (array) $item,
-                    array_fill_keys( [ 'ID', 'title', 'url', 'classes', 'menu_item_parent' ], null )
+                    array_fill_keys(['ID', 'title', 'url', 'classes', 'menu_item_parent'], null)
                 );
 
-                if ( empty( $item_array['classes'] ) || empty( $item_array['classes'][0] ) ) {
+                if (empty($item_array['classes']) || empty($item_array['classes'][0])) {
                     $item_array['classes'] = false;
                 }
 
@@ -79,4 +79,4 @@ class UAMS_QuickLinks
     }
 }
 
-new UAMS_QuickLinks();
+new UAMS_QuickLinks;

@@ -20,33 +20,33 @@ class UAMS_Map
 
     public function __construct()
     {
-        add_shortcode( 'map', [ $this, 'map_handler' ] );
+        add_shortcode('map', [$this, 'map_handler']);
     }
 
-    public function map_handler( $atts, $content = null ): string
+    public function map_handler($atts, $content = null): string
     {
         $params = shortcode_atts(
             [
                 'building' => '',
-                'width'    => '100%',
-                'height'   => '480px',
+                'width' => '100%',
+                'height' => '480px',
             ],
             $atts,
             'map'
         );
 
-        $building = sanitize_text_field( $params['building'] );
+        $building = sanitize_text_field($params['building']);
 
-        if ( empty( $building ) ) {
+        if (empty($building)) {
             return 'required attribute "building" missing';
         }
 
-        if ( ! in_array( $building, self::$buildingcode, true ) ) {
-            return sprintf( 'Building "%s" is not supported', esc_html( $building ) );
+        if (! in_array($building, self::$buildingcode, true)) {
+            return sprintf('Building "%s" is not supported', esc_html($building));
         }
 
-        $width  = esc_attr( $params['width'] );
-        $height = esc_attr( $params['height'] );
+        $width = esc_attr($params['width']);
+        $height = esc_attr($params['height']);
 
         return sprintf(
             '<div class="uams-campus-map">
@@ -55,11 +55,11 @@ class UAMS_Map
             </div>',
             $width,
             $height,
-            esc_url( self::URL ),
-            rawurlencode( $building ),
-            rawurlencode( $building )
+            esc_url(self::URL),
+            rawurlencode($building),
+            rawurlencode($building)
         );
     }
 }
 
-new UAMS_Map();
+new UAMS_Map;

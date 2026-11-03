@@ -3,7 +3,6 @@
 /**
  * Install stylesheets
  */
-
 class UAMS_Styles
 {
     public $STYLES;
@@ -12,28 +11,28 @@ class UAMS_Styles
     {
         $this->STYLES = [
             'uams-master' => [
-                'id'      => 'uams-master',
-                'url'     => get_template_directory_uri() . '/style' . $this->dev_stylesheet() . '.css',
-                'deps'    => [],
+                'id' => 'uams-master',
+                'url' => get_template_directory_uri().'/style'.$this->dev_stylesheet().'.css',
+                'deps' => [],
                 'version' => '3.6',
             ],
-            'uams-style'  => [
-                'id'      => 'uams-style',
-                'url'     => get_stylesheet_uri(),
-                'deps'    => [ 'uams-master' ],
+            'uams-style' => [
+                'id' => 'uams-style',
+                'url' => get_stylesheet_uri(),
+                'deps' => ['uams-master'],
                 'version' => '3.6',
-                'child'   => true,
+                'child' => true,
             ],
         ];
 
-        add_action( 'wp_enqueue_scripts', [ $this, 'uams_register_default_styles' ] );
-        add_action( 'wp_enqueue_scripts', [ $this, 'uams_enqueue_default_styles' ] );
-        add_action( 'admin_enqueue_scripts', [ $this, 'uams_enqueue_admin_styles' ] );
+        add_action('wp_enqueue_scripts', [$this, 'uams_register_default_styles']);
+        add_action('wp_enqueue_scripts', [$this, 'uams_enqueue_default_styles']);
+        add_action('admin_enqueue_scripts', [$this, 'uams_enqueue_admin_styles']);
     }
 
     public function uams_register_default_styles(): void
     {
-        foreach ( $this->STYLES as $style ) {
+        foreach ($this->STYLES as $style) {
             wp_register_style(
                 $style['id'],
                 $style['url'],
@@ -45,25 +44,25 @@ class UAMS_Styles
 
     public function uams_enqueue_default_styles(): void
     {
-        wp_enqueue_style( 'uams-master' );
+        wp_enqueue_style('uams-master');
 
-        foreach ( $this->STYLES as $style ) {
-            if ( ! empty( $style['child'] ) && ! $this->is_child_theme() ) {
+        foreach ($this->STYLES as $style) {
+            if (! empty($style['child']) && ! $this->is_child_theme()) {
                 continue;
             }
 
-            wp_enqueue_style( $style['id'] );
+            wp_enqueue_style($style['id']);
         }
     }
 
     public function uams_enqueue_admin_styles(): void
     {
-        if ( ! is_admin() ) {
+        if (! is_admin()) {
             return;
         }
 
-        foreach ( $this->STYLES as $style ) {
-            if ( ! empty( $style['admin'] ) ) {
+        foreach ($this->STYLES as $style) {
+            if (! empty($style['admin'])) {
                 wp_register_style(
                     $style['id'],
                     $style['url'],
@@ -71,7 +70,7 @@ class UAMS_Styles
                     $style['version'] ?? false
                 );
 
-                wp_enqueue_style( $style['id'] );
+                wp_enqueue_style($style['id']);
             }
         }
     }

@@ -2,4 +2,4 @@
 
 declare(strict_types=1);
 
-uams_breadcrumbs() ?>
+uams_breadcrumbs();

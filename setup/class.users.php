@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Adds Affiliations, Office, Twitter, and Facebook to user profiles
  * Removes yim, aim and jabber from user profiles
@@ -7,10 +8,10 @@ class UAMS_Users
 {
     public function __construct()
     {
-        add_filter( 'user_contactmethods', [ $this, 'additional_contact_fields' ], 10, 1 );
+        add_filter('user_contactmethods', [$this, 'additional_contact_fields'], 10, 1);
 
-        $role = get_role( 'editor' );
-        if ( $role instanceof WP_Role ) {
+        $role = get_role('editor');
+        if ($role instanceof WP_Role) {
             $caps = [
                 'edit_theme_options',
                 'gravityforms_edit_forms',
@@ -26,30 +27,30 @@ class UAMS_Users
                 'gravityforms_edit_entry_notes',
             ];
 
-            foreach ( $caps as $cap ) {
-                if ( ! $role->has_cap( $cap ) ) {
-                    $role->add_cap( $cap );
+            foreach ($caps as $cap) {
+                if (! $role->has_cap($cap)) {
+                    $role->add_cap($cap);
                 }
             }
         }
 
-        add_action( 'admin_menu', [ $this, 'custom_admin_menu' ] );
+        add_action('admin_menu', [$this, 'custom_admin_menu']);
     }
 
     /**
      * @return mixed[]
      */
-    public function additional_contact_fields( $contactmethods ): array
+    public function additional_contact_fields($contactmethods): array
     {
-        $contactmethods = is_array( $contactmethods ) ? $contactmethods : [];
+        $contactmethods = is_array($contactmethods) ? $contactmethods : [];
 
         $contactmethods['affiliation'] = 'Affiliation';
-        $contactmethods['phone']       = 'Phone Number';
-        $contactmethods['office']      = 'Office';
-        $contactmethods['twitter']     = 'Twitter';
-        $contactmethods['facebook']    = 'Facebook';
+        $contactmethods['phone'] = 'Phone Number';
+        $contactmethods['office'] = 'Office';
+        $contactmethods['twitter'] = 'Twitter';
+        $contactmethods['facebook'] = 'Facebook';
 
-        unset( $contactmethods['yim'], $contactmethods['aim'], $contactmethods['jabber'] );
+        unset($contactmethods['yim'], $contactmethods['aim'], $contactmethods['jabber']);
 
         return $contactmethods;
     }
@@ -58,19 +59,19 @@ class UAMS_Users
     {
         $user = wp_get_current_user();
 
-        if ( $user instanceof WP_User && in_array( 'editor', (array) $user->roles, true ) ) {
-            remove_submenu_page( 'themes.php', 'themes.php' );
+        if ($user instanceof WP_User && in_array('editor', (array) $user->roles, true)) {
+            remove_submenu_page('themes.php', 'themes.php');
 
             global $submenu;
-            if ( isset( $submenu['themes.php'][6] ) ) {
-                unset( $submenu['themes.php'][6] );
+            if (isset($submenu['themes.php'][6])) {
+                unset($submenu['themes.php'][6]);
             }
-            
-            if ( isset( $submenu['themes.php'][15] ) ) {
-                unset( $submenu['themes.php'][15] );
+
+            if (isset($submenu['themes.php'][15])) {
+                unset($submenu['themes.php'][15]);
             }
         }
     }
 }
 
-new UAMS_Users();
+new UAMS_Users;

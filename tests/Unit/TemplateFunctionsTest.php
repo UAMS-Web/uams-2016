@@ -9,8 +9,9 @@
 
 declare(strict_types=1);
 
-use function Brain\Monkey\Functions\when;
 use Brain\Monkey\Functions;
+
+use function Brain\Monkey\Functions\when;
 
 it('treats a PDF attachment as a PDF', function (): void {
     when('get_post_mime_type')->justReturn('application/pdf');

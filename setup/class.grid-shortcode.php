@@ -14,36 +14,36 @@ class UAMS_GridShortcode
 {
     public function __construct()
     {
-        add_shortcode( 'row', [ $this, 'bs_row' ] );
-        add_shortcode( 'col', [ $this, 'bs_span' ] );
+        add_shortcode('row', [$this, 'bs_row']);
+        add_shortcode('col', [$this, 'bs_span']);
     }
 
-    public function bs_row( $params, $content = '' )
+    public function bs_row($params, $content = '')
     {
-        $atts = shortcode_atts( [
+        $atts = shortcode_atts([
             'class' => 'row',
-        ], $params, 'row' );
+        ], $params, 'row');
 
-        $content = ! empty( $content ) ? preg_replace( '/<br class="nc".\/>/', '', (string) $content ) : '';
-        $result  = '<div class="' . esc_attr( $atts['class'] ) . '">';
-        $result .= do_shortcode( $content );
+        $content = ! empty($content) ? preg_replace('/<br class="nc".\/>/', '', (string) $content) : '';
+        $result = '<div class="'.esc_attr($atts['class']).'">';
+        $result .= do_shortcode($content);
         $result .= '</div>';
 
-        return force_balance_tags( $result );
+        return force_balance_tags($result);
     }
 
-    public function bs_span( $params, $content = '' )
+    public function bs_span($params, $content = '')
     {
-        $atts = shortcode_atts( [
+        $atts = shortcode_atts([
             'class' => 'col-sm-1',
-        ], $params, 'col' );
+        ], $params, 'col');
 
-        $result  = '<div class="' . esc_attr( $atts['class'] ) . '">';
-        $result .= do_shortcode( (string) $content );
+        $result = '<div class="'.esc_attr($atts['class']).'">';
+        $result .= do_shortcode((string) $content);
         $result .= '</div>';
 
-        return force_balance_tags( $result );
+        return force_balance_tags($result);
     }
 }
 
-new UAMS_GridShortcode();
+new UAMS_GridShortcode;

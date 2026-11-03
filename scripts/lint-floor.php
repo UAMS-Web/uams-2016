@@ -25,7 +25,7 @@ $skip = ['vendor', 'node_modules', 'tests', '.git'];
 $iterator = new RecursiveIteratorIterator(
     new RecursiveCallbackFilterIterator(
         new RecursiveDirectoryIterator($root, FilesystemIterator::SKIP_DOTS),
-        static fn (SplFileInfo $file): bool => !$file->isDir() || !in_array($file->getFilename(), $skip, true)
+        static fn (SplFileInfo $file): bool => ! $file->isDir() || ! in_array($file->getFilename(), $skip, true)
     )
 );
 
