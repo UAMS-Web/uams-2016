@@ -14,7 +14,7 @@ class UAMS
         $this->initialize();
     }
 
-    private function includes()
+    private function includes(): void
     {
         $parent = get_template_directory() . '/setup/';
 
@@ -63,7 +63,7 @@ class UAMS
         }
     }
 
-    private function initialize()
+    private function initialize(): void
     {
         $this->Install           = class_exists( 'UAMS_Install_Theme' ) ? new UAMS_Install_Theme() : null;
         $this->Scripts           = class_exists( 'UAMS_Scripts' ) ? new UAMS_Scripts() : null;

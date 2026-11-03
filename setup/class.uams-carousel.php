@@ -11,26 +11,28 @@ Author: Automattic
 class UAMS_Carousel {
 
     const COLUMNS = 5;
+    
     const LINK    = 'none';
 
-    public $prebuilt_widths = array( 370, 700, 1000, 1200, 1400, 2000 );
+    public $prebuilt_widths = [ 370, 700, 1000, 1200, 1400, 2000 ];
+    
     public $first_run       = true;
 
     public function __construct()
     {
-        add_action( 'init', array( $this, 'init' ) );
+        add_action( 'init', [ $this, 'init' ] );
     }
 
-    public function init()
+    public function init(): void
     {
         if ( $this->disable() ) {
             return;
         }
 
         $this->prebuilt_widths = apply_filters( 'jp_carousel_widths', $this->prebuilt_widths );
-        add_action( 'wp_enqueue_scripts', array( $this, 'enqueue_assets' ) );
-        add_filter( 'gallery_style', array( $this, 'add_data_to_container' ) );
-        add_filter( 'wp_get_attachment_image_attributes', array( $this, 'add_data_to_images' ), 10, 2 );
+        add_action( 'wp_enqueue_scripts', [ $this, 'enqueue_assets' ] );
+        add_filter( 'gallery_style', [ $this, 'add_data_to_container' ] );
+        add_filter( 'wp_get_attachment_image_attributes', [ $this, 'add_data_to_images' ], 10, 2 );
     }
 
     public function disable()
@@ -46,8 +48,8 @@ class UAMS_Carousel {
     public function enqueue_assets( $output = '' )
     {
         if ( ! empty( $output ) && ! apply_filters( 'jp_carousel_force_enable', false ) ) {
-            remove_filter( 'gallery_style', array( $this, 'add_data_to_container' ) );
-            remove_filter( 'wp_get_attachment_image_attributes', array( $this, 'add_data_to_images' ) );
+            remove_filter( 'gallery_style', [ $this, 'add_data_to_container' ] );
+            remove_filter( 'wp_get_attachment_image_attributes', [ $this, 'add_data_to_images' ] );
             return $output;
         }
 
@@ -56,7 +58,7 @@ class UAMS_Carousel {
         $is_logged_in        = is_user_logged_in();
         $require_name_email  = (int) get_option( 'require_name_email' );
 
-        $localize_strings = array(
+        $localize_strings = [
             'widths'             => $this->prebuilt_widths,
             'is_logged_in'       => $is_logged_in,
             'lang'               => strtolower( substr( (string) get_locale(), 0, 2 ) ),
@@ -72,7 +74,7 @@ class UAMS_Carousel {
             'focal_length'       => __( 'Focal Length', 'jetpack' ),
             'require_name_email' => $require_name_email,
             'login_url'          => wp_login_url( apply_filters( 'the_permalink', get_permalink() ) ),
-        );
+        ];
 
         $localize_strings = apply_filters( 'jp_carousel_localize_strings', $localize_strings );
         wp_localize_script( 'site', 'jetpackCarouselStrings', $localize_strings );
@@ -92,26 +94,27 @@ class UAMS_Carousel {
 
         $attachment_id   = (int) $attachment->ID;
         $orig_file       = wp_get_attachment_image_src( $attachment_id, 'original' );
-        $orig_file       = isset( $orig_file[0] ) ? $orig_file[0] : wp_get_attachment_url( $attachment_id );
+        $orig_file       = $orig_file[0] ?? wp_get_attachment_url( $attachment_id );
+        
         $meta            = wp_get_attachment_metadata( $attachment_id );
         $size            = isset( $meta['width'], $meta['height'] ) ? (int) $meta['width'] . ',' . (int) $meta['height'] : '';
-        $img_meta        = ! empty( $meta['image_meta'] ) ? (array) $meta['image_meta'] : array();
+        $img_meta        = ! empty( $meta['image_meta'] ) ? (array) $meta['image_meta'] : [];
 
         $medium_file_info = wp_get_attachment_image_src( $attachment_id, 'medium' );
-        $medium_file      = isset( $medium_file_info[0] ) ? $medium_file_info[0] : '';
+        $medium_file      = $medium_file_info[0] ?? '';
 
         $large_file_info  = wp_get_attachment_image_src( $attachment_id, 'large' );
-        $large_file       = isset( $large_file_info[0] ) ? $large_file_info[0] : '';
+        $large_file       = $large_file_info[0] ?? '';
 
         $post_obj         = get_post( $attachment_id );
         $attachment_title = $post_obj ? wptexturize( $post_obj->post_title ) : '';
         $attachment_desc  = $post_obj ? wpautop( wptexturize( $post_obj->post_content ) ) : '';
 
-        if ( ! empty( $img_meta ) ) {
+        if ( $img_meta !== [] ) {
             unset( $img_meta['latitude'], $img_meta['longitude'] );
         }
 
-        $json_img_meta = json_encode( array_map( 'strval', $img_meta ) );
+        $json_img_meta = json_encode( array_map( strval(...), $img_meta ) );
 
         $attr['data-attachment-id']     = $attachment_id;
         $attr['data-orig-file']         = esc_attr( $orig_file );
@@ -133,12 +136,12 @@ class UAMS_Carousel {
         if ( isset( $post ) && $post instanceof WP_Post ) {
             $blog_id = (int) get_current_blog_id();
 
-            $extra_data = array(
-                'data-carousel-extra' => array(
+            $extra_data = [
+                'data-carousel-extra' => [
                     'blog_id'   => $blog_id,
                     'permalink' => get_permalink( $post->ID ),
-                ),
-            );
+                ],
+            ];
 
             $extra_data = apply_filters( 'jp_carousel_add_data_to_container', $extra_data );
 

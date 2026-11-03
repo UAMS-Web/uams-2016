@@ -8,25 +8,25 @@
 
 class UAMS_Button
 {
-    private static $types = array( 'plus', 'go', 'external', 'play' );
+    private static array $types = [ 'plus', 'go', 'external', 'play' ];
 
     public function __construct()
     {
-        add_shortcode( 'button', array( $this, 'button_handler' ) );
+        add_shortcode( 'button', [ $this, 'button_handler' ] );
     }
 
-    public function button_handler( $atts, $content = null )
+    public function button_handler( $atts, $content = null ): string
     {
-        $atts = shortcode_atts( array(
+        $atts = shortcode_atts( [
             'color' => 'none',
             'type'  => '',
             'url'   => '#',
             'size'  => '',
             'small' => null,
             'text'  => '',
-        ), $atts, 'button' );
+        ], $atts, 'button' );
 
-        $classes = array( 'uams-btn' );
+        $classes = [ 'uams-btn' ];
         $color   = 'btn-' . sanitize_html_class( $atts['color'] );
 
         if ( empty( $content ) && empty( $atts['text'] ) ) {
@@ -47,9 +47,9 @@ class UAMS_Button
         }
 
         if ( ! empty( $atts['size'] ) ) {
-            if ( in_array( $atts['size'], array( 'small', 'sm' ), true ) ) {
+            if ( in_array( $atts['size'], [ 'small', 'sm' ], true ) ) {
                 $classes[] = 'btn-sm';
-            } elseif ( in_array( $atts['size'], array( 'large', 'lg' ), true ) ) {
+            } elseif ( in_array( $atts['size'], [ 'large', 'lg' ], true ) ) {
                 $classes[] = 'btn-lg';
             }
         }

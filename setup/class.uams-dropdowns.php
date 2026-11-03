@@ -8,27 +8,31 @@
 class UAMS_Dropdowns
 {
     const NAME           = 'White Bar';
+    
     const LOCATION       = 'white-bar';
+    
     const DISPLAY_NAME   = 'Dropdowns';
+    
     const DEFAULT_STATUS = 'publish';
 
-    public $menu_items = array();
+    public $menu_items = [];
+    
     public $MENU_ID;
 
     public function __construct()
     {
-        $this->menu_items = array();
-        add_action( 'after_setup_theme', array( $this, 'register_white_bar_menu' ) );
-        add_action( 'after_setup_theme', array( $this, 'install_default_white_bar_menu' ) );
-        add_action( 'wp_update_nav_menu', array( $this, 'save_white_bar' ) );
+        $this->menu_items = [];
+        add_action( 'after_setup_theme', [ $this, 'register_white_bar_menu' ] );
+        add_action( 'after_setup_theme', [ $this, 'install_default_white_bar_menu' ] );
+        add_action( 'wp_update_nav_menu', [ $this, 'save_white_bar' ] );
     }
 
-    public function register_white_bar_menu()
+    public function register_white_bar_menu(): void
     {
         register_nav_menu( self::LOCATION, __( self::NAME ) );
     }
 
-    public function install_default_white_bar_menu()
+    public function install_default_white_bar_menu(): void
     {
         $this->generate_menu_list();
         $this->MENU_ID = wp_create_nav_menu( self::DISPLAY_NAME );
@@ -38,8 +42,8 @@ class UAMS_Dropdowns
             return;
         }
 
-        foreach ( $this->menu_items as $menu_name => $menu_attributes ) {
-            $children = isset( $menu_attributes['children'] ) ? $menu_attributes['children'] : array();
+        foreach ( $this->menu_items as $menu_attributes ) {
+            $children = $menu_attributes['children'] ?? [];
             unset( $menu_attributes['children'] );
 
             $parent_id = wp_update_nav_menu_item( $this->MENU_ID, 0, $menu_attributes );
@@ -55,14 +59,14 @@ class UAMS_Dropdowns
         $this->set_uams_menu_location();
     }
 
-    public function set_uams_menu_location()
+    public function set_uams_menu_location(): void
     {
         $locations = (array) get_theme_mod( 'nav_menu_locations' );
         $locations['white-bar'] = $this->MENU_ID;
         set_theme_mod( 'nav_menu_locations', $locations );
     }
 
-    public function generate_menu_list()
+    public function generate_menu_list(): void
     {
         // The default About dropdown.
         $this->add_menu_item( 'About', 'http://web.uams.edu/about/' );
@@ -90,13 +94,13 @@ class UAMS_Dropdowns
         $this->add_menu_item( 'Research', 'http://research.uams.edu' );
     }
 
-    public function add_menu_item( $name, $url, $parent = null )
+    public function add_menu_item( $name, $url, $parent = null ): void
     {
-        $item = array(
+        $item = [
             'menu-item-title'  => $name,
             'menu-item-url'    => $url,
             'menu-item-status' => self::DEFAULT_STATUS,
-        );
+        ];
 
         if ( $parent ) {
             $this->menu_items[ $parent ]['children'][ $name ] = $item;
@@ -105,7 +109,7 @@ class UAMS_Dropdowns
         }
     }
 
-    public function save_white_bar( $menu_id )
+    public function save_white_bar( $menu_id ): void
     {
         $menu_object = wp_get_nav_menu_object( $menu_id );
         if ( $menu_object && isset( $menu_object->slug ) && $menu_object->slug === 'dropdowns' ) {

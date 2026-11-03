@@ -3,33 +3,40 @@
 class UAMS_Page_Attributes_Meta_Box
 {
     const ID       = 'pageparentdiv';
+    
     const TITLE    = 'Page Attributes';
+    
     const POSTTYPE = 'page';
+    
     const POSITION = 'side';
+    
     const PRIORITY = 'core';
 
-    public $HIDDEN = array();
+    /**
+     * @var array{'No Sidebar'}
+     */
+    public $HIDDEN = [];
 
     public function __construct()
     {
-        $this->HIDDEN = array( 'No Sidebar' );
-        add_action( 'add_meta_boxes', array( $this, 'replace_meta_box' ) );
-        add_action( 'save_post', array( $this, 'save_postdata' ) );
-        add_action( 'admin_head', array( $this, 'custom_style' ) );
+        $this->HIDDEN = [ 'No Sidebar' ];
+        add_action( 'add_meta_boxes', [ $this, 'replace_meta_box' ] );
+        add_action( 'save_post', [ $this, 'save_postdata' ] );
+        add_action( 'admin_head', [ $this, 'custom_style' ] );
     }
 
-    public function replace_meta_box()
+    public function replace_meta_box(): void
     {
         remove_meta_box( 'pageparentdiv', 'page', 'side' );
-        add_meta_box( 'uamspageparentdiv', 'Page Attributes', array( $this, 'page_attributes_meta_box' ), 'page', 'side', 'core' );
+        add_meta_box( 'uamspageparentdiv', 'Page Attributes', [ $this, 'page_attributes_meta_box' ], 'page', 'side', 'core' );
     }
 
-    public function page_attributes_meta_box( $post )
+    public function page_attributes_meta_box( $post ): void
     {
         $post_type_object = get_post_type_object( $post->post_type );
 
         if ( $post_type_object && $post_type_object->hierarchical ) {
-            $dropdown_args = array(
+            $dropdown_args = [
                 'post_type'        => $post->post_type,
                 'exclude_tree'     => $post->ID,
                 'selected'         => $post->post_parent,
@@ -37,7 +44,7 @@ class UAMS_Page_Attributes_Meta_Box
                 'show_option_none' => __( '(no parent)' ),
                 'sort_column'      => 'menu_order, post_title, sidebar, parent',
                 'echo'             => 0,
-            );
+            ];
 
             $dropdown_args = apply_filters( 'page_attributes_dropdown_pages_args', $dropdown_args, $post );
             $pages         = wp_dropdown_pages( $dropdown_args );
@@ -87,9 +94,9 @@ class UAMS_Page_Attributes_Meta_Box
         <?php
     }
 
-    public function page_template_dropdown( $default = '', $post = null )
+    public function page_template_dropdown( $default = '', $post = null ): void
     {
-        $previews = array(
+        $previews = [
             'Big Hero'         => '/assets/images/template-big-hero.jpg',
             'Small Hero'       => '/assets/images/template-small-hero.jpg',
             'Home'             => '/assets/images/template-home.jpg',
@@ -97,7 +104,7 @@ class UAMS_Page_Attributes_Meta_Box
             'Blank'            => '/assets/images/template-no-title.jpg',
             'No title/image'   => '/assets/images/template-no-title.jpg',
             'Default Template' => '/assets/images/template-default.jpg',
-        );
+        ];
 
         $templates = get_page_templates( get_post() );
         ksort( $templates );
@@ -118,12 +125,12 @@ class UAMS_Page_Attributes_Meta_Box
         echo '</div>';
     }
 
-    public function custom_style()
+    public function custom_style(): void
     {
         wp_enqueue_style( 'uams-admin-template', get_template_directory_uri() . '/assets/admin/css/uams.admin.template.css' );
     }
 
-    public function save_postdata( $post_ID = 0 )
+    public function save_postdata( $post_ID = 0 ): int
     {
         $post_ID   = (int) $post_ID;
         $post_type = get_post_type( $post_ID );

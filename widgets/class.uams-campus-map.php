@@ -13,14 +13,14 @@ class UAMS_Campus_Map extends WP_Widget
 		parent::__construct(
 			'uams-campus-map',
 			__( 'UAMS Campus Map', 'uams' ),
-			array(
+			[
 				'description' => __( 'Show your building on the UAMS campus map.', 'uams' ),
 				'classname'   => 'uams-widget-campus-map',
-			)
+			]
 		);
 	}
 
-	public function widget( $args, $instance )
+	public function widget( $args, $instance ): void
 	{
 		$title        = apply_filters( 'widget_title', $instance['title'] ?? '' );
 		$buildingCode = apply_filters( 'uams_campus_map_buildingcode', $instance['buildingCode'] ?? '' );
@@ -51,16 +51,12 @@ class UAMS_Campus_Map extends WP_Widget
 		echo $args['before_widget'] . $content . $args['after_widget'];
 	}
 
-	public function update( $new_instance, $old_instance )
-	{
-		$instance                 = array();
-		$instance['title']        = sanitize_text_field( $new_instance['title'] ?? '' );
-		$instance['buildingCode'] = sanitize_text_field( $new_instance['buildingCode'] ?? '' );
+	public function update($new_instance, $old_instance)
+    {
+        return ['title' => sanitize_text_field( $new_instance['title'] ?? '' ), 'buildingCode' => sanitize_text_field( $new_instance['buildingCode'] ?? '' )];
+    }
 
-		return $instance;
-	}
-
-	public function form( $instance )
+	public function form( $instance ): void
 	{
 		$title        = isset( $instance['title'] ) ? esc_attr( $instance['title'] ) : '';
 		$buildingCode = isset( $instance['buildingCode'] ) ? esc_attr( $instance['buildingCode'] ) : '';
@@ -124,6 +120,6 @@ class UAMS_Campus_Map extends WP_Widget
 	}
 }
 
-add_action( 'widgets_init', function() {
+add_action( 'widgets_init', function(): void {
 	register_widget( 'UAMS_Campus_Map' );
 } );

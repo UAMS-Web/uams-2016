@@ -41,9 +41,9 @@ class UAMS_CardsShortcode
 {
     public function __construct()
     {
-        add_filter( 'the_content', array( $this, 'wpex_fix_shortcodes' ) );
-        add_shortcode( 'cards', array( $this, 'cards_handler' ) );
-        add_shortcode( 'card', array( $this, 'card_handler' ) );
+        add_filter( 'the_content', [ $this, 'wpex_fix_shortcodes' ] );
+        add_shortcode( 'cards', [ $this, 'cards_handler' ] );
+        add_shortcode( 'card', [ $this, 'card_handler' ] );
     }
 
     public function wpex_fix_shortcodes( $content )
@@ -52,20 +52,20 @@ class UAMS_CardsShortcode
             return $content;
         }
 
-        $array = array(
+        $array = [
             '<p>['    => '[',
             ']</p>'   => ']',
             ']<br />' => ']',
-        );
+        ];
 
         return strtr( $content, $array );
     }
 
-    public function cards_handler( $atts, $content = null )
+    public function cards_handler( $atts, $content = null ): string
     {
-        $cards_atts = shortcode_atts( array(
+        $cards_atts = shortcode_atts( [
             'name' => '',
-        ), $atts, 'cards' );
+        ], $atts, 'cards' );
 
         if ( empty( $content ) ) {
             return 'No content inside the cards element. Make sure you close your cards element.';
@@ -77,9 +77,9 @@ class UAMS_CardsShortcode
         return sprintf( '%s<section class="cards">%s</section>', $title, $output );
     }
 
-    public function card_handler( $atts, $content = null )
+    public function card_handler( $atts, $content = null ): string
     {
-        $card_atts = shortcode_atts( array(
+        $card_atts = shortcode_atts( [
             'title'  => '',
             'size'   => '',
             'image'  => '',
@@ -89,7 +89,7 @@ class UAMS_CardsShortcode
             'alt'    => '',
             'action' => '',
             'footer' => '',
-        ), $atts, 'card' );
+        ], $atts, 'card' );
 
         $size    = ! empty( $card_atts['size'] ) ? ' ' . sanitize_html_class( $card_atts['size'] ) : '';
         $color   = ! empty( $card_atts['color'] ) ? ' ' . sanitize_html_class( $card_atts['color'] ) : '';

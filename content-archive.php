@@ -15,7 +15,7 @@ if ( ! is_home() && ! is_search() && ! is_archive() ) :
 endif;
 
 if ( has_post_thumbnail() ) :
-	the_post_thumbnail( 'thumbnail', array( 'style' => 'margin-bottom:5px;' ) );
+	the_post_thumbnail( 'thumbnail', [ 'style' => 'margin-bottom:5px;' ] );
 endif;
 ?>
 <?php the_excerpt(); ?>

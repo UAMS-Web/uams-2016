@@ -3,16 +3,23 @@
 class UAMS_Custom_Post {
 
     public $name;
-    public $args     = array();
-    public $taxonomy = array();
+    
+    public $args     = [];
+    
+    /**
+     * @var array<mixed, mixed>
+     */
+    public $taxonomy = [];
+    
     public $post_label = 'Post';
 
     public function __construct( $args ) {
         if ( empty( $args['name'] ) ) {
             return;
         }
+        
         $this->name = $args['name'];
-        $this->args = isset( $args['args'] ) && is_array( $args['args'] ) ? $args['args'] : array();
+        $this->args = isset( $args['args'] ) && is_array( $args['args'] ) ? $args['args'] : [];
 
         if ( isset( $args['labels'] ) ) {
             $this->args['labels'] = $args['labels'];
@@ -20,19 +27,20 @@ class UAMS_Custom_Post {
             if ( isset( $args['post_label'] ) ) {
                 $this->post_label = $args['post_label'];
             }
+            
             $this->args['labels'] = $this->label_gen();
         }
 
-        add_action( 'init', array( $this, 'register_post' ) );
+        add_action( 'init', [ $this, 'register_post' ] );
 
         if ( isset( $args['taxonomy'] ) && is_array( $args['taxonomy'] ) ) {
             $this->taxonomy = $args['taxonomy'];
-            add_action( 'init', array( $this, 'add_custom_taxonomy' ) );
+            add_action( 'init', [ $this, 'add_custom_taxonomy' ] );
         }
     }
 
-    public function label_gen() {
-        return array(
+    public function label_gen(): array {
+        return [
             'name'               => __( $this->post_label . 's' ),
             'singular_name'      => __( $this->post_label ),
             'all_items'          => __( $this->post_label . 's' ),
@@ -45,16 +53,16 @@ class UAMS_Custom_Post {
             'search_items'       => __( 'Search ' . $this->post_label . 's' ),
             'not_found'          => __( 'No ' . $this->post_label . 's found' ),
             'not_found_in_trash' => __( 'No ' . $this->post_label . 's found in Trash' ),
-        );
+        ];
     }
 
-    public function register_post() {
+    public function register_post(): void {
         if ( ! post_type_exists( $this->name ) ) {
             register_post_type( $this->name, $this->args );
         }
     }
 
-    public function add_custom_taxonomy() {
+    public function add_custom_taxonomy(): void {
         if ( empty( $this->taxonomy['name'] ) ) {
             return;
         }
@@ -63,8 +71,9 @@ class UAMS_Custom_Post {
             if ( isset( $this->taxonomy['labels'] ) ) {
                 $this->taxonomy['args']['labels'] = $this->taxonomy['labels'];
             }
-            $tax_args = isset( $this->taxonomy['args'] ) && is_array( $this->taxonomy['args'] ) ? $this->taxonomy['args'] : array();
-            register_taxonomy( $this->taxonomy['name'], array( $this->name ), $tax_args );
+            
+            $tax_args = isset( $this->taxonomy['args'] ) && is_array( $this->taxonomy['args'] ) ? $this->taxonomy['args'] : [];
+            register_taxonomy( $this->taxonomy['name'], [ $this->name ], $tax_args );
         } elseif ( ! in_array( $this->taxonomy['name'], get_object_taxonomies( $this->name ), true ) ) {
             register_taxonomy_for_object_type( $this->taxonomy['name'], $this->name );
         }

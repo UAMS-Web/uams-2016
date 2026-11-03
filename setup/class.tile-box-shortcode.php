@@ -10,40 +10,42 @@
 class TileBox
 {
     const MAXTILES = 12;
-    private $count = 0;
-    private $NumbersArray = array( 'zero', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine', 'ten', 'eleven', 'twelve' );
+    
+    private int $count = 0;
+    
+    private array $NumbersArray = [ 'zero', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine', 'ten', 'eleven', 'twelve' ];
 
     public function __construct()
     {
-        add_filter( 'the_content', array( $this, 'wpex_fix_shortcodes' ) );
-        add_shortcode( 'box', array( $this, 'box_handler' ) );
-        add_shortcode( 'tile', array( $this, 'tile_handler' ) );
+        add_filter( 'the_content', [ $this, 'wpex_fix_shortcodes' ] );
+        add_shortcode( 'box', [ $this, 'box_handler' ] );
+        add_shortcode( 'tile', [ $this, 'tile_handler' ] );
     }
 
-    public function wpex_fix_shortcodes( $content )
+    public function wpex_fix_shortcodes( $content ): string
     {
         if ( empty( $content ) || ! is_string( $content ) ) {
             return (string) $content;
         }
 
-        $array = array(
+        $array = [
             '<p>['    => '[',
             ']</p>'   => ']',
             ']<br />' => ']',
-        );
+        ];
 
         return strtr( $content, $array );
     }
 
-    public function box_handler( $atts, $content = null )
+    public function box_handler( $atts, $content = null ): string
     {
-        $boxCenter = shortcode_atts( array(
+        $boxCenter = shortcode_atts( [
             'alignment' => 'none',
             'color'     => '',
             'padding'   => '',
             'shadow'    => '',
             'custom'    => '',
-        ), $atts, 'box' );
+        ], $atts, 'box' );
 
         $color   = ! empty( $boxCenter['color'] ) ? ' box-' . sanitize_html_class( $boxCenter['color'] ) : '';
         $padding = ! empty( $boxCenter['padding'] ) ? ' nopad' : '';
@@ -59,7 +61,7 @@ class TileBox
 
         $output    = do_shortcode( $content );
         $count_key = min( $this->count, self::MAXTILES );
-        $number    = isset( $this->NumbersArray[ $count_key ] ) ? $this->NumbersArray[ $count_key ] : 'twelve';
+        $number    = $this->NumbersArray[ $count_key ] ?? 'twelve';
 
         return sprintf(
             '<div class="box-outer"><div class="box %s %s%s%s%s%s">%s</div></div>',
@@ -73,12 +75,12 @@ class TileBox
         );
     }
 
-    public function tile_handler( $atts, $content = null )
+    public function tile_handler( $atts, $content = null ): string
     {
         $this->count++;
-        $tile_atts = shortcode_atts( array(
+        $tile_atts = shortcode_atts( [
             'empty' => 'false',
-        ), $atts, 'tile' );
+        ], $atts, 'tile' );
 
         $classes = 'tile';
 

@@ -12,7 +12,7 @@ $has_sidebar = ( 'on' !== $sidebar );
 
 $first       = true;
 $i           = 0;
-$slidecolor  = array();
+$slidecolor  = [];
 $slider_type = function_exists( 'get_field' ) ? get_field( 'home_page_slider' ) : '';
 
 if ( 'slide' === $slider_type && function_exists( 'have_rows' ) && have_rows( 'home_slides' ) ) : ?>
@@ -31,13 +31,13 @@ if ( 'slide' === $slider_type && function_exists( 'have_rows' ) && have_rows( 'h
           $buttonlink = get_sub_field( 'home_slide_external_link' );
       }
       $textcolor        = get_sub_field( 'home_slide_text_color' );
-      $slidecolor[ $i ] = $textcolor ? $textcolor : 'lighttext';
+      $slidecolor[ $i ] = $textcolor ?: 'lighttext';
   ?>
     <div data-mobimg="<?php echo esc_url( $hasmobileimage ? $mob_url : $dt_url ); ?>" data-dtimg="<?php echo esc_url( $dt_url ); ?>" class="uams-hero-image uams-homepage-slider <?php echo esc_attr( $slidecolor[ $i ] ); ?> <?php echo $first ? 'activeslide' : ''; ?>" style="background-position: center center; background-image:url('<?php echo esc_url( $dt_url ); ?>');">
       <div>
-        <h3 class="slide-title" id="slide-title-<?php echo (int) $i; ?>"><?php echo esc_html( get_sub_field( 'home_slide_title' ) ); ?><span class="udub-slant"><span></span></span></h3>
+        <h3 class="slide-title" id="slide-title-<?php echo $i; ?>"><?php echo esc_html( get_sub_field( 'home_slide_title' ) ); ?><span class="udub-slant"><span></span></span></h3>
         <p class="slide-content"><?php echo esc_html( get_sub_field( 'home_slide_text' ) ); ?></p>
-        <p><a class="uams-btn btn-sm btn-none" href="<?php echo esc_url( $buttonlink ); ?>" aria-describedby="slide-title-<?php echo (int) $i; ?>"><?php echo esc_html( get_sub_field( 'home_slide_button_text' ) ); ?></a></p>
+        <p><a class="uams-btn btn-sm btn-none" href="<?php echo esc_url( $buttonlink ); ?>" aria-describedby="slide-title-<?php echo $i; ?>"><?php echo esc_html( get_sub_field( 'home_slide_button_text' ) ); ?></a></p>
       </div>
     </div>
   <?php
@@ -46,7 +46,7 @@ if ( 'slide' === $slider_type && function_exists( 'have_rows' ) && have_rows( 'h
   endwhile;
   ?>
   <?php if ( $i > 1 ) : ?>
-  <div class="slideshow-controls <?php echo esc_attr( isset( $slidecolor[0] ) ? $slidecolor[0] : '' ); ?>">
+  <div class="slideshow-controls <?php echo esc_attr( $slidecolor[0] ?? '' ); ?>">
     <button class="next-headline">
       <span class="uwn-slideshow-next-text">NEXT</span>
       <span class="uwn-slideshow-next-title">NEXT TITLE HERE</span>
@@ -105,7 +105,7 @@ if ( 'slide' === $slider_type && function_exists( 'have_rows' ) && have_rows( 'h
           $externalurl = get_sub_field( 'action_link_url' );
           $action_link = $external ? $externalurl : $internalurl;
       ?>
-        <li class="ab-1_<?php echo (int) $row_count; ?>"><a href="<?php echo esc_url( $action_link ); ?>" title="<?php echo esc_attr( $linktitle ); ?>"><span class="icon <?php echo esc_attr( $icon ); ?>"></span><span><?php echo esc_html( $linktitle ); ?></span></a></li>
+        <li class="ab-1_<?php echo $row_count; ?>"><a href="<?php echo esc_url( $action_link ); ?>" title="<?php echo esc_attr( $linktitle ); ?>"><span class="icon <?php echo esc_attr( $icon ); ?>"></span><span><?php echo esc_html( $linktitle ); ?></span></a></li>
       <?php endwhile; ?>
     </ul>
   </nav>
@@ -138,7 +138,7 @@ if ( 'slide' === $slider_type && function_exists( 'have_rows' ) && have_rows( 'h
 
                 <?php
                 if ( ! function_exists( 'text_cut' ) ) {
-                    function text_cut( $text, $length = 27, $dots = true ) {
+                    function text_cut( $text, $length = 27, $dots = true ): string {
                         $text      = trim( preg_replace( '#[\s\n\r\t]{2,}#', ' ', (string) $text ) );
                         $text_temp = $text;
 
@@ -191,7 +191,7 @@ if ( 'slide' === $slider_type && function_exists( 'have_rows' ) && have_rows( 'h
 
 <?php
 if ( function_exists( 'get_field' ) && 'slide' === get_field( 'home_page_slider' ) && function_exists( 'have_rows' ) && have_rows( 'home_slides' ) ) {
-    wp_enqueue_script( 'home-slider-script', get_template_directory_uri() . '/js/home-slider.js', array( 'jquery' ), '1.1', true );
+    wp_enqueue_script( 'home-slider-script', get_template_directory_uri() . '/js/home-slider.js', [ 'jquery' ], '1.1', true );
 }
 
 get_footer();

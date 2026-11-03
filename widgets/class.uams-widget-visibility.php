@@ -9,32 +9,32 @@ class UAMS_Widget_Conditions
 	public function __construct()
 	{
 		if ( is_admin() ) {
-			add_action( 'sidebar_admin_setup', array( __CLASS__, 'widget_admin_setup' ) );
-			add_filter( 'widget_update_callback', array( __CLASS__, 'widget_update' ), 10, 3 );
-			add_action( 'in_widget_form', array( __CLASS__, 'widget_conditions_admin' ), 10, 3 );
-			add_action( 'wp_ajax_widget_conditions_options', array( __CLASS__, 'widget_conditions_options' ) );
+			add_action( 'sidebar_admin_setup', [ self::class, 'widget_admin_setup' ] );
+			add_filter( 'widget_update_callback', [ self::class, 'widget_update' ], 10, 3 );
+			add_action( 'in_widget_form', [ self::class, 'widget_conditions_admin' ], 10, 3 );
+			add_action( 'wp_ajax_widget_conditions_options', [ self::class, 'widget_conditions_options' ] );
 		} else {
-			add_action( 'widget_display_callback', array( __CLASS__, 'filter_widget' ) );
-			add_action( 'sidebars_widgets', array( __CLASS__, 'sidebars_widgets' ) );
+			add_action( 'widget_display_callback', [ self::class, 'filter_widget' ] );
+			add_action( 'sidebars_widgets', [ self::class, 'sidebars_widgets' ] );
 		}
 	}
 
-	public static function widget_admin_setup()
+	public static function widget_admin_setup(): void
 	{
 		wp_enqueue_style( 'widget-conditions', get_template_directory_uri() . '/assets/admin/css/uams.widget-conditions.css' );
-		wp_enqueue_script( 'widget-conditions', get_template_directory_uri() . '/assets/admin/js/uams.widget-conditions.js', array( 'jquery', 'jquery-ui-core' ), '20140422', true );
+		wp_enqueue_script( 'widget-conditions', get_template_directory_uri() . '/assets/admin/js/uams.widget-conditions.js', [ 'jquery', 'jquery-ui-core' ], '20140422', true );
 		wp_enqueue_style( 'widget-cards', get_template_directory_uri() . '/assets/admin/css/uams.widgets-misc.css' );
 	}
 
-	public static function widget_conditions_options_echo( $major = '', $minor = '' )
+	public static function widget_conditions_options_echo( $major = '', $minor = '' ): void
 	{
 		switch ( $major ) {
 			case 'category':
 				?>
 				<option value=""><?php _e( 'All category pages', 'jetpack' ); ?></option>
 				<?php
-				$categories = get_categories( array( 'number' => 1000, 'orderby' => 'count', 'order' => 'DESC' ) );
-				usort( $categories, array( __CLASS__, 'strcasecmp_name' ) );
+				$categories = get_categories( [ 'number' => 1000, 'orderby' => 'count', 'order' => 'DESC' ] );
+				usort( $categories, [ self::class, 'strcasecmp_name' ] );
 
 				foreach ( $categories as $category ) {
 					?>
@@ -47,7 +47,7 @@ class UAMS_Widget_Conditions
 				?>
 				<option value=""><?php _e( 'All author pages', 'jetpack' ); ?></option>
 				<?php
-				foreach ( get_users( array( 'orderby' => 'name', 'exclude_admin' => true ) ) as $author ) {
+				foreach ( get_users( [ 'orderby' => 'name', 'exclude_admin' => true ] ) as $author ) {
 					?>
 					<option value="<?php echo esc_attr( $author->ID ); ?>" <?php selected( $author->ID, $minor ); ?>><?php echo esc_html( $author->display_name ); ?></option>
 					<?php
@@ -58,8 +58,8 @@ class UAMS_Widget_Conditions
 				?>
 				<option value=""><?php _e( 'All tag pages', 'jetpack' ); ?></option>
 				<?php
-				$tags = get_tags( array( 'number' => 1000, 'orderby' => 'count', 'order' => 'DESC' ) );
-				usort( $tags, array( __CLASS__, 'strcasecmp_name' ) );
+				$tags = get_tags( [ 'number' => 1000, 'orderby' => 'count', 'order' => 'DESC' ] );
+				usort( $tags, [ self::class, 'strcasecmp_name' ] );
 
 				foreach ( $tags as $tag ) {
 					?>
@@ -91,7 +91,7 @@ class UAMS_Widget_Conditions
 				<option value="search" <?php selected( 'search', $minor ); ?>><?php _e( 'Search results', 'jetpack' ); ?></option>
 				<optgroup label="<?php esc_attr_e( 'Post type:', 'jetpack' ); ?>">
 					<?php
-					$post_types = get_post_types( array( 'public' => true ), 'objects' );
+					$post_types = get_post_types( [ 'public' => true ], 'objects' );
 					foreach ( $post_types as $post_type ) {
 						?>
 						<option value="<?php echo esc_attr( 'post_type-' . $post_type->name ); ?>" <?php selected( 'post_type-' . $post_type->name, $minor ); ?>><?php echo esc_html( $post_type->labels->singular_name ); ?></option>
@@ -101,7 +101,7 @@ class UAMS_Widget_Conditions
 				</optgroup>
 				<optgroup label="<?php esc_attr_e( 'Static page:', 'jetpack' ); ?>">
 					<?php
-					echo str_replace( ' value="' . esc_attr( $minor ) . '"', ' value="' . esc_attr( $minor ) . '" selected="selected"', preg_replace( '/<\/?select[^>]*?>/i', '', wp_dropdown_pages( array( 'echo' => false ) ) ) );
+					echo str_replace( ' value="' . esc_attr( $minor ) . '"', ' value="' . esc_attr( $minor ) . '" selected="selected"', preg_replace( '/<\/?select[^>]*?>/i', '', wp_dropdown_pages( [ 'echo' => false ] ) ) );
 					?>
 				</optgroup>
 				<?php
@@ -111,15 +111,15 @@ class UAMS_Widget_Conditions
 				?>
 				<option value=""><?php _e( 'All taxonomy pages', 'jetpack' ); ?></option>
 				<?php
-				$taxonomies = get_taxonomies( array( '_builtin' => false ), 'objects' );
-				usort( $taxonomies, array( __CLASS__, 'strcasecmp_name' ) );
+				$taxonomies = get_taxonomies( [ '_builtin' => false ], 'objects' );
+				usort( $taxonomies, [ self::class, 'strcasecmp_name' ] );
 
 				foreach ( $taxonomies as $taxonomy ) {
 					?>
 					<optgroup label="<?php esc_attr_e( $taxonomy->labels->name . ':', 'jetpack' ); ?>">
 						<option value="<?php echo esc_attr( $taxonomy->name ); ?>" <?php selected( $taxonomy->name, $minor ); ?>><?php echo 'All ' . esc_html( $taxonomy->name ) . ' pages'; ?></option>
 						<?php
-						$terms = get_terms( array( 'taxonomy' => $taxonomy->name, 'number' => 250, 'hide_empty' => false ) );
+						$terms = get_terms( [ 'taxonomy' => $taxonomy->name, 'number' => 250, 'hide_empty' => false ] );
 						if ( ! is_wp_error( $terms ) && is_array( $terms ) ) {
 							foreach ( $terms as $term ) {
 								?>
@@ -135,7 +135,7 @@ class UAMS_Widget_Conditions
 		}
 	}
 
-	public static function widget_conditions_options()
+	public static function widget_conditions_options(): void
 	{
 		$major = isset( $_REQUEST['major'] ) ? sanitize_text_field( $_REQUEST['major'] ) : '';
 		$minor = isset( $_REQUEST['minor'] ) ? sanitize_text_field( $_REQUEST['minor'] ) : '';
@@ -143,16 +143,14 @@ class UAMS_Widget_Conditions
 		wp_die();
 	}
 
-	public static function widget_conditions_admin( $widget, $return, $instance )
+	public static function widget_conditions_admin( $widget, $return, $instance ): void
 	{
-		$conditions = ( isset( $instance['conditions'] ) && is_array( $instance['conditions'] ) ) ? $instance['conditions'] : array();
+		$conditions = ( isset( $instance['conditions'] ) && is_array( $instance['conditions'] ) ) ? $instance['conditions'] : [];
 
-		if ( ! isset( $conditions['action'] ) ) {
-			$conditions['action'] = 'show';
-		}
+		$conditions['action'] ??= 'show';
 
 		if ( empty( $conditions['rules'] ) || ! is_array( $conditions['rules'] ) ) {
-			$conditions['rules'] = array( array( 'major' => '', 'minor' => '' ) );
+			$conditions['rules'] = [ [ 'major' => '', 'minor' => '' ] ];
 		}
 
 		$is_visible = ! empty( $_POST['widget-conditions-visible'] );
@@ -182,7 +180,7 @@ class UAMS_Widget_Conditions
 									<option value="tag" <?php selected( 'tag', $rule_major ); ?>><?php echo esc_html_x( 'Tag', 'Noun, as in: "This post has one tag."', 'jetpack' ); ?></option>
 									<option value="date" <?php selected( 'date', $rule_major ); ?>><?php echo esc_html_x( 'Date', 'Noun, as in: "This page is a date archive."', 'jetpack' ); ?></option>
 									<option value="page" <?php selected( 'page', $rule_major ); ?>><?php echo esc_html_x( 'Page', 'Example: The user is looking at a page, not a post.', 'jetpack' ); ?></option>
-									<?php if ( get_taxonomies( array( '_builtin' => false ) ) ) : ?>
+									<?php if ( get_taxonomies( [ '_builtin' => false ] ) ) : ?>
 										<option value="taxonomy" <?php selected( 'taxonomy', $rule_major ); ?>><?php echo esc_html_x( 'Taxonomy', 'Noun, as in: "This post has one taxonomy."', 'jetpack' ); ?></option>
 									<?php endif; ?>
 								</select>
@@ -212,19 +210,19 @@ class UAMS_Widget_Conditions
 			return $instance;
 		}
 
-		$conditions          = array();
+		$conditions          = [];
 		$conditions['action'] = sanitize_text_field( $_POST['conditions']['action'] );
-		$conditions['rules']  = array();
+		$conditions['rules']  = [];
 
 		foreach ( $_POST['conditions']['rules_major'] as $index => $major_rule ) {
 			if ( empty( $major_rule ) ) {
 				continue;
 			}
 
-			$conditions['rules'][] = array(
+			$conditions['rules'][] = [
 				'major' => sanitize_text_field( $major_rule ),
 				'minor' => isset( $_POST['conditions']['rules_minor'][ $index ] ) ? sanitize_text_field( $_POST['conditions']['rules_minor'][ $index ] ) : '',
-			);
+			];
 		}
 
 		if ( ! empty( $conditions['rules'] ) ) {
@@ -247,7 +245,7 @@ class UAMS_Widget_Conditions
 
 	public static function sidebars_widgets( $widget_areas )
 	{
-		$settings = array();
+		$settings = [];
 
 		foreach ( $widget_areas as $widget_area => $widgets ) {
 			if ( empty( $widgets ) || 'wp_inactive_widgets' === $widget_area ) {
@@ -263,9 +261,7 @@ class UAMS_Widget_Conditions
 					$widget_number = null;
 				}
 
-				if ( ! isset( $settings[ $id_base ] ) ) {
-					$settings[ $id_base ] = get_option( 'widget_' . $id_base );
-				}
+				$settings[ $id_base ] ??= get_option( 'widget_' . $id_base );
 
 				if ( ! is_null( $widget_number ) ) {
 					if ( isset( $settings[ $id_base ][ $widget_number ] ) && false === self::filter_widget( $settings[ $id_base ][ $widget_number ] ) ) {
@@ -343,7 +339,7 @@ class UAMS_Widget_Conditions
 							}
 							break;
 						default:
-							if ( 0 === strpos( $minor, 'post_type-' ) ) {
+							if ( str_starts_with($minor, 'post_type-') ) {
 								$condition_result = is_singular( substr( $minor, 10 ) );
 							} else {
 								$condition_result = is_page( $minor );
@@ -415,7 +411,7 @@ class UAMS_Widget_Conditions
 		return $instance;
 	}
 
-	public static function strcasecmp_name( $a, $b )
+	public static function strcasecmp_name( $a, $b ): int
 	{
 		return strcasecmp( $a->name, $b->name );
 	}

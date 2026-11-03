@@ -13,43 +13,53 @@ if ( defined( 'TWITTER_OAUTH_TOKEN' ) ) :
 class UAMS_Widget_Twitter extends WP_Widget
 {
 	const ID          = 'uams-twitter-feed';
+    
 	const SHORTCODE   = 'twitter';
+    
 	const NAME        = 'UAMS Twitter Feed';
+    
 	const DESCRIPTION = 'Display your latest tweets';
+    
 	const CLASSNAME   = 'twitter-feed-widget';
 
 	const URL           = 'https://api.twitter.com/1.1/statuses/user_timeline.json';
+    
 	const AUTHOR_URL    = 'https://api.twitter.com/1.1/users/show.json';
+    
 	const REQUESTMETHOD = 'GET';
+    
 	const GETFIELD      = '?include_entities=true&include_rts=true&screen_name=%s&count=%u';
+    
 	const RETWEET_TEXT  = '<small>Retweeted by <a href="//twitter.com/%s"> @%s</a></small>';
 
 	const COUNT   = 5;
+    
 	const ACCOUNT = 'twitter';
+    
 	const EXPIRES = 60;
 
-	public static $SETTINGS = array(
+	public static $SETTINGS = [
 		'oauth_access_token'        => TWITTER_OAUTH_TOKEN,
 		'oauth_access_token_secret' => TWITTER_OAUTH_TOKEN_SECRET,
 		'consumer_key'              => TWITTER_CONSUMER_KEY,
 		'consumer_secret'           => TWITTER_CONSUMER_SECRET,
-	);
+	];
 
 	public function __construct()
 	{
 		parent::__construct(
 			self::ID,
 			__( self::NAME, 'uams' ),
-			array(
+			[
 				'description' => __( self::DESCRIPTION, 'uams' ),
 				'classname'   => self::CLASSNAME,
-			)
+			]
 		);
 
-		add_shortcode( self::SHORTCODE, array( $this, 'shortcode' ) );
+		add_shortcode( self::SHORTCODE, [ $this, 'shortcode' ] );
 	}
 
-	public function form( $instance )
+	public function form( $instance ): void
 	{
 		$title = isset( $instance['title'] ) ? esc_attr( $instance['title'] ) : self::NAME;
 		$name  = isset( $instance['name'] ) ? esc_attr( $instance['name'] ) : self::ACCOUNT;
@@ -72,31 +82,26 @@ class UAMS_Widget_Twitter extends WP_Widget
 		<?php
 	}
 
-	public function update( $new_instance, $old_instance )
-	{
-		$instance          = array();
-		$instance['title'] = sanitize_text_field( $new_instance['title'] ?? '' );
-		$instance['name']  = sanitize_text_field( $new_instance['name'] ?? '' );
-		$instance['count'] = ! empty( $new_instance['count'] ) ? absint( $new_instance['count'] ) : self::COUNT;
-
-		return $instance;
-	}
+	public function update($new_instance, $old_instance)
+    {
+        return ['title' => sanitize_text_field( $new_instance['title'] ?? '' ), 'name' => sanitize_text_field( $new_instance['name'] ?? '' ), 'count' => ! empty( $new_instance['count'] ) ? absint( $new_instance['count'] ) : self::COUNT];
+    }
 
 	public function shortcode( $atts )
 	{
 		$atts = shortcode_atts(
-			array(
+			[
 				'title' => '',
 				'name'  => self::ACCOUNT,
 				'count' => self::COUNT,
-			),
+			],
 			$atts,
 			'twitter'
 		);
 
 		$tweets = $this->getLatestTweets( $atts['name'], $atts['count'] );
 
-		if ( ! is_array( $tweets ) || empty( $tweets ) ) {
+		if ( $tweets === [] ) {
 			return '';
 		}
 
@@ -128,7 +133,7 @@ class UAMS_Widget_Twitter extends WP_Widget
 		return $output;
 	}
 
-	public function widget( $args, $instance )
+	public function widget( $args, $instance ): void
 	{
 		$title = ! empty( $instance['title'] ) ? esc_attr( $instance['title'] ) : '';
 		$count = ! empty( $instance['count'] ) ? absint( $instance['count'] ) : self::COUNT;
@@ -139,7 +144,7 @@ class UAMS_Widget_Twitter extends WP_Widget
 		echo $args['after_widget'] ?? '';
 	}
 
-	private function getLatestTweets( $name = 'uams', $count = 5 )
+	private function getLatestTweets( $name = 'uams', $count = 5 ): array
 	{
 		$count         = absint( $count );
 		$transientName = 'twitter-feed-' . sanitize_key( $name ) . '-' . $count;
@@ -147,7 +152,7 @@ class UAMS_Widget_Twitter extends WP_Widget
 
 		if ( false === $cached ) {
 			if ( ! class_exists( 'TwitterAPIExchange' ) ) {
-				return array();
+				return [];
 			}
 
 			$parameters = sprintf( self::GETFIELD, rawurlencode( $name ), $count );
@@ -157,12 +162,12 @@ class UAMS_Widget_Twitter extends WP_Widget
 					->buildOauth( self::URL, self::REQUESTMETHOD );
 
 			$tweets = json_decode( $twitter->performRequest() );
-			$latest = array();
+			$latest = [];
 
 			if ( is_array( $tweets ) ) {
 				foreach ( $tweets as $index => $tweet ) {
 					$hasAuthor = ( isset( $tweet->entities->user_mentions ) && count( $tweet->entities->user_mentions ) > 0 );
-					$retweet   = ( isset( $tweet->text ) && 0 === strpos( $tweet->text, 'RT' ) );
+					$retweet   = ( isset( $tweet->text ) && str_starts_with($tweet->text, 'RT') );
 
 					$latest[ $index ]['author'] = $retweet ? ( $tweet->entities->user_mentions[0]->screen_name ?? '' ) : ( $tweet->user->screen_name ?? '' );
 
@@ -188,10 +193,10 @@ class UAMS_Widget_Twitter extends WP_Widget
 		}
 
 		$decoded = json_decode( $cached, true );
-		return is_array( $decoded ) ? $decoded : array();
+		return is_array( $decoded ) ? $decoded : [];
 	}
 
-	private function formatText( $text )
+	private function formatText( $text ): ?string
 	{
 		if ( empty( $text ) || ! is_string( $text ) ) {
 			return '';
@@ -205,29 +210,27 @@ class UAMS_Widget_Twitter extends WP_Widget
 
 		$text = preg_replace_callback(
 			'/[#]+[A-Za-z0-9-_]+/',
-			array( $this, 'encodeHashTag' ),
+			[ $this, 'encodeHashTag' ],
 			(string) $text
 		);
 
-		$text = preg_replace_callback(
+		return preg_replace_callback(
 			'/[@]+[A-Za-z0-9-_]+/',
-			array( $this, 'normalizeScreenName' ),
+			[ $this, 'normalizeScreenName' ],
 			(string) $text
 		);
-
-		return $text;
 	}
 
-	private function encodeHashTag( $hashTag )
+	private function encodeHashTag( $hashTag ): string
 	{
-		$tag = isset( $hashTag[0] ) ? $hashTag[0] : '';
+		$tag = $hashTag[0] ?? '';
 		return '<a href="//twitter.com/search?q=' . urlencode( $tag ) . '"> ' . esc_html( $tag ) . ' </a>';
 	}
 
-	private function normalizeScreenName( $screenname )
+	private function normalizeScreenName( $screenname ): string
 	{
 		$name = isset( $screenname[0] ) ? str_replace( '@', '', $screenname[0] ) : '';
-		return '<a href="//twitter.com/' . esc_attr( $name ) . '">' . esc_html( isset( $screenname[0] ) ? $screenname[0] : '' ) . '</a>';
+		return '<a href="//twitter.com/' . esc_attr( $name ) . '">' . esc_html( $screenname[0] ?? '' ) . '</a>';
 	}
 }
 
@@ -235,7 +238,7 @@ if ( file_exists( get_template_directory() . '/assets/frameworks/TwitterAPIExcha
 	require_once get_template_directory() . '/assets/frameworks/TwitterAPIExchange.php';
 }
 
-add_action( 'widgets_init', function() {
+add_action( 'widgets_init', function(): void {
 	register_widget( 'UAMS_Widget_Twitter' );
 } );
 

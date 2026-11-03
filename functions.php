@@ -2,7 +2,7 @@
 
 // allows child theme overwriting of either whole UAMS object or just parts
 if (!function_exists('setup_uams_object')){
-    function setup_uams_object() {
+    function setup_uams_object(): \UAMS {
         require( get_template_directory() . '/setup/class.uams.php' );
         $UAMS = new UAMS();
         do_action('extend_uams_object', $UAMS);
@@ -13,7 +13,7 @@ if (!function_exists('setup_uams_object')){
 $UAMS = setup_uams_object();
 
 // Custom colors
-function webcenter_scripts() {
+function webcenter_scripts(): void {
 	if(wp_script_is('wp-color-picker', 'enqueued')){
 		wp_enqueue_script( 'webcenter-scripts', get_template_directory_uri() . '/assets/admin/js/custom-color.js');
 	}
@@ -51,17 +51,15 @@ function hs_content_character_count( $valid, $value, $field, $input ){
 if( ! class_exists('acf') ) {
     // 1. customize ACF path
     add_filter('acf/settings/path', 'my_acf_settings_path');
-    function my_acf_settings_path( $path ) {
-        $path = get_template_directory() . '/_includes/acf-pro/';
-        return $path;
+    function my_acf_settings_path( $path ): string {
+        return get_template_directory() . '/_includes/acf-pro/';
     }
 
     // 2. customize ACF dir
     add_filter('acf/settings/dir', 'my_acf_settings_dir');
 
-    function my_acf_settings_dir( $dir ) {
-        $dir = get_template_directory_uri() . '/_includes/acf-pro/';
-        return $dir;
+    function my_acf_settings_dir( $dir ): string {
+        return get_template_directory_uri() . '/_includes/acf-pro/';
     }
 
     // 3. Hide ACF field group menu item
@@ -82,6 +80,7 @@ function uams_custom_field_body_class( $classes ) {
 		$classes[] = 'action-bar';
 
 	}
+    
 	/* Add custom class of uams-primary if the item is checked in the backend */
 	if ( get_option('primary_uams_site') ) {
 
@@ -92,12 +91,13 @@ function uams_custom_field_body_class( $classes ) {
 	// return the $classes array
 	return $classes;
 }
+
 /* Add custom class of uams-primary if the item is checked in the backend */
 
 
 /* Add Woocommerce Supprt */
 add_action( 'after_setup_theme', 'woocommerce_support' );
-function woocommerce_support() {
+function woocommerce_support(): void {
     add_theme_support( 'woocommerce' );
 }
 
@@ -140,9 +140,9 @@ function add_allowed_origins($origins) {
 
 // Enqueue Font Awesome.
 add_action( 'wp_enqueue_scripts', 'custom_load_font_awesome' );
-function custom_load_font_awesome() {
-    wp_enqueue_script( 'font-awesome-all', get_bloginfo('template_directory') . '/js/fontawesome-all.min.js', array(), null, true );
-    wp_enqueue_script( 'font-awesome-v4', get_bloginfo('template_directory') . '/js/fontawesome-v4-shims.min.js', array(), null, true );
+function custom_load_font_awesome(): void {
+    wp_enqueue_script( 'font-awesome-all', get_bloginfo('template_directory') . '/js/fontawesome-all.min.js', [], null, true );
+    wp_enqueue_script( 'font-awesome-v4', get_bloginfo('template_directory') . '/js/fontawesome-v4-shims.min.js', [], null, true );
     //wp_enqueue_script( 'font-awesome-light', get_bloginfo('template_directory') . '/js/fa-light.min.js', array(), null );
     //wp_enqueue_script( 'font-awesome-brands', get_bloginfo('template_directory') . '/js/fa-brands.min.js', array(), null );
     //wp_enqueue_script( 'font-awesome', get_bloginfo('template_directory') . '/js/fontawesome.min.js', array(), null );
@@ -160,9 +160,9 @@ add_filter( 'script_loader_tag', 'add_defer_attribute', 10, 2 );
 function add_defer_attribute( $tag, $handle ) {
     if (( 'font-awesome-all' === $handle ) || ( 'font-awesome-light' === $handle ) || ( 'font-awesome-brands' === $handle ) || ( 'font-awesome-v4' === $handle )) {
     	return str_replace( ' src', ' defer src', $tag );
-	} else {
-		return $tag;
 	}
+
+    return $tag;
 }
 
 /**
@@ -170,7 +170,7 @@ function add_defer_attribute( $tag, $handle ) {
  *  Exposes form submission data to the data layer
  */
 add_action( 'gform_after_submission', 'access_entry_via_field', 10, 2 );
-	function access_entry_via_field( $entry, $form ) {
+	function access_entry_via_field( $entry, $form ): void {
 	echo "<script>var entryField = ". json_encode($entry) .";",
 	"var formData = ". json_encode($form) .";",
 	"var dataLayer = window.dataLayer || [];",
@@ -180,17 +180,18 @@ add_action( 'gform_after_submission', 'access_entry_via_field', 10, 2 );
 
 add_filter( 'embed_oembed_html', 'wrap_oembed_html', 99, 4 );
 add_filter( 'video_embed_html', 'wrap_oembed_html', 10, 4 ); // Pass all 4 expected args
-function wrap_oembed_html( $cached_html, $url = '', $attr = array(), $post_id = 0 ) {
+function wrap_oembed_html( $cached_html, $url = '', $attr = [], $post_id = 0 ) {
     if ( empty( $url ) || ! is_string( $url ) ) {
         return $cached_html;
     }
 
-    if ( false !== strpos( $url, '://youtube.com' ) ||
-         false !== strpos( $url, '://www.youtube.com' ) ||
-         false !== strpos( $url, '://youtu.be' ) ||
-         false !== strpos( $url, '://www.youtu.be' ) ||
-         false !== strpos( $url, '://vimeo.com' ) ) {
+    if ( str_contains( $url, '://youtube.com' ) ||
+         str_contains( $url, '://www.youtube.com' ) ||
+         str_contains( $url, '://youtu.be' ) ||
+         str_contains( $url, '://www.youtu.be' ) ||
+         str_contains( $url, '://vimeo.com' ) ) {
             $cached_html = '<div class="nc-video-player" role="region" aria-label="video" tabindex="-1"><div class="tube-wrapper">' . $cached_html . '</div></div>';
     }
+    
     return $cached_html;
 }

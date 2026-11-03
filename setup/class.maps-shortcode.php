@@ -8,29 +8,29 @@
 
 class UAMS_Map
 {
-    private static $buildingcode = array(
+    private static array $buildingcode = [
         '127', '116', '117', '118', '119', '120', '121', '122', '123', '124',
         '125', '128', '129', '126', '131', '130', '132', '133', '134', '135',
         '136', '137', '138', '139', '141', '142', '143', '144', '145', '146',
         '147', '148', '149', '150', '151', '152', '153', '154', '155', '2',
         '3', '4', '7', '6',
-    );
+    ];
 
     const URL = '//maps.uams.edu/full-screen/?markerid=';
 
     public function __construct()
     {
-        add_shortcode( 'map', array( $this, 'map_handler' ) );
+        add_shortcode( 'map', [ $this, 'map_handler' ] );
     }
 
-    public function map_handler( $atts, $content = null )
+    public function map_handler( $atts, $content = null ): string
     {
         $params = shortcode_atts(
-            array(
+            [
                 'building' => '',
                 'width'    => '100%',
                 'height'   => '480px',
-            ),
+            ],
             $atts,
             'map'
         );

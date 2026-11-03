@@ -4,19 +4,19 @@ class UAMS_Home_Slider_Meta_Box
 {
     public function __construct()
     {
-        add_action( 'add_meta_boxes', array( $this, 'hs_add_meta_box' ) );
-        add_action( 'save_post', array( $this, 'save' ) );
+        add_action( 'add_meta_boxes', [ $this, 'hs_add_meta_box' ] );
+        add_action( 'save_post', [ $this, 'save' ] );
     }
 
-    public function hs_add_meta_box( $post_type )
+    public function hs_add_meta_box( $post_type ): void
     {
-        $post_types = array( 'home_slider' );
+        $post_types = [ 'home_slider' ];
 
         if ( in_array( $post_type, $post_types, true ) ) {
             add_meta_box(
                 'hs-meta',
                 'Home Slider Options',
-                array( $this, 'hs_meta_box_function' ),
+                [ $this, 'hs_meta_box_function' ],
                 $post_type,
                 'side',
                 'high'
@@ -24,7 +24,7 @@ class UAMS_Home_Slider_Meta_Box
         }
     }
 
-    public function hs_meta_box_function( $post )
+    public function hs_meta_box_function( $post ): void
     {
         wp_nonce_field( 'mobileimage_nonce', 'mobileimage_name' );
 

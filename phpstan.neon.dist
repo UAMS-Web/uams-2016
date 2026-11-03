@@ -219,6 +219,14 @@ parameters:
             identifier: staticMethod.void
             path: setup/class.dropdowns_walker.php
 
+        # save_postdata() returns the post id on the save_post action. WordPress
+        # ignores an action callback's return value, so it is harmless; the
+        # return type is inferred from the code and left as it is.
+        -
+            identifier: return.void
+            message: '#^Action callback returns int but should not return anything\.$#'
+            path: setup/class.uams-page-attributes-meta-box.php
+
         # Core's docblocks carry an @internal tag on force_balance_tags() (a note
         # on who modified the code) and on get_terms() (a note on its $deprecated
         # parameter). PHPStan reads the tag as "internal"; both are long-standing

@@ -7,10 +7,10 @@ class UAMS_Enclosure
 {
     public function __construct()
     {
-        add_action( 'rss2_item', array( $this, 'add_post_featured_image_as_rss_item_enclosure' ) );
+        add_action( 'rss2_item', [ $this, 'add_post_featured_image_as_rss_item_enclosure' ] );
     }
 
-    public function add_post_featured_image_as_rss_item_enclosure()
+    public function add_post_featured_image_as_rss_item_enclosure(): void
     {
         if ( ! has_post_thumbnail() ) {
             return;

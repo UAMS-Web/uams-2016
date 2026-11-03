@@ -71,7 +71,7 @@ $btn_url     = $external ? $externalurl : $internalurl;
 
                 <?php
                 if ( ! function_exists( 'text_cut' ) ) {
-                    function text_cut( $text, $length = 27, $dots = true ) {
+                    function text_cut( $text, $length = 27, $dots = true ): string {
                         $text      = trim( preg_replace( '#[\s\n\r\t]{2,}#', ' ', (string) $text ) );
                         $text_temp = $text;
 

@@ -3,10 +3,15 @@
 class UAMS_Recent_Posts extends WP_Widget
 {
 	const ID    = 'uams-recent';
+    
 	const TITLE = 'UAMS Recent Posts';
+    
 	const DESC  = 'A widget that shows recent posts on your blog';
+    
 	const ITEMS = 5;
+    
 	const FETCH = 20;
+    
 	const DAYS  = 14;
 
 	public function __construct()
@@ -14,24 +19,24 @@ class UAMS_Recent_Posts extends WP_Widget
 		parent::__construct(
 			self::ID,
 			__( self::TITLE, 'uams' ),
-			array(
+			[
 				'description' => __( self::DESC, 'uams' ),
 				'classname'   => self::ID,
-			)
+			]
 		);
 	}
 
-	public function widget( $args, $instance )
+	public function widget( $args, $instance ): void
 	{
 		$title = ! empty( $instance['title'] ) ? $instance['title'] : self::TITLE;
 		$items = ! empty( $instance['items'] ) ? absint( $instance['items'] ) : self::ITEMS;
-		$more  = ! empty( $instance['more'] ) ? (bool) $instance['more'] : false;
+		$more  = ! empty( $instance['more'] ) && (bool) $instance['more'];
 
 		$recent = wp_get_recent_posts(
-			array(
+			[
 				'numberposts' => $items,
 				'post_status' => 'publish',
-			),
+			],
 			OBJECT
 		);
 
@@ -84,17 +89,12 @@ class UAMS_Recent_Posts extends WP_Widget
 		echo $args['after_widget'];
 	}
 
-	public function update( $new_instance, $old_instance )
-	{
-		$instance          = array();
-		$instance['title'] = sanitize_text_field( $new_instance['title'] ?? '' );
-		$instance['items'] = ! empty( $new_instance['items'] ) ? absint( $new_instance['items'] ) : self::ITEMS;
-		$instance['more']  = ! empty( $new_instance['more'] );
+	public function update($new_instance, $old_instance)
+    {
+        return ['title' => sanitize_text_field( $new_instance['title'] ?? '' ), 'items' => ! empty( $new_instance['items'] ) ? absint( $new_instance['items'] ) : self::ITEMS, 'more' => ! empty( $new_instance['more'] )];
+    }
 
-		return $instance;
-	}
-
-	public function form( $instance )
+	public function form( $instance ): void
 	{
 		$title = $instance['title'] ?? self::TITLE;
 		$items = ! empty( $instance['items'] ) ? absint( $instance['items'] ) : self::ITEMS;
@@ -127,6 +127,6 @@ class UAMS_Recent_Posts extends WP_Widget
 	}
 }
 
-add_action( 'widgets_init', function() {
+add_action( 'widgets_init', function(): void {
 	register_widget( 'UAMS_Recent_Posts' );
 } );

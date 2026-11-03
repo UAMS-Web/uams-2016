@@ -5,82 +5,85 @@
 
 class UAMS_Filters
 {
-    private $REPLACE_TEMPLATE_CLASS = array( 'templatestemplate-', '-php' );
+    private array $REPLACE_TEMPLATE_CLASS = [ 'templatestemplate-', '-php' ];
 
     public function __construct()
     {
         // Custom UAMS Filters
-        add_filter( 'italics', array( $this, 'italicize' ) );
-        add_filter( 'abbreviation', array( $this, 'abbreviate' ) );
+        add_filter( 'italics', [ $this, 'italicize' ] );
+        add_filter( 'abbreviation', [ $this, 'abbreviate' ] );
 
         // Global filters
         add_filter( 'widget_text', 'do_shortcode' );
         add_filter( 'the_excerpt', 'do_shortcode' );
 
         // Add template body classes
-        add_filter( 'body_class', array( $this, 'better_template_name_body_class' ) );
+        add_filter( 'body_class', [ $this, 'better_template_name_body_class' ] );
 
         // Category dropdown widget classes
-        add_filter( 'widget_categories_dropdown_args', array( $this, 'custom_widget_classes' ) );
+        add_filter( 'widget_categories_dropdown_args', [ $this, 'custom_widget_classes' ] );
 
         // Excerpt modifiers
         add_filter( 'excerpt_more', '__return_false' );
-        add_filter( 'the_excerpt', array( $this, 'excerpt_more_override' ) );
+        add_filter( 'the_excerpt', [ $this, 'excerpt_more_override' ] );
 
         // Add PDF filter to media library
-        add_filter( 'post_mime_types', array( $this, 'modify_post_mime_types' ) );
+        add_filter( 'post_mime_types', [ $this, 'modify_post_mime_types' ] );
 
         // Multisite filters
         if ( is_multisite() ) {
-            add_filter( 'body_class', array( $this, 'add_site_title_body_class' ) );
+            add_filter( 'body_class', [ $this, 'add_site_title_body_class' ] );
         }
 
         // Custom excerpt ending
-        add_filter( 'excerpt_more', array( $this, 'custom_excerpt_more' ) );
+        add_filter( 'excerpt_more', [ $this, 'custom_excerpt_more' ] );
 
-        add_filter( 'next_posts_link_attributes', array( $this, 'posts_link_attributes_right' ) );
-        add_filter( 'previous_posts_link_attributes', array( $this, 'posts_link_attributes_left' ) );
+        add_filter( 'next_posts_link_attributes', [ $this, 'posts_link_attributes_right' ] );
+        add_filter( 'previous_posts_link_attributes', [ $this, 'posts_link_attributes_left' ] );
 
         // Allow username less than 4 characters
-        add_filter( 'wpmu_validate_user_signup', array( $this, 'short_user_names' ) );
+        add_filter( 'wpmu_validate_user_signup', [ $this, 'short_user_names' ] );
     }
 
-    public function posts_link_attributes_right()
+    public function posts_link_attributes_right(): string
     {
         return 'class="uams-btn btn-sm"';
     }
 
-    public function posts_link_attributes_left()
+    public function posts_link_attributes_left(): string
     {
         return 'class="uams-btn btn-sm btn-left"';
     }
 
-    public function custom_excerpt_more( $more )
+    public function custom_excerpt_more( $more ): string
     {
         return '...';
     }
 
     public function modify_post_mime_types( $post_mime_types )
     {
-        $post_mime_types['application/pdf'] = array(
+        $post_mime_types['application/pdf'] = [
             __( 'PDF' ),
             __( 'Manage PDFs' ),
             _n_noop( 'PDF <span class="count">(%s)</span>', 'PDFs <span class="count">(%s)</span>' ),
-        );
+        ];
 
         return $post_mime_types;
     }
 
-    public function add_site_title_body_class( $classes )
+    /**
+     * @return mixed[]
+     */
+    public function add_site_title_body_class( $classes ): array
     {
-        $classes = is_array( $classes ) ? $classes : array();
+        $classes = is_array( $classes ) ? $classes : [];
         $blog_id = get_current_blog_id();
         $details = get_blog_details( $blog_id );
 
         if ( $details && ! empty( $details->path ) ) {
             $site = array_filter( explode( '/', $details->path ) );
             array_shift( $site );
-            if ( ! empty( $site ) ) {
+            if ( $site !== [] ) {
                 $classes[] = 'site-' . sanitize_html_class( implode( '-', $site ) );
             }
         }
@@ -88,14 +91,18 @@ class UAMS_Filters
         return $classes;
     }
 
-    public function better_template_name_body_class( $classes )
+    /**
+     * @return mixed[]
+     */
+    public function better_template_name_body_class( $classes ): array
     {
-        $classes = is_array( $classes ) ? $classes : array();
+        $classes = is_array( $classes ) ? $classes : [];
         if ( is_page_template() ) {
             foreach ( $classes as $index => $class ) {
                 $classes[ $index ] = str_replace( $this->REPLACE_TEMPLATE_CLASS, '', $class );
             }
         }
+        
         return $classes;
     }
 
@@ -105,7 +112,7 @@ class UAMS_Filters
         return $args;
     }
 
-    public function italicize( $content )
+    public function italicize( $content ): string|array|null
     {
         if ( empty( $content ) || ! is_string( $content ) ) {
             return (string) $content;
@@ -116,17 +123,17 @@ class UAMS_Filters
             return $content;
         }
 
-        $words = array_filter( array_map( 'trim', explode( ' ', $raw_words ) ) );
-        if ( empty( $words ) ) {
+        $words = array_filter( array_map( trim(...), explode( ' ', $raw_words ) ) );
+        if ( $words === [] ) {
             return $content;
         }
 
-        $quoted_words = array_map( 'preg_quote', $words );
+        $quoted_words = array_map( preg_quote(...), $words );
         $regex        = '/\b(' . implode( '|', $quoted_words ) . ')\b/i';
         $new_content  = preg_replace( $regex, '<em>$1</em>', $content );
 
         if ( in_array( '&', $words, true ) ) {
-            $new_content = str_replace( array( ' &#038; ', ' & ', ' &amp; ' ), ' <em>&</em> ', $new_content );
+            $new_content = str_replace( [ ' &#038; ', ' & ', ' &amp; ' ], ' <em>&</em> ', $new_content );
         }
 
         return $new_content;
@@ -138,7 +145,7 @@ class UAMS_Filters
         return ! empty( $abbr ) ? $abbr : $title;
     }
 
-    public function excerpt_more_override( $excerpt )
+    public function excerpt_more_override( $excerpt ): string
     {
         return $excerpt . '<div><a class="more" href="' . esc_url( uams_get_permalink() ) . '">Read more</a></div>';
     }

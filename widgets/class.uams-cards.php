@@ -15,21 +15,21 @@ class UAMS_Widget_Cards extends WP_Widget
 		parent::__construct(
 			'uams-widget-cards',
 			__( 'UAMS Image Cards', 'uams' ),
-			array(
+			[
 				'description' => __( 'Choose from several styles of cards', 'uams' ),
 				'classname'   => 'cards-widget',
-			)
+			]
 		);
 	}
 
-	public static function scripts()
+	public static function scripts(): void
 	{
-		wp_enqueue_script( 'single-card-image', get_template_directory_uri() . '/assets/admin/js/widgets/uams.card-widget.js', array( 'jquery' ), null, true );
+		wp_enqueue_script( 'single-card-image', get_template_directory_uri() . '/assets/admin/js/widgets/uams.card-widget.js', [ 'jquery' ], null, true );
 		wp_enqueue_script( 'jquery-ui-autocomplete' );
 		wp_enqueue_media();
 	}
 
-	public function form( $instance )
+	public function form( $instance ): void
 	{
 		$title    = isset( $instance['title'] ) ? esc_attr( $instance['title'] ) : 'Image Widget';
 		$text     = isset( $instance['text'] ) ? esc_attr( $instance['text'] ) : '';
@@ -85,21 +85,12 @@ class UAMS_Widget_Cards extends WP_Widget
 		<?php
 	}
 
-	public function update( $new_instance, $old_instance )
-	{
-		$instance               = array();
-		$instance['title']      = sanitize_text_field( $new_instance['title'] ?? '' );
-		$instance['text']       = wp_kses_post( $new_instance['text'] ?? '' );
-		$instance['image']      = absint( $new_instance['image'] ?? 0 );
-		$instance['src']        = esc_url_raw( $new_instance['src'] ?? '' );
-		$instance['link']       = esc_url_raw( $new_instance['link'] ?? '' );
-		$instance['link-text']  = sanitize_text_field( $new_instance['link-text'] ?? '' );
-		$instance['radio_card'] = sanitize_text_field( $new_instance['radio_card'] ?? 'default-card' );
+	public function update($new_instance, $old_instance)
+    {
+        return ['title' => sanitize_text_field( $new_instance['title'] ?? '' ), 'text' => wp_kses_post( $new_instance['text'] ?? '' ), 'image' => absint( $new_instance['image'] ?? 0 ), 'src' => esc_url_raw( $new_instance['src'] ?? '' ), 'link' => esc_url_raw( $new_instance['link'] ?? '' ), 'link-text' => sanitize_text_field( $new_instance['link-text'] ?? '' ), 'radio_card' => sanitize_text_field( $new_instance['radio_card'] ?? 'default-card' )];
+    }
 
-		return $instance;
-	}
-
-	public function widget( $args, $instance )
+	public function widget( $args, $instance ): void
 	{
 		$title     = $instance['title'] ?? '';
 		$text      = $instance['text'] ?? '';
@@ -144,7 +135,7 @@ class UAMS_Widget_Cards extends WP_Widget
 	}
 }
 
-add_action( 'widgets_init', function() {
+add_action( 'widgets_init', function(): void {
 	register_widget( 'UAMS_Widget_Cards' );
 } );
-add_action( 'admin_enqueue_scripts', array( 'UAMS_Widget_Cards', 'scripts' ) );
+add_action( 'admin_enqueue_scripts', [ 'UAMS_Widget_Cards', 'scripts' ] );

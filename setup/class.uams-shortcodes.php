@@ -9,14 +9,23 @@
 class UAMS_Shortcodes
 {
     public $tile_box;
+    
     public $button;
+    
     public $youtube;
+    
     public $subpage_list;
+    
     public $accordion;
+    
     public $maps;
+    
     public $tabs;
+    
     public $bootstrap;
+    
     public $custommenu;
+    
     public $cards;
 
     public function __construct()
@@ -25,13 +34,14 @@ class UAMS_Shortcodes
         $this->initialize();
     }
 
-    private function includes()
+    private function includes(): void
     {
         require_once get_template_directory() . '/setup/class.tile-box-shortcode.php';
         require_once get_template_directory() . '/setup/class.button-shortcode.php';
         if ( file_exists( get_template_directory() . '/setup/class.youtube-shortcode.php' ) ) {
             require_once get_template_directory() . '/setup/class.youtube-shortcode.php';
         }
+        
         require_once get_template_directory() . '/setup/class.subpage-list-shortcode.php';
         require_once get_template_directory() . '/setup/class.accordion-shortcode.php';
         require_once get_template_directory() . '/setup/class.maps-shortcode.php';
@@ -41,7 +51,7 @@ class UAMS_Shortcodes
         require_once get_template_directory() . '/setup/class.cards-shortcode.php';
     }
 
-    private function initialize()
+    private function initialize(): void
     {
         $this->tile_box     = class_exists( 'TileBox' ) ? new TileBox() : null;
         $this->button       = class_exists( 'UAMS_Button' ) ? new UAMS_Button() : null;

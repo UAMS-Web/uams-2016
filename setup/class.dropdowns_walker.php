@@ -14,18 +14,19 @@ class UAMS_Dropdowns_Walker_Menu extends Walker_Nav_Menu
         // Constructor stub preserved
     }
 
-    public function start_lvl( &$output, $depth = 0, $args = null )
+    public function start_lvl( &$output, $depth = 0, $args = null ): void
     {
         $indent = str_repeat( "\t", (int) $depth );
         if ( $depth > 0 ) {
             $output .= "\n{$indent}<ul class=\"sub-menu\">";
         } else {
-            $output .= "\n{$indent}<ul role=\"group\" id=\"menu-" . esc_attr( $this->CURRENT ) . "\" aria-labelledby=\"" . esc_attr( $this->CURRENT ) . "\" aria-expanded=\"false\" class=\"reddiedrops-menu\">";
+            $output .= "\n{$indent}<ul role=\"group\" id=\"menu-" . esc_attr( $this->CURRENT ) . '" aria-labelledby="' . esc_attr( $this->CURRENT ) . '" aria-expanded="false" class="reddiedrops-menu">';
         }
+        
         $output .= "\n";
     }
 
-    public function end_lvl( &$output, $depth = 0, $args = null )
+    public function end_lvl( &$output, $depth = 0, $args = null ): void
     {
         $indent  = str_repeat( "\t", (int) $depth );
         $output .= "{$indent}</ul>\n";
@@ -40,7 +41,7 @@ class UAMS_Dropdowns_Walker_Menu extends Walker_Nav_Menu
         return parent::display_element( $element, $children_elements, $max_depth, $depth, $args, $output );
     }
 
-    public function start_el( &$output, $item, $depth = 0, $args = null, $id = 0 )
+    public function start_el( &$output, $item, $depth = 0, $args = null, $id = 0 ): void
     {
         $this->CURRENT = ! empty( $item->post_name ) ? $item->post_name : sanitize_title( $item->title );
         $title         = ! empty( $item->title ) ? $item->title : $item->post_title;
@@ -51,7 +52,7 @@ class UAMS_Dropdowns_Walker_Menu extends Walker_Nav_Menu
         $indent       = ( $depth ) ? str_repeat( "\t", (int) $depth ) : '';
 
         $first_class = ( ! empty( $item->classes ) && is_array( $item->classes ) ) ? reset( $item->classes ) : '';
-        $classes     = ( 0 === $depth ) ? array_filter( array( 'reddiedrops-item', $first_class ) ) : array();
+        $classes     = ( 0 === $depth ) ? array_filter( [ 'reddiedrops-item', $first_class ] ) : [];
         $class_names = implode( ' ', apply_filters( 'nav_menu_css_class', $classes, $item ) );
 
         $li_classnames = ! empty( $class_names ) ? ' class="' . esc_attr( $class_names ) . '"' : '';

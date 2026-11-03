@@ -3,9 +3,13 @@
 class UAMS_Blogroll extends WP_Widget
 {
 	const NAME        = 'UAMS Blogroll';
+    
 	const ID          = 'blogroll';
+    
 	const CLASSNAME   = 'uams-blogroll';
+    
 	const DESCRIPTION = 'Pull and display your sites blog posts';
+    
 	const LIMIT       = 2;
 
 	public function __construct()
@@ -13,16 +17,16 @@ class UAMS_Blogroll extends WP_Widget
 		parent::__construct(
 			self::ID,
 			__( self::NAME, 'uams' ),
-			array(
+			[
 				'classname'   => self::CLASSNAME,
 				'description' => __( self::DESCRIPTION, 'uams' ),
-			)
+			]
 		);
 
-		add_shortcode( self::ID, array( $this, 'shortcode' ) );
+		add_shortcode( self::ID, [ $this, 'shortcode' ] );
 	}
 
-	public function form( $instance )
+	public function form( $instance ): void
 	{
 		$title  = empty( $instance['title'] ) ? self::NAME : esc_attr( $instance['title'] );
 		$number = empty( $instance['number'] ) ? self::LIMIT : absint( $instance['number'] );
@@ -68,7 +72,7 @@ class UAMS_Blogroll extends WP_Widget
 		return $instance;
 	}
 
-	public function widget( $args, $instance )
+	public function widget( $args, $instance ): void
 	{
 		$title       = ! empty( $instance['title'] ) ? $instance['title'] : self::NAME;
 		$number      = ! empty( $instance['number'] ) ? absint( $instance['number'] ) : self::LIMIT;
@@ -89,7 +93,7 @@ class UAMS_Blogroll extends WP_Widget
 	public function shortcode( $atts )
 	{
 		$params = shortcode_atts(
-			array(
+			[
 				'excerpt'       => 'true',
 				'trim'          => 'false',
 				'image'         => 'hide',
@@ -102,7 +106,7 @@ class UAMS_Blogroll extends WP_Widget
 				'mini'          => false,
 				'style'         => 'default',
 				'date'          => 'show',
-			),
+			],
 			$atts
 		);
 
@@ -142,9 +146,9 @@ class UAMS_Blogroll extends WP_Widget
 				$image = get_the_post_thumbnail(
 					$post->ID,
 					'thumbnail',
-					array(
+					[
 						'alt' => get_post_meta( get_post_thumbnail_id( $post->ID ), '_wp_attachment_image_alt', true ),
-					)
+					]
 				);
 				$class = ' class="pull-left"';
 			}
@@ -201,7 +205,7 @@ class UAMS_Blogroll extends WP_Widget
 				}
 				$html .= '</div></div></div>';
 			} else {
-				$html .= "<li><span><{$params->titletag}><a href=\"" . esc_url( $link ) . "\">" . esc_html( $post->post_title ) . "</a><span class=\"date\">{$date}</span></{$params->titletag}>{$author}<span{$class}>{$image}</span>{$excerpt}</span></li>";
+				$html .= "<li><span><{$params->titletag}><a href=\"" . esc_url( $link ) . '">' . esc_html( $post->post_title ) . "</a><span class=\"date\">{$date}</span></{$params->titletag}>{$author}<span{$class}>{$image}</span>{$excerpt}</span></li>";
 			}
 		}
 
@@ -211,12 +215,12 @@ class UAMS_Blogroll extends WP_Widget
 		return "<ul class=\"shortcode-blogroll{$miniclass} {$cardsclass}\">{$html}</ul>";
 	}
 
-	private function is_true( $attribute )
+	private function is_true( $attribute ): bool
 	{
-		return in_array( $attribute, array( 'show', 'true' ), true );
+		return in_array( $attribute, [ 'show', 'true' ], true );
 	}
 }
 
-add_action( 'widgets_init', function() {
+add_action( 'widgets_init', function(): void {
 	register_widget( 'UAMS_Blogroll' );
 } );

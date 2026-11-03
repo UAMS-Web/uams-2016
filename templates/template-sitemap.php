@@ -40,7 +40,7 @@ get_template_part( 'header', 'image' ); ?>
 
                   <?php
                   if ( ! function_exists( 'text_cut' ) ) {
-                      function text_cut( $text, $length = 27, $dots = true ) {
+                      function text_cut( $text, $length = 27, $dots = true ): string {
                           $text      = trim( preg_replace( '#[\s\n\r\t]{2,}#', ' ', (string) $text ) );
                           $text_temp = $text;
 
@@ -66,27 +66,27 @@ get_template_part( 'header', 'image' ); ?>
         <h2 id="pages">Pages</h2>
         <ul>
           <?php
-          wp_list_pages( array(
+          wp_list_pages( [
               'exclude'  => '',
               'title_li' => '',
-          ) );
+          ] );
           ?>
         </ul>
 
         <h2 id="posts">Posts</h2>
         <ul>
           <?php
-          $cats = get_categories( array( 'hide_empty' => true ) );
+          $cats = get_categories( [ 'hide_empty' => true ] );
           foreach ( $cats as $cat ) {
               echo '<li><h3>' . esc_html( $cat->name ) . '</h3>';
               echo '<ul>';
 
-              $cat_posts = new WP_Query( array(
+              $cat_posts = new WP_Query( [
                   'posts_per_page'      => -1,
                   'cat'                 => $cat->term_id,
                   'ignore_sticky_posts' => true,
                   'no_found_rows'       => true,
-              ) );
+              ] );
 
               if ( $cat_posts->have_posts() ) {
                   while ( $cat_posts->have_posts() ) {

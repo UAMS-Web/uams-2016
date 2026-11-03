@@ -12,45 +12,46 @@
 
 class UAMS_TabsShortcode
 {
-    public $tab_titles = array();
-    public $tab_links  = array();
+    public $tab_titles = [];
+    
+    public $tab_links  = [];
 
     public function __construct()
     {
-        add_filter( 'the_content', array( $this, 'wpex_fix_shortcodes' ) );
-        add_shortcode( 'tabs', array( $this, 'tabs_handler' ) );
-        add_shortcode( 'tab', array( $this, 'tab_handler' ) );
-        add_action( 'init', array( $this, 'register_uams_tabs' ) );
+        add_filter( 'the_content', [ $this, 'wpex_fix_shortcodes' ] );
+        add_shortcode( 'tabs', [ $this, 'tabs_handler' ] );
+        add_shortcode( 'tab', [ $this, 'tab_handler' ] );
+        add_action( 'init', [ $this, 'register_uams_tabs' ] );
     }
 
-    public function register_uams_tabs()
+    public function register_uams_tabs(): void
     {
-        wp_register_script( 'uams-tabs', get_template_directory_uri() . '/js/uams.tabs.min.js', array(), '1.0', true );
+        wp_register_script( 'uams-tabs', get_template_directory_uri() . '/js/uams.tabs.min.js', [], '1.0', true );
     }
 
-    public function wpex_fix_shortcodes( $content )
+    public function wpex_fix_shortcodes( $content ): string
     {
         if ( empty( $content ) || ! is_string( $content ) ) {
             return (string) $content;
         }
 
-        $array = array(
+        $array = [
             '<p>['    => '[',
             ']</p>'   => ']',
             ']<br />' => ']',
-        );
+        ];
 
         return strtr( $content, $array );
     }
 
-    public function tabs_handler( $atts, $content = null )
+    public function tabs_handler( $atts, $content = null ): string
     {
-        $this->tab_titles = array();
-        $this->tab_links  = array();
+        $this->tab_titles = [];
+        $this->tab_links  = [];
 
-        $tabs_atts = shortcode_atts( array(
+        $tabs_atts = shortcode_atts( [
             'name' => '',
-        ), $atts, 'tabs' );
+        ], $atts, 'tabs' );
 
         if ( empty( $content ) ) {
             return 'No content inside the tabs element. Make sure you close your tabs element. Required structure: [tabs][tab title=""]content[/tab][/tabs]';
@@ -83,12 +84,12 @@ class UAMS_TabsShortcode
         return $output;
     }
 
-    public function tab_handler( $atts, $content = null )
+    public function tab_handler( $atts, $content = null ): string
     {
-        $tab_atts = shortcode_atts( array(
+        $tab_atts = shortcode_atts( [
             'title' => '',
             'link'  => '',
-        ), $atts, 'tab' );
+        ], $atts, 'tab' );
 
         if ( empty( $content ) ) {
             $content = 'No content for this tab. Make sure you wrap your content like this: [tab]Content here[/tab]';

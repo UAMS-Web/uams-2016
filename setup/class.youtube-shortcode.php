@@ -7,21 +7,21 @@
 
 class UAMS_YouTube
 {
-    public static $types = array( 'playlist', 'single' );
+    public static $types = [ 'playlist', 'single' ];
 
     public function __construct()
     {
-        add_shortcode( 'youtube', array( $this, 'youtube_handler' ) );
+        add_shortcode( 'youtube', [ $this, 'youtube_handler' ] );
     }
 
-    public function youtube_handler( $atts )
+    public function youtube_handler( $atts ): string
     {
-        $params = shortcode_atts( array(
+        $params = shortcode_atts( [
             'type'        => '',
             'id'          => '',
             'max-results' => 0,
             'max_results' => 0,
-        ), $atts, 'youtube' );
+        ], $atts, 'youtube' );
 
         $type = strtolower( trim( $params['type'] ) );
 

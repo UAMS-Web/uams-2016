@@ -7,16 +7,19 @@ class UAMS_Media_Credit
 {
     public function __construct()
     {
-        add_filter( 'mce_external_plugins', array( $this, 'add_media_credit_shortcode_to_tinymce' ) );
-        add_filter( 'image_send_to_editor', array( $this, 'mediacredit_tinymce_html' ), 10, 7 );
-        add_shortcode( 'mediacredit', array( $this, 'mediacredit_html' ) );
-        add_filter( 'attachment_fields_to_edit', array( $this, 'image_attachment_fields_to_edit' ), 100, 2 );
-        add_filter( 'attachment_fields_to_save', array( $this, 'custom_image_attachment_fields_to_save' ), 10, 2 );
+        add_filter( 'mce_external_plugins', [ $this, 'add_media_credit_shortcode_to_tinymce' ] );
+        add_filter( 'image_send_to_editor', [ $this, 'mediacredit_tinymce_html' ], 10, 7 );
+        add_shortcode( 'mediacredit', [ $this, 'mediacredit_html' ] );
+        add_filter( 'attachment_fields_to_edit', [ $this, 'image_attachment_fields_to_edit' ], 100, 2 );
+        add_filter( 'attachment_fields_to_save', [ $this, 'custom_image_attachment_fields_to_save' ], 10, 2 );
     }
 
-    public function add_media_credit_shortcode_to_tinymce( $plugins )
+    /**
+     * @return mixed[]
+     */
+    public function add_media_credit_shortcode_to_tinymce( $plugins ): array
     {
-        $plugins = is_array( $plugins ) ? $plugins : array();
+        $plugins = is_array( $plugins ) ? $plugins : [];
         $plugins['mediacredit'] = get_template_directory_uri() . '/assets/admin/js/media-credit.js';
         return $plugins;
     }
@@ -38,14 +41,14 @@ class UAMS_Media_Credit
             </dl>" : $html;
     }
 
-    public function mediacredit_html( $attrs, $content = null )
+    public function mediacredit_html( $attrs, $content = null ): string
     {
-        $atts = shortcode_atts( array(
+        $atts = shortcode_atts( [
             'id'     => '',
             'align'  => '',
             'size'   => 'full',
             'credit' => '',
-        ), $attrs, 'mediacredit' );
+        ], $attrs, 'mediacredit' );
 
         $post_id = (int) $atts['id'];
         if ( 1 > $post_id ) {
@@ -65,11 +68,11 @@ class UAMS_Media_Credit
         $context = (array) get_post_meta( $post_id, '_wp_attachment_context' );
 
         if ( ! in_array( 'custom-header', $context, true ) && wp_attachment_is_image( $post_id ) ) {
-            $form_fields['media_credit'] = array(
+            $form_fields['media_credit'] = [
                 'label' => __( 'Image Credit' ),
                 'input' => 'text',
                 'value' => get_post_meta( $post_id, '_media_credit', true ),
-            );
+            ];
         }
 
         return $form_fields;
@@ -80,6 +83,7 @@ class UAMS_Media_Credit
         if ( isset( $attachment['media_credit'], $post['ID'] ) ) {
             update_post_meta( (int) $post['ID'], '_media_credit', sanitize_text_field( $attachment['media_credit'] ) );
         }
+        
         return $post;
     }
 }

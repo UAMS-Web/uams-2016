@@ -2,12 +2,12 @@
 
 class UAMS_Sidebar_Menu_Walker extends Walker_Page
 {
-    public function start_el( &$output, $page, $depth = 0, $args = array(), $current_page = 0 )
+    public function start_el( &$output, $page, $depth = 0, $args = [], $current_page = 0 ): void
     {
         $indent = $depth ? str_repeat( "\t", (int) $depth ) : '';
         $args   = (array) $args;
 
-        $css_class = array( 'page_item', 'page-item-' . $page->ID );
+        $css_class = [ 'page_item', 'page-item-' . $page->ID ];
 
         if ( isset( $args['pages_with_children'][ $page->ID ] ) ) {
             $css_class[] = 'page_item_has_children';

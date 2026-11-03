@@ -8,8 +8,8 @@ class UAMS_Replace_Media
 {
     public function __construct()
     {
-        add_filter( 'attachment_fields_to_edit', array( $this, 'uams_edit_attachment_slug' ), 10, 2 );
-        add_filter( 'attachment_fields_to_save', array( $this, 'uams_save_attachment_slug' ), 10, 2 );
+        add_filter( 'attachment_fields_to_edit', [ $this, 'uams_edit_attachment_slug' ], 10, 2 );
+        add_filter( 'attachment_fields_to_save', [ $this, 'uams_save_attachment_slug' ], 10, 2 );
     }
 
     public function uams_edit_attachment_slug( $fields, $post )
@@ -19,10 +19,10 @@ class UAMS_Replace_Media
         $post_id   = ( $post instanceof WP_Post ) ? $post->ID : (int) $post;
         $mime_type = (string) get_post_mime_type( $post_id );
 
-        if ( false !== strpos( $mime_type, 'application/' ) ) {
+        if ( str_contains( $mime_type, 'application/' ) ) {
             $nonce_field = wp_nonce_field( 'replace-media-' . $post_id, 'replace-media-nonce', true, false );
 
-            $fields['replace_media'] = array(
+            $fields['replace_media'] = [
                 'label' => __( 'Replace Media' ),
                 'input' => 'html',
                 'html'  => '
@@ -76,7 +76,7 @@ class UAMS_Replace_Media
                 });
                 </script>
                 ',
-            );
+            ];
         }
 
         return $fields;
@@ -89,7 +89,7 @@ class UAMS_Replace_Media
         if ( $currentMediaID > 0 ) {
             $mime_type = (string) get_post_mime_type( $currentMediaID );
 
-            if ( false !== strpos( $mime_type, 'application/' ) && ! empty( $attachment[ 'replace_media_for_' . $currentMediaID ] ) ) {
+            if ( str_contains( $mime_type, 'application/' ) && ! empty( $attachment[ 'replace_media_for_' . $currentMediaID ] ) ) {
                 if ( empty( $attachment['replace-media-nonce'] ) || ! wp_verify_nonce( $attachment['replace-media-nonce'], 'replace-media-' . $currentMediaID ) ) {
                     wp_die( 'You do not have access to replace the media file' );
                 }

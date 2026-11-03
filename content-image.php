@@ -1,6 +1,6 @@
 <div class="uams-image-content">
 
-  <?php echo wp_get_attachment_image( get_the_ID(), 'full', false, array( 'class' => 'attachment-full center-block' ) ); ?>
+  <?php echo wp_get_attachment_image( get_the_ID(), 'full', false, [ 'class' => 'attachment-full center-block' ] ); ?>
 
   <h1 class="entry-title"><?php the_title(); ?></h1>
 

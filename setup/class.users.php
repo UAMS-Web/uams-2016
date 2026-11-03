@@ -7,11 +7,11 @@ class UAMS_Users
 {
     public function __construct()
     {
-        add_filter( 'user_contactmethods', array( $this, 'additional_contact_fields' ), 10, 1 );
+        add_filter( 'user_contactmethods', [ $this, 'additional_contact_fields' ], 10, 1 );
 
         $role = get_role( 'editor' );
         if ( $role instanceof WP_Role ) {
-            $caps = array(
+            $caps = [
                 'edit_theme_options',
                 'gravityforms_edit_forms',
                 'gravityforms_delete_forms',
@@ -24,7 +24,7 @@ class UAMS_Users
                 'gravityforms_export_entries',
                 'gravityforms_view_entry_notes',
                 'gravityforms_edit_entry_notes',
-            );
+            ];
 
             foreach ( $caps as $cap ) {
                 if ( ! $role->has_cap( $cap ) ) {
@@ -33,12 +33,15 @@ class UAMS_Users
             }
         }
 
-        add_action( 'admin_menu', array( $this, 'custom_admin_menu' ) );
+        add_action( 'admin_menu', [ $this, 'custom_admin_menu' ] );
     }
 
-    public function additional_contact_fields( $contactmethods )
+    /**
+     * @return mixed[]
+     */
+    public function additional_contact_fields( $contactmethods ): array
     {
-        $contactmethods = is_array( $contactmethods ) ? $contactmethods : array();
+        $contactmethods = is_array( $contactmethods ) ? $contactmethods : [];
 
         $contactmethods['affiliation'] = 'Affiliation';
         $contactmethods['phone']       = 'Phone Number';
@@ -51,7 +54,7 @@ class UAMS_Users
         return $contactmethods;
     }
 
-    public function custom_admin_menu()
+    public function custom_admin_menu(): void
     {
         $user = wp_get_current_user();
 
@@ -62,6 +65,7 @@ class UAMS_Users
             if ( isset( $submenu['themes.php'][6] ) ) {
                 unset( $submenu['themes.php'][6] );
             }
+            
             if ( isset( $submenu['themes.php'][15] ) ) {
                 unset( $submenu['themes.php'][15] );
             }

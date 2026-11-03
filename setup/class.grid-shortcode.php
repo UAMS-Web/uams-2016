@@ -14,15 +14,15 @@ class UAMS_GridShortcode
 {
     public function __construct()
     {
-        add_shortcode( 'row', array( $this, 'bs_row' ) );
-        add_shortcode( 'col', array( $this, 'bs_span' ) );
+        add_shortcode( 'row', [ $this, 'bs_row' ] );
+        add_shortcode( 'col', [ $this, 'bs_span' ] );
     }
 
     public function bs_row( $params, $content = '' )
     {
-        $atts = shortcode_atts( array(
+        $atts = shortcode_atts( [
             'class' => 'row',
-        ), $params, 'row' );
+        ], $params, 'row' );
 
         $content = ! empty( $content ) ? preg_replace( '/<br class="nc".\/>/', '', (string) $content ) : '';
         $result  = '<div class="' . esc_attr( $atts['class'] ) . '">';
@@ -34,9 +34,9 @@ class UAMS_GridShortcode
 
     public function bs_span( $params, $content = '' )
     {
-        $atts = shortcode_atts( array(
+        $atts = shortcode_atts( [
             'class' => 'col-sm-1',
-        ), $params, 'col' );
+        ], $params, 'col' );
 
         $result  = '<div class="' . esc_attr( $atts['class'] ) . '">';
         $result .= do_shortcode( (string) $content );

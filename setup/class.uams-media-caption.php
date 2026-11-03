@@ -8,17 +8,17 @@ class UAMS_Media_Caption
 {
     public function __construct()
     {
-        add_filter( 'img_caption_shortcode', array( $this, 'add_media_credit_to_caption_shortcode_filter' ), 10, 3 );
+        add_filter( 'img_caption_shortcode', [ $this, 'add_media_credit_to_caption_shortcode_filter' ], 10, 3 );
     }
 
     public function add_media_credit_to_caption_shortcode_filter( $val, $attr, $content = null )
     {
-        $atts = shortcode_atts( array(
+        $atts = shortcode_atts( [
             'id'      => '',
             'align'   => '',
             'width'   => '',
             'caption' => '',
-        ), $attr, 'caption' );
+        ], $attr, 'caption' );
 
         $width   = (int) $atts['width'];
         $caption = $atts['caption'];

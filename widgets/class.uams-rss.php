@@ -7,11 +7,14 @@
 class UAMS_RSS extends WP_Widget
 {
 	const ID          = 'uams-widget-rss';
+    
 	const NAME        = 'UAMS RSS';
+    
 	const DESCRIPTION = 'Similar to the Wordpress RSS widget but allows a blurb before the RSS feed is listed.';
+    
 	const ITEMS       = 10;
 
-	private static $WIDGET_DEFAULTS = array(
+	private static array $WIDGET_DEFAULTS = [
 		'url'          => '',
 		'title'        => '',
 		'text'         => '',
@@ -20,9 +23,9 @@ class UAMS_RSS extends WP_Widget
 		'show_author'  => true,
 		'show_date'    => true,
 		'show_image'   => true,
-	);
+	];
 
-	private static $SHORTCODE_DEFAULTS = array(
+	private static array $SHORTCODE_DEFAULTS = [
 		'url'        => null,
 		'number'     => 5,
 		'title'      => null,
@@ -34,23 +37,23 @@ class UAMS_RSS extends WP_Widget
 		'show_desc'  => false,
 		'has_blurb'  => false,
 		'more'       => null,
-	);
+	];
 
 	public function __construct()
 	{
-		add_shortcode( 'rss', array( $this, 'uams_rss_shortcode' ) );
+		add_shortcode( 'rss', [ $this, 'uams_rss_shortcode' ] );
 
 		parent::__construct(
 			self::ID,
 			__( self::NAME, 'uams' ),
-			array(
+			[
 				'description' => __( self::DESCRIPTION, 'uams' ),
 				'classname'   => self::ID,
-			)
+			]
 		);
 	}
 
-	public function form( $instance )
+	public function form( $instance ): void
 	{
 		$inputs = wp_parse_args( (array) $instance, self::$WIDGET_DEFAULTS );
 
@@ -95,7 +98,7 @@ class UAMS_RSS extends WP_Widget
 
 	public function update( $new_instance, $old_instance )
 	{
-		$instance                 = array();
+		$instance                 = [];
 		$instance['url']          = esc_url_raw( strip_tags( $new_instance['url'] ?? '' ) );
 		$instance['title']        = sanitize_text_field( $new_instance['title'] ?? '' );
 		$instance['items']        = ! empty( $new_instance['items'] ) ? (int) $new_instance['items'] : self::ITEMS;
@@ -113,7 +116,7 @@ class UAMS_RSS extends WP_Widget
 		return $instance;
 	}
 
-	public function widget( $args, $instance )
+	public function widget( $args, $instance ): void
 	{
 		$title     = apply_filters( 'widget_title', $instance['title'] ?? '' );
 		$text      = $instance['text'] ?? '';
@@ -204,6 +207,6 @@ class UAMS_RSS extends WP_Widget
 	}
 }
 
-add_action( 'widgets_init', function() {
+add_action( 'widgets_init', function(): void {
 	register_widget( 'UAMS_RSS' );
 } );

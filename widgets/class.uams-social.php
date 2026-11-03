@@ -13,14 +13,14 @@ class UAMS_Social_Icons extends WP_Widget
 		parent::__construct(
 			'uams-widget-social',
 			__( 'UAMS Social Icons', 'uams' ),
-			array(
+			[
 				'description' => __( 'Display social media icons with links to the appropriate account', 'uams' ),
 				'classname'   => 'social-widget',
-			)
+			]
 		);
 	}
 
-	public function form( $instance )
+	public function form( $instance ): void
 	{
 		$title     = isset( $instance['title'] ) ? esc_attr( $instance['title'] ) : 'Connect with us:';
 		$facebook  = isset( $instance['facebook'] ) ? esc_url( $instance['facebook'] ) : '';
@@ -63,21 +63,12 @@ class UAMS_Social_Icons extends WP_Widget
 		<?php
 	}
 
-	public function update( $new_instance, $old_instance )
-	{
-		$instance              = array();
-		$instance['title']     = sanitize_text_field( $new_instance['title'] ?? '' );
-		$instance['facebook']  = esc_url_raw( $new_instance['facebook'] ?? '' );
-		$instance['twitter']   = esc_url_raw( $new_instance['twitter'] ?? '' );
-		$instance['instagram'] = esc_url_raw( $new_instance['instagram'] ?? '' );
-		$instance['youtube']   = esc_url_raw( $new_instance['youtube'] ?? '' );
-		$instance['linkedin']  = esc_url_raw( $new_instance['linkedin'] ?? '' );
-		$instance['pinterest'] = esc_url_raw( $new_instance['pinterest'] ?? '' );
+	public function update($new_instance, $old_instance)
+    {
+        return ['title' => sanitize_text_field( $new_instance['title'] ?? '' ), 'facebook' => esc_url_raw( $new_instance['facebook'] ?? '' ), 'twitter' => esc_url_raw( $new_instance['twitter'] ?? '' ), 'instagram' => esc_url_raw( $new_instance['instagram'] ?? '' ), 'youtube' => esc_url_raw( $new_instance['youtube'] ?? '' ), 'linkedin' => esc_url_raw( $new_instance['linkedin'] ?? '' ), 'pinterest' => esc_url_raw( $new_instance['pinterest'] ?? '' )];
+    }
 
-		return $instance;
-	}
-
-	public function widget( $args, $instance )
+	public function widget( $args, $instance ): void
 	{
 		$title     = ! empty( $instance['title'] ) ? $instance['title'] : '';
 		$facebook  = ! empty( $instance['facebook'] ) ? $instance['facebook'] : '';
@@ -123,6 +114,6 @@ class UAMS_Social_Icons extends WP_Widget
 	}
 }
 
-add_action( 'widgets_init', function() {
+add_action( 'widgets_init', function(): void {
 	register_widget( 'UAMS_Social_Icons' );
 } );

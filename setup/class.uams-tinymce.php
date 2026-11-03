@@ -5,13 +5,13 @@
 
 class UAMS_TinyMCE
 {
-    private $remove = array(
-        'theme_advanced_buttons2' => array( 'justifyfull' ),
-    );
+    private array $remove = [
+        'theme_advanced_buttons2' => [ 'justifyfull' ],
+    ];
 
     public function __construct()
     {
-        add_filter( 'tiny_mce_before_init', array( $this, 'buttons' ) );
+        add_filter( 'tiny_mce_before_init', [ $this, 'buttons' ] );
     }
 
     public function buttons( $settings )
@@ -27,6 +27,7 @@ class UAMS_TinyMCE
                 $settings[ $buttongroup ] = implode( ',', $newBtns );
             }
         }
+        
         return $settings;
     }
 }

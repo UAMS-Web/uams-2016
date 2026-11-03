@@ -4,17 +4,17 @@ class UAMS_Documentation_Dashboard_Widget
 {
     public function __construct()
     {
-        add_action( 'wp_dashboard_setup', array( $this, 'uams_add_documentation_dashboard_widget' ) );
+        add_action( 'wp_dashboard_setup', [ $this, 'uams_add_documentation_dashboard_widget' ] );
     }
 
-    public function uams_add_documentation_dashboard_widget()
+    public function uams_add_documentation_dashboard_widget(): void
     {
         global $wp_meta_boxes;
 
         wp_add_dashboard_widget(
             'uams-documentation-dashboard-widget',
             'Documentation and FAQs',
-            array( $this, 'uams_documentation_html' )
+            [ $this, 'uams_documentation_html' ]
         );
 
         if ( isset( $wp_meta_boxes['dashboard']['normal']['core']['uams-documentation-dashboard-widget'] ) ) {
@@ -30,7 +30,7 @@ class UAMS_Documentation_Dashboard_Widget
         remove_meta_box( 'dashboard_incoming_links', 'dashboard', 'normal' );
     }
 
-    public function uams_documentation_html()
+    public function uams_documentation_html(): void
     {
         ?>
         <div class="wrap">

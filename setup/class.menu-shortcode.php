@@ -9,13 +9,13 @@ class UAMS_MenuShortcode
 {
     public function __construct()
     {
-        add_shortcode( 'custommenu', array( $this, 'vo_custom_menu_shortcode' ) );
+        add_shortcode( 'custommenu', [ $this, 'vo_custom_menu_shortcode' ] );
     }
 
     public function vo_custom_menu_shortcode( $atts, $content = null )
     {
         $params = shortcode_atts(
-            array(
+            [
                 'menu'            => '',
                 'container'       => 'div',
                 'container_class' => 'icon-menu',
@@ -30,13 +30,13 @@ class UAMS_MenuShortcode
                 'depth'           => 0,
                 'walker'          => '',
                 'theme_location'  => '',
-            ),
+            ],
             $atts,
             'custommenu'
         );
 
         return wp_nav_menu(
-            array(
+            [
                 'menu'            => $params['menu'],
                 'container'       => $params['container'],
                 'container_class' => $params['container_class'],
@@ -52,7 +52,7 @@ class UAMS_MenuShortcode
                 'depth'           => (int) $params['depth'],
                 'walker'          => ! empty( $params['walker'] ) && class_exists( $params['walker'] ) ? new $params['walker']() : '',
                 'theme_location'  => $params['theme_location'],
-            )
+            ]
         );
     }
 }

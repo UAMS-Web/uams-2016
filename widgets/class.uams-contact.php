@@ -15,29 +15,29 @@ class UAMS_Widget_Contact extends WP_Widget
 		parent::__construct(
 			'uams-contact-list',
 			__( 'Contact list', 'uams' ),
-			array(
+			[
 				'description' => __( 'Display important contact information', 'uams' ),
 				'classname'   => 'contact-widget',
-			)
+			]
 		);
 	}
 
-	public static function scripts()
+	public static function scripts(): void
 	{
-		wp_enqueue_script( 'contact-card', get_template_directory_uri() . '/assets/admin/js/widgets/uams.contact-widget.js', array( 'jquery' ), null, true );
+		wp_enqueue_script( 'contact-card', get_template_directory_uri() . '/assets/admin/js/widgets/uams.contact-widget.js', [ 'jquery' ], null, true );
 		wp_enqueue_script( 'jquery-ui-autocomplete' );
 		wp_enqueue_media();
 	}
 
-	public function widget( $args, $instance )
+	public function widget( $args, $instance ): void
 	{
 		$title  = apply_filters( 'widget_title', empty( $instance['title'] ) ? __( 'List', 'uams' ) : $instance['title'] );
 		$amount = empty( $instance['amount'] ) ? 1 : absint( $instance['amount'] );
 
-		$person_names  = array();
-		$person_titles = array();
-		$person_phones = array();
-		$person_emails = array();
+		$person_names  = [];
+		$person_titles = [];
+		$person_phones = [];
+		$person_emails = [];
 
 		for ( $i = 1; $i <= $amount; $i++ ) {
 			$person_names[ $i - 1 ]  = $instance[ 'person_name' . $i ] ?? '';
@@ -80,13 +80,13 @@ class UAMS_Widget_Contact extends WP_Widget
 
 	public function update( $new_instance, $old_instance )
 	{
-		$instance          = array();
+		$instance          = [];
 		$instance['title'] = sanitize_text_field( $new_instance['title'] ?? '' );
 		$amount            = ! empty( $new_instance['amount'] ) ? absint( $new_instance['amount'] ) : 1;
 		$new_person        = ! empty( $new_instance['new_person'] );
 
-		$order    = array();
-		$position = array();
+		$order    = [];
+		$position = [];
 
 		if ( isset( $new_instance['position1'] ) ) {
 			for ( $i = 1; $i <= $amount; $i++ ) {
@@ -96,12 +96,12 @@ class UAMS_Widget_Contact extends WP_Widget
 					$amount--;
 				}
 			}
-			if ( ! empty( $position ) ) {
+			if ( $position !== [] ) {
 				asort( $position );
 				$order = array_keys( $position );
 				if ( $new_person ) {
 					$amount++;
-					array_push( $order, $amount );
+					$order[] = $amount;
 				}
 			}
 		} elseif ( ! empty( $new_instance['order'] ) ) {
@@ -116,31 +116,29 @@ class UAMS_Widget_Contact extends WP_Widget
 			}
 		}
 
-		if ( ! empty( $order ) ) {
-			foreach ( $order as $i => $item_num ) {
+		foreach ( $order as $i => $item_num ) {
 				$idx                                  = $i + 1;
 				$instance[ 'person_name' . $idx ]  = sanitize_text_field( $new_instance[ 'person_name' . $item_num ] ?? '' );
 				$instance[ 'person_title' . $idx ] = sanitize_text_field( $new_instance[ 'person_title' . $item_num ] ?? '' );
 				$instance[ 'person_phone' . $idx ] = sanitize_text_field( $new_instance[ 'person_phone' . $item_num ] ?? '' );
 				$instance[ 'person_email' . $idx ] = sanitize_email( $new_instance[ 'person_email' . $item_num ] ?? '' );
 			}
-		}
 
 		$instance['amount'] = $amount;
 
 		return $instance;
 	}
 
-	public function form( $instance )
+	public function form( $instance ): void
 	{
-		$instance = wp_parse_args( (array) $instance, array( 'title' => '', 'amount' => 1 ) );
+		$instance = wp_parse_args( (array) $instance, [ 'title' => '', 'amount' => 1 ] );
 		$title    = esc_attr( $instance['title'] );
 		$amount   = empty( $instance['amount'] ) ? 1 : absint( $instance['amount'] );
 
-		$person_names  = array();
-		$person_titles = array();
-		$person_phones = array();
-		$person_emails = array();
+		$person_names  = [];
+		$person_titles = [];
+		$person_phones = [];
+		$person_emails = [];
 
 		for ( $i = 1; $i <= $amount; $i++ ) {
 			$person_names[ $i ]  = $instance[ 'person_name' . $i ] ?? '';
@@ -200,7 +198,7 @@ class UAMS_Widget_Contact extends WP_Widget
 	}
 }
 
-add_action( 'widgets_init', function() {
+add_action( 'widgets_init', function(): void {
 	register_widget( 'UAMS_Widget_Contact' );
 } );
-add_action( 'admin_enqueue_scripts', array( 'UAMS_Widget_Contact', 'scripts' ) );
+add_action( 'admin_enqueue_scripts', [ 'UAMS_Widget_Contact', 'scripts' ] );
