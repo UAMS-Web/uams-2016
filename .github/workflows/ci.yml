@@ -141,6 +141,10 @@ jobs:
       # --ignore-scripts: nothing the build needs runs on install.
       - run: npm ci --ignore-scripts
 
+      # The build tests compare fresh builds with the committed compiled files, so they run
+      # before `grunt` below, which rewrites those tracked files in the workspace.
+      - run: npm test
+
       # The default task: jshint, concat, uglify, notify, less. A failing task fails the job.
       - run: npx grunt
 

@@ -77,6 +77,12 @@ The code-quality tools run from Composer: `composer test:pint` (formatting, Pint
 
 The remote gate is [`.github/workflows/ci.yml`](.github/workflows/ci.yml), which runs on every pull request and on pushes to `dev`, `staging` and `master`. It runs the checks above (Pint, Rector, PHPStan, the Pest unit suite on Linux, Windows and macOS), the PHP 8.2 floor lint, the Grunt build, and the repository checks for synced files, emoji and the aggregate job list. Its final `CI` job is the single status to require on a branch. The integration suite needs WordPress and a database, so it runs locally only.
 
+The Grunt build has its own tests: after `npm ci`, `npm test` runs `tests/Build/` with Node's built-in test runner. They build the Less and JavaScript in a scratch copy and compare the result with the committed `style.css`, `style.dev.css`, `uams.css`, `js/site.dev.js`, `js/site.js` and `uams.js`; they also check the `jshint` task, the registered tasks and the `watch` targets. Run them before `grunt`, which rewrites the committed compiled files. The committed stylesheets differ from a fresh build in the ways `tests/Build/build.test.js` lists.
+
+Build notes: `package.json` carries an `overrides` entry that pins `minimatch` to `^3.1.3` under `jshint` and `globule` (the latter reached through `grunt-contrib-watch` and `gaze`). Both ask for `~3.0.2`, which stops below the 3.1.3 release that fixes GHSA-7r86-cg39-jmmj, and the newest `jshint` keeps the same range. Remove the entry once `jshint` and `globule` (or the packages that pull it in) accept `minimatch` 3.1.3 or later, then run `npm install --package-lock-only` and confirm `npm ls minimatch` shows no copy below 3.1.3.
+
+The same entry pins `lodash` to `^4.18.0` under `jshint`, which asks for `~4.17.21` in its newest release (2.13.6). That range stops below the 4.18.0 release that fixes GHSA-r5fr-rjxr-66jc. Remove it once `jshint` accepts `lodash` 4.18.0 or later, and confirm `npm ls lodash` shows no copy below 4.18.0.
+
 A coverage run needs a coverage driver such as PCOV: `php -d pcov.enabled=1 vendor/bin/pest --coverage`. It measures the theme's own PHP and leaves out the vendored and unused trees (see `phpunit.xml`).
 
 ## Bugs and feature requests ##
