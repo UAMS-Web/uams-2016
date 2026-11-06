@@ -3,9 +3,12 @@
     "description": "The UAMS 2016 WordPress theme. This file holds development dependencies only: nothing in it is installed on a site.",
     "type": "wordpress-theme",
     "license": "proprietary",
+    "require": {
+        "php": ">=8.2"
+    },
     "require-dev": {
         "brain/monkey": "^2.7",
-        "phpunit/phpunit": "^11.5"
+        "pestphp/pest": "^5.3"
     },
     "autoload-dev": {
         "psr-4": {
@@ -13,14 +16,29 @@
         }
     },
     "config": {
-        "sort-packages": true
+        "platform": {
+            "php": "8.4.27"
+        },
+        "sort-packages": true,
+        "allow-plugins": {
+            "pestphp/pest-plugin": true
+        }
     },
     "scripts": {
-        "test": "@test:unit",
-        "test:unit": "phpunit"
+        "lint:floor": "@php scripts/lint-floor.php",
+        "setup:integration": "@composer install --working-dir=tests/Integration",
+        "test": [
+            "@test:unit",
+            "@test:integration"
+        ],
+        "test:unit": "pest",
+        "test:integration": "@php tests/Integration/vendor/bin/phpunit --configuration tests/Integration/phpunit.xml"
     },
     "scripts-descriptions": {
-        "test": "Run the test suite.",
-        "test:unit": "Run the unit suite: no WordPress and no database, with WordPress functions mocked by Brain Monkey."
+        "lint:floor": "Parse every shipped PHP file; run it under the PHP floor (8.2) to prove none uses newer syntax.",
+        "setup:integration": "Install the Integration suite's own Composer setup (PHPUnit 9.6, wp-phpunit, the polyfills).",
+        "test": "Run both suites, each in its own process, so the Unit suite never sees WordPress.",
+        "test:unit": "Run the Pest suite that needs no WordPress and no database.",
+        "test:integration": "Run the PHPUnit 9.6 suite that boots WordPress through wp-phpunit against the test database."
     }
 }

@@ -49,16 +49,31 @@ This is an overview of the custom widgets, plugins and various features it inclu
 Download the [UAMS 2016 theme](https://github.com/UAMS-Web/uams-2016/archive/master.zip) into the wp-content/themes folder of your local WordPress install. Next, log into the WordPress dashboard and go the Appearance -> Themes page. From here you can activate the UAMS 2016 theme. 
 
 ## Running the tests ##
- - - -
+ - - - -
 
-The theme's PHP tests run on PHPUnit with [Brain Monkey](https://giuseppe-mazzapica.gitbook.io/brain-monkey) mocking WordPress, so they need no database and no WordPress install. The tools in `composer.json` are for development only and are not part of the deployed theme.
+The theme supports PHP 8.2 and later (`Requires PHP` in the style sheet header, `require.php` in `composer.json`). Development runs on PHP 8.4, pinned in `config.platform.php`. The tools in `composer.json` are for development only and are not part of the deployed theme.
+
+There are two suites, each in its own process:
+
+ * **Unit** runs on [Pest](https://pestphp.com) with [Brain Monkey](https://giuseppe-mazzapica.gitbook.io/brain-monkey) mocking WordPress, so it needs no database and no WordPress install.
+ * **Integration** boots the theme inside a real WordPress through `wp-phpunit`, on PHPUnit 9.6 (WordPress' test suite supports PHPUnit 9 only). It has its own `tests/Integration/composer.json`.
 
 ```bash
 composer install
-composer test
+composer test:unit
 ```
 
-A coverage run needs a coverage driver such as PCOV: `php -d pcov.enabled=1 vendor/bin/phpunit --coverage-text`. It measures the theme's own PHP and leaves out the vendored and unused trees (see `phpunit.xml`).
+The integration suite needs the theme checked out inside a WordPress install and a disposable MySQL database, which is dropped and rebuilt on every run. The default name is `uams_2016_tests`; override it with `WP_TESTS_DB_NAME`, and never point it at a database anything else uses.
+
+```bash
+mysql -u root -e 'CREATE DATABASE uams_2016_tests'
+composer setup:integration
+composer test:integration
+```
+
+`composer lint:floor` parses every shipped PHP file with the PHP it runs under. Run it under PHP 8.2 to prove none uses newer syntax.
+
+A coverage run needs a coverage driver such as PCOV: `php -d pcov.enabled=1 vendor/bin/pest --coverage`. It measures the theme's own PHP and leaves out the vendored and unused trees (see `phpunit.xml`).
 
 ## Bugs and feature requests ##
  - - -
