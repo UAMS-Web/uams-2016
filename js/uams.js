@@ -736,11 +736,11 @@ UAMS.YouTube.Collection = Backbone.Collection.extend({
                 this.max_results = max_results_temp;
             }
             this.model = UAMS.YouTube.PlaylistItem;
-            this.url = 'https://www.googleapis.com/youtube/v3/playlistItems?part=snippet&playlistId=' + this.youtube_id + '&key=AIzaSyApmhFr5oa8bmKPcpN7bm-h0mekjkUVypU&maxResults=' + this.max_results;
+            this.url = 'https://www.googleapis.com/youtube/v3/playlistItems?part=snippet&playlistId=' + this.youtube_id + '&key=&maxResults=' + this.max_results;
         }
         else if (this.type == 'single') {
             this.model = UAMS.YouTube.Video;
-            this.url = 'https://www.googleapis.com/youtube/v3/videos?part=snippet&id=' + this.youtube_id + '&key=AIzaSyApmhFr5oa8bmKPcpN7bm-h0mekjkUVypU';
+            this.url = 'https://www.googleapis.com/youtube/v3/videos?part=snippet&id=' + this.youtube_id + '&key=';
         }
     },
 

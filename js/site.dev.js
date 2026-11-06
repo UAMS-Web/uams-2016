@@ -10401,11 +10401,11 @@ UAMS.YouTube.Collection = Backbone.Collection.extend({
                 this.max_results = max_results_temp;
             }
             this.model = UAMS.YouTube.PlaylistItem;
-            this.url = 'https://www.googleapis.com/youtube/v3/playlistItems?part=snippet&playlistId=' + this.youtube_id + '&key=AIzaSyAKmV8t81T_-MkSazI03H3xTmY28tRzBF8&maxResults=' + this.max_results; //Old: AIzaSyApmhFr5oa8bmKPcpN7bm-h0mekjkUVypU
+            this.url = 'https://www.googleapis.com/youtube/v3/playlistItems?part=snippet&playlistId=' + this.youtube_id + '&key=AIzaSyAKmV8t81T_-MkSazI03H3xTmY28tRzBF8&maxResults=' + this.max_results;
         }
         else if (this.type == 'single') {
             this.model = UAMS.YouTube.Video;
-            this.url = 'https://www.googleapis.com/youtube/v3/videos?part=snippet&id=' + this.youtube_id + '&key=AIzaSyAKmV8t81T_-MkSazI03H3xTmY28tRzBF8'; //Old: AIzaSyApmhFr5oa8bmKPcpN7bm-h0mekjkUVypU
+            this.url = 'https://www.googleapis.com/youtube/v3/videos?part=snippet&id=' + this.youtube_id + '&key=AIzaSyAKmV8t81T_-MkSazI03H3xTmY28tRzBF8';
         }
     },
 
