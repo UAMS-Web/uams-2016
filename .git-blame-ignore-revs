@@ -1,0 +1,11 @@
+# Commits git blame should skip: whole-repository reformats whose every line
+# is a style change with no author of its own. One full 40-character commit hash
+# per line, with a comment above it saying what the commit was.
+#
+# git blame reads this file only when told to, once per clone:
+#   git config blame.ignoreRevsFile .git-blame-ignore-revs
+#
+# Pint reformat: adopt the laravel preset (UAMS-Web/uams-claude-skills#10).
+# This is the commit on the branch; a squash merge gives it a different hash,
+# so after merging, replace this line with the squash commit's hash.
+4502b245daff74c9e22ab009f6c410d1e7a6f7bb
