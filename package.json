@@ -1,14 +1,26 @@
 {
   "name": "uams",
   "version": "0.1.0",
+  "scripts": {
+    "test": "node --test \"tests/Build/**/*.test.js\""
+  },
   "devDependencies": {
     "clean-css": "^4.2.3",
     "grunt": "^1.3.0",
     "grunt-contrib-concat": "*",
-    "grunt-contrib-jshint": "^2.1.0",
+    "grunt-contrib-jshint": "^3.2.0",
     "grunt-contrib-less": "^2.0.0",
     "grunt-contrib-uglify": "^5.0.0",
     "grunt-contrib-watch": "^1.1.0",
     "grunt-notify": "~0.4.5"
+  },
+  "overrides": {
+    "jshint": {
+      "minimatch": "^3.1.3",
+      "lodash": "^4.18.0"
+    },
+    "globule": {
+      "minimatch": "^3.1.3"
+    }
   }
 }
