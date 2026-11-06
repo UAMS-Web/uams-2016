@@ -1,6 +1,6 @@
 <?php get_header(); ?>
 
-<?php get_template_part( 'header', 'image' ); ?>
+<?php get_template_part('header', 'image'); ?>
 
 <div class="container uams-body">
 
@@ -8,35 +8,36 @@
 
     <div <?php uams_content_class(); ?> role='main'>
 
-      <?php //uams_site_title(); ?>
+      <?php // uams_site_title();?>
 
-      <?php //get_template_part( 'menu', 'mobile' ); ?>
+      <?php // get_template_part( 'menu', 'mobile' );?>
 
-      <?php //get_template_part( 'breadcrumbs' ); ?>
+      <?php // get_template_part( 'breadcrumbs' );?>
 
       <div id='main_content' class="uams-body-copy" tabindex="-1">
 
-      <h1><?php echo single_cat_title( '', false ); ?></h1>
-      <?php if ( category_description() ) : // Show an optional category description ?>
+      <h1><?php echo single_cat_title('', false); ?></h1>
+      <?php if (category_description()) { // Show an optional category description?>
         <div class="archive-meta"><?php echo category_description(); ?></div>
-      <?php endif; ?>
+      <?php } ?>
       <hr>
 
         <?php
           // Start the Loop.
-          while ( have_posts() ) : the_post();
+          while (have_posts()) {
+              the_post();
 
-            /*
-             * Include the post format-specific template for the content. If you want to
-             * use this in a child theme, then include a file called called content-___.php
-             * (where ___ is the post format) and that will be used instead.
-             */
-            get_template_part( 'content', 'archive' );
+              /*
+               * Include the post format-specific template for the content. If you want to
+               * use this in a child theme, then include a file called called content-___.php
+               * (where ___ is the post format) and that will be used instead.
+               */
+              get_template_part('content', 'archive');
 
-          endwhile;
-        ?>
+          }
+?>
         <br />
-        <?php posts_nav_link( ' ', 'Previous page', 'Next page' ); ?>
+        <?php posts_nav_link(' ', 'Previous page', 'Next page'); ?>
 
       </div>
 

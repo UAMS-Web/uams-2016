@@ -8,45 +8,45 @@
 
 class UAMS_Map
 {
-    private static $buildingcode = array(
+    private static array $buildingcode = [
         '127', '116', '117', '118', '119', '120', '121', '122', '123', '124',
         '125', '128', '129', '126', '131', '130', '132', '133', '134', '135',
         '136', '137', '138', '139', '141', '142', '143', '144', '145', '146',
         '147', '148', '149', '150', '151', '152', '153', '154', '155', '2',
         '3', '4', '7', '6',
-    );
+    ];
 
     const URL = '//maps.uams.edu/full-screen/?markerid=';
 
     public function __construct()
     {
-        add_shortcode( 'map', array( $this, 'map_handler' ) );
+        add_shortcode('map', [$this, 'map_handler']);
     }
 
-    public function map_handler( $atts, $content = null )
+    public function map_handler($atts, $content = null): string
     {
         $params = shortcode_atts(
-            array(
+            [
                 'building' => '',
-                'width'    => '100%',
-                'height'   => '480px',
-            ),
+                'width' => '100%',
+                'height' => '480px',
+            ],
             $atts,
             'map'
         );
 
-        $building = sanitize_text_field( $params['building'] );
+        $building = sanitize_text_field($params['building']);
 
-        if ( empty( $building ) ) {
+        if (empty($building)) {
             return 'required attribute "building" missing';
         }
 
-        if ( ! in_array( $building, self::$buildingcode, true ) ) {
-            return sprintf( 'Building "%s" is not supported', esc_html( $building ) );
+        if (! in_array($building, self::$buildingcode, true)) {
+            return sprintf('Building "%s" is not supported', esc_html($building));
         }
 
-        $width  = esc_attr( $params['width'] );
-        $height = esc_attr( $params['height'] );
+        $width = esc_attr($params['width']);
+        $height = esc_attr($params['height']);
 
         return sprintf(
             '<div class="uams-campus-map">
@@ -55,11 +55,11 @@ class UAMS_Map
             </div>',
             $width,
             $height,
-            esc_url( self::URL ),
-            rawurlencode( $building ),
-            rawurlencode( $building )
+            esc_url(self::URL),
+            rawurlencode($building),
+            rawurlencode($building)
         );
     }
 }
 
-new UAMS_Map();
+new UAMS_Map;

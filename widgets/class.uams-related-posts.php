@@ -1,8 +1,9 @@
 <?php
 
+declare(strict_types=1);
+
 //       Name: UAMS Related Posts
 //       Description: A widget that shows related posts
-
 /*
 if ( ! class_exists( 'UAMS_Widget_Related_Posts') ) :
 
@@ -111,7 +112,7 @@ class UAMS_Widget_Related_Posts extends WP_Widget
 
   <?php
 
-	}
+    }
 
 
 

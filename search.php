@@ -1,6 +1,6 @@
 <?php get_header(); ?>
 
-<?php get_template_part( 'header', 'image' ); ?>
+<?php get_template_part('header', 'image'); ?>
 
 <div class="container uams-body">
 
@@ -10,23 +10,24 @@
 
       <?php uams_site_title(); ?>
 
-      <?php get_template_part( 'menu', 'mobile' ); ?>
+      <?php get_template_part('menu', 'mobile'); ?>
 
-      <?php get_template_part( 'breadcrumbs' ); ?>
+      <?php get_template_part('breadcrumbs'); ?>
 
       <div id='main_content' class="uams-body-copy" tabindex="-1">
 
         <?php
-          if ( have_posts() ) :
-            while ( have_posts() ) : the_post();
-              get_template_part( 'content', 'archive' );
-            endwhile;
-          else :
-            echo "<h3 class='no-results'>Sorry, no results matched your criteria.</h3>";
-          endif;
-        ?>
+          if (have_posts()) {
+              while (have_posts()) {
+                  the_post();
+                  get_template_part('content', 'archive');
+              }
+          } else {
+              echo "<h3 class='no-results'>Sorry, no results matched your criteria.</h3>";
+          }
+?>
 
-        <?php posts_nav_link( ' ' ); ?>
+        <?php posts_nav_link(' '); ?>
 
       </div>
 
