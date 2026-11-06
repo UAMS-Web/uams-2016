@@ -348,6 +348,19 @@ Each tile is setup as a series of shortcodes wrapped in `[box]` shortcode.
   [youtube type='playlist' id='PLgNkGpnjFWo9CN_HeVtujhMnUXK05iwgZ' max-results='10']
 ```
 
+> __API key:__ The shortcode's script asks the YouTube Data API for the video or playlist details, and the request needs an API key. The theme does not carry a key. Define it in the site's `wp-config.php`, above the line that says to stop editing:
+
+```
+  define( 'UAMS_YOUTUBE_API_KEY', 'the-key-from-google-cloud' );
+```
+
+> The theme passes the value to the browser as `uams_youtube.apiKey`, so it is a __browser key__ that every visitor can read, and it has to be restricted in Google Cloud:
+>
+> - __API restrictions:__ allow only the YouTube Data API v3.
+> - __Application restrictions:__ HTTP referrers, listing the site's domains.
+>
+> When the constant is not defined or is empty, the theme sends no request to YouTube and the shortcode's placeholder stays empty. To rotate the key, change the constant; no theme release is needed.
+
 ### Subpage List ###
 
 > This shortcode lists out all the subpages relative to the current page. 

@@ -9,9 +9,64 @@ class UAMS_YouTube
 {
     public static $types = ['playlist', 'single'];
 
+    /**
+     * The constant in wp-config.php that holds the YouTube Data API key.
+     */
+    public const KEY_CONSTANT = 'UAMS_YOUTUBE_API_KEY';
+
+    /**
+     * The script handle the key is passed to (see class.uams-scripts.php).
+     */
+    public const SCRIPT_HANDLE = 'site';
+
+    /**
+     * The JavaScript object the key is passed in: `uams_youtube.apiKey`.
+     */
+    public const SCRIPT_OBJECT = 'uams_youtube';
+
     public function __construct()
     {
         add_shortcode('youtube', [$this, 'youtube_handler']);
+
+        // After the `site` script is registered, at the default priority, in class.uams-scripts.php.
+        add_action('wp_enqueue_scripts', [$this, 'localize_api_key'], 20);
+    }
+
+    /**
+     * The API key from the constant, or an empty string when the constant is undefined, empty or not a string.
+     */
+    public static function api_key(): string
+    {
+        if (! defined(self::KEY_CONSTANT)) {
+            return '';
+        }
+
+        return self::normalize_key(constant(self::KEY_CONSTANT));
+    }
+
+    /**
+     * A usable key from whatever the constant holds: a trimmed string, or an empty string for anything else.
+     */
+    public static function normalize_key(mixed $value): string
+    {
+        return is_string($value) ? trim($value) : '';
+    }
+
+    /**
+     * Pass the key to the `site` script as `uams_youtube.apiKey`, when there is one.
+     *
+     * With no key nothing is passed, and the script renders nothing for a placeholder.
+     * wp_localize_script() encodes the value as JSON, which escapes it for JavaScript.
+     */
+    public function localize_api_key(): void
+    {
+        $key = self::api_key();
+
+        if ($key === '') {
+            return;
+        }
+
+        wp_localize_script(self::SCRIPT_HANDLE, self::SCRIPT_OBJECT, ['apiKey' => $key]);
     }
 
     public function youtube_handler($atts): string
