@@ -107,11 +107,15 @@ test.describe('less', () => {
     assert.equal(built.split('Version: 0.9\n').length, 2, 'one version line expected');
     assert.equal(built.split(alertRule).length, 2, 'one alert background rule expected');
 
+    // The release version is set by hand at each release, so it is read from the committed header.
+    const committed = readCommitted('style.css');
+    const version = committed.match(/\nVersion: (\d+\.\d+\.\d+\.\d+)\n/);
+    assert.ok(version, 'the committed header carries a four-segment version');
+
     const edited = built
-      .replace('Version: 0.9\n', 'Version: 1.3.0.1\n')
+      .replace('Version: 0.9\n', `Version: ${version[1]}\n`)
       .replace(alertRule, '\n    /* background: url(assets/images/alert.png) no-repeat 0 -10px transparent; */\n');
 
-    const committed = readCommitted('style.css');
     assert.ok(committed.startsWith(edited), 'the committed file starts with the edited fresh build');
 
     // The appended block of 48 lines the less sources do not produce.
