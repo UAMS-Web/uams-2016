@@ -19,6 +19,16 @@ UAMS.elements = {
 
 }
 
+// True when the hostname is one of the domains or a subdomain of one. Compares whole labels, so
+// 'www.uams.edu.example.com' and 'notuamsonline.com' do not match.
+UAMS.hostIsOn = function( hostname, domains ) {
+  hostname = String( hostname || '' ).toLowerCase()
+
+  return _.some( domains, function( domain ) {
+    return hostname === domain || hostname.slice( -( domain.length + 1 ) ) === '.' + domain
+  } )
+}
+
 UAMS.getBaseUrl = function() {
   var site = _.first( _.compact( Backbone.history.location.pathname.split('/') ) )
   var url = ''
@@ -27,13 +37,7 @@ UAMS.getBaseUrl = function() {
     Backbone.history.location.origin = Backbone.history.location.protocol + "//" + Backbone.history.location.hostname + (Backbone.history.location.port ? ':' + Backbone.history.location.port: '');
   }
 
-  if (Backbone.history.location.origin.indexOf('www.uams.edu') != -1) {
-    url = Backbone.history.location.origin + ( site ? '/' + site : '' ) + '/';
-  } else if (Backbone.history.location.origin.indexOf('uamsonline.com') != -1) {
-    url = Backbone.history.location.origin + ( site ? '/' + site : '' ) + '/';
-  } else if (Backbone.history.location.origin.indexOf('inside.uams.edu') != -1) {
-    url = Backbone.history.location.origin + ( site ? '/' + site : '' ) + '/';
-  } else if (Backbone.history.location.origin.indexOf('insidedev.uamsonlinedev.com') != -1) {
+  if (UAMS.hostIsOn(Backbone.history.location.hostname, ['www.uams.edu', 'uamsonline.com', 'inside.uams.edu', 'insidedev.uamsonlinedev.com'])) {
     url = Backbone.history.location.origin + ( site ? '/' + site : '' ) + '/';
   } else {
     url = Backbone.history.location.origin + '/';

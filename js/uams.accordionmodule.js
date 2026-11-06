@@ -37,7 +37,7 @@ $(document).ready(function(){
                       
                       $accordion_panel.prepend( $that.removeClass( "js-accordion__header" ).addClass( $accordions_prefix_classes + "__title" ).attr( "tabindex", "0") );
                           
-                      $accordion_header = $( '<button class="js-accordion__header ' + $accordions_prefix_classes + '__header">' + $text + '</button>' );
+                      $accordion_header = $( '<button class="js-accordion__header ' + $accordions_prefix_classes + '__header"></button>' ).text( $text );
                       $accordion_panel.before( $accordion_header ); 
                           
                       $accordion_header.attr({
