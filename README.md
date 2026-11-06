@@ -81,6 +81,8 @@ The Grunt build has its own tests: after `npm ci`, `npm test` runs `tests/Build/
 
 Build notes: `package.json` carries an `overrides` entry that pins `minimatch` to `^3.1.3` under `jshint` and `globule` (the latter reached through `grunt-contrib-watch` and `gaze`). Both ask for `~3.0.2`, which stops below the 3.1.3 release that fixes GHSA-7r86-cg39-jmmj, and the newest `jshint` keeps the same range. Remove the entry once `jshint` and `globule` (or the packages that pull it in) accept `minimatch` 3.1.3 or later, then run `npm install --package-lock-only` and confirm `npm ls minimatch` shows no copy below 3.1.3.
 
+The same entry pins `lodash` to `^4.18.0` under `jshint`, which asks for `~4.17.21` in its newest release (2.13.6). That range stops below the 4.18.0 release that fixes GHSA-r5fr-rjxr-66jc. Remove it once `jshint` accepts `lodash` 4.18.0 or later, and confirm `npm ls lodash` shows no copy below 4.18.0.
+
 A coverage run needs a coverage driver such as PCOV: `php -d pcov.enabled=1 vendor/bin/pest --coverage`. It measures the theme's own PHP and leaves out the vendored and unused trees (see `phpunit.xml`).
 
 ## Bugs and feature requests ##
