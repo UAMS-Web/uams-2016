@@ -10,90 +10,92 @@
 class TileBox
 {
     const MAXTILES = 12;
-    private $count = 0;
-    private $NumbersArray = array( 'zero', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine', 'ten', 'eleven', 'twelve' );
+
+    private int $count = 0;
+
+    private array $NumbersArray = ['zero', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine', 'ten', 'eleven', 'twelve'];
 
     public function __construct()
     {
-        add_filter( 'the_content', array( $this, 'wpex_fix_shortcodes' ) );
-        add_shortcode( 'box', array( $this, 'box_handler' ) );
-        add_shortcode( 'tile', array( $this, 'tile_handler' ) );
+        add_filter('the_content', [$this, 'wpex_fix_shortcodes']);
+        add_shortcode('box', [$this, 'box_handler']);
+        add_shortcode('tile', [$this, 'tile_handler']);
     }
 
-    public function wpex_fix_shortcodes( $content )
+    public function wpex_fix_shortcodes($content): string
     {
-        if ( empty( $content ) || ! is_string( $content ) ) {
+        if (empty($content) || ! is_string($content)) {
             return (string) $content;
         }
 
-        $array = array(
-            '<p>['    => '[',
-            ']</p>'   => ']',
+        $array = [
+            '<p>[' => '[',
+            ']</p>' => ']',
             ']<br />' => ']',
-        );
+        ];
 
-        return strtr( $content, $array );
+        return strtr($content, $array);
     }
 
-    public function box_handler( $atts, $content = null )
+    public function box_handler($atts, $content = null): string
     {
-        $boxCenter = shortcode_atts( array(
+        $boxCenter = shortcode_atts([
             'alignment' => 'none',
-            'color'     => '',
-            'padding'   => '',
-            'shadow'    => '',
-            'custom'    => '',
-        ), $atts, 'box' );
+            'color' => '',
+            'padding' => '',
+            'shadow' => '',
+            'custom' => '',
+        ], $atts, 'box');
 
-        $color   = ! empty( $boxCenter['color'] ) ? ' box-' . sanitize_html_class( $boxCenter['color'] ) : '';
-        $padding = ! empty( $boxCenter['padding'] ) ? ' nopad' : '';
-        $shadow  = ! empty( $boxCenter['shadow'] ) ? ' noshadow' : '';
-        $custom  = ! empty( $boxCenter['custom'] ) ? ' ' . sanitize_html_class( $boxCenter['custom'] ) : '';
-        $center  = 'box-' . sanitize_html_class( $boxCenter['alignment'] );
+        $color = ! empty($boxCenter['color']) ? ' box-'.sanitize_html_class($boxCenter['color']) : '';
+        $padding = ! empty($boxCenter['padding']) ? ' nopad' : '';
+        $shadow = ! empty($boxCenter['shadow']) ? ' noshadow' : '';
+        $custom = ! empty($boxCenter['custom']) ? ' '.sanitize_html_class($boxCenter['custom']) : '';
+        $center = 'box-'.sanitize_html_class($boxCenter['alignment']);
 
         $this->count = 0;
 
-        if ( empty( $content ) ) {
+        if (empty($content)) {
             return 'No content inside the box element. Make sure you close your box element. Required structure: [box][tile]content[/tile][/box]';
         }
 
-        $output    = do_shortcode( $content );
-        $count_key = min( $this->count, self::MAXTILES );
-        $number    = isset( $this->NumbersArray[ $count_key ] ) ? $this->NumbersArray[ $count_key ] : 'twelve';
+        $output = do_shortcode($content);
+        $count_key = min($this->count, self::MAXTILES);
+        $number = $this->NumbersArray[$count_key] ?? 'twelve';
 
         return sprintf(
             '<div class="box-outer"><div class="box %s %s%s%s%s%s">%s</div></div>',
-            esc_attr( $number ),
-            esc_attr( $center ),
-            esc_attr( $color ),
-            esc_attr( $padding ),
-            esc_attr( $shadow ),
-            esc_attr( $custom ),
+            esc_attr($number),
+            esc_attr($center),
+            esc_attr($color),
+            esc_attr($padding),
+            esc_attr($shadow),
+            esc_attr($custom),
             $output
         );
     }
 
-    public function tile_handler( $atts, $content = null )
+    public function tile_handler($atts, $content = null): string
     {
         $this->count++;
-        $tile_atts = shortcode_atts( array(
+        $tile_atts = shortcode_atts([
             'empty' => 'false',
-        ), $atts, 'tile' );
+        ], $atts, 'tile');
 
         $classes = 'tile';
 
-        if ( $this->count > self::MAXTILES ) {
+        if ($this->count > self::MAXTILES) {
             $content = 'Too many [tile]s. Only up to 12 are supported.';
         }
 
-        if ( filter_var( $tile_atts['empty'], FILTER_VALIDATE_BOOLEAN ) ) {
+        if (filter_var($tile_atts['empty'], FILTER_VALIDATE_BOOLEAN)) {
             $classes .= ' empty';
-        } elseif ( empty( $content ) ) {
+        } elseif (empty($content)) {
             $content = 'No content for this tile. Make sure you wrap your content like this: [tile]Content here[/tile]';
         }
 
-        return sprintf( '<div class="%s">%s</div>', esc_attr( $classes ), apply_filters( 'the_content', (string) $content ) );
+        return sprintf('<div class="%s">%s</div>', esc_attr($classes), apply_filters('the_content', (string) $content));
     }
 }
 
-new TileBox();
+new TileBox;

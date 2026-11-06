@@ -26,7 +26,7 @@
             </ul>
         </nav>
 
-        <p>&copy; <?php echo date( 'Y' ); ?> University of Arkansas for Medical Sciences  |  Little Rock, AR</p>
+        <p>&copy; <?php echo date('Y'); ?> University of Arkansas for Medical Sciences  |  Little Rock, AR</p>
 
     </div>
 
@@ -36,11 +36,11 @@
 <?php wp_footer(); ?>
 
 <?php
-    $custom_footer_script = get_post_meta( get_the_ID(), 'custom_footer_script', true );
-    if ( ! empty( $custom_footer_script ) ) {
-		echo $custom_footer_script;
-	}
-?>
+    $custom_footer_script = get_post_meta(get_the_ID(), 'custom_footer_script', true);
+        if (! empty($custom_footer_script)) {
+            echo $custom_footer_script;
+        }
+        ?>
 
 </body>
 </html>
