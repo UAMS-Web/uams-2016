@@ -10,6 +10,12 @@
 //       Playlist: <div id='some-unique-id' class="uams-youtube" data-uams-youtube='youtube_playlist_id_here' data-uams-youtube-type='playlist'></div>
 
 UAMS.YouTube = {};
+// The YouTube Data API key reaches this script from the page, as `uams_youtube.apiKey`, which
+// the theme localizes from the UAMS_YOUTUBE_API_KEY constant in wp-config.php (see
+// setup/class.youtube-shortcode.php). With no key this returns an empty string.
+UAMS.YouTube.apiKey = function () {
+    return (typeof uams_youtube !== 'undefined' && typeof uams_youtube.apiKey === 'string') ? uams_youtube.apiKey : '';
+};
 
 //the UAMS.YouTube.Collection object contains data in models that refer to youtube videos
 //(alone or in a playlist) and has a view that renders the proper player with the data
@@ -22,6 +28,10 @@ UAMS.YouTube.Collection = Backbone.Collection.extend({
         this.el = options.el;
         this.$el = $(this.el);
         this.youtube_id = this.$el.data('uams-youtube');
+        // Without a key there is nothing to request: leave the placeholder empty.
+        if (!UAMS.YouTube.apiKey()) {
+            return;
+        }
         this.setup_for_type();
         this.make_view();
         this.fetch({success: this.view.onDataReady});
@@ -41,11 +51,11 @@ UAMS.YouTube.Collection = Backbone.Collection.extend({
                 this.max_results = max_results_temp;
             }
             this.model = UAMS.YouTube.PlaylistItem;
-            this.url = 'https://www.googleapis.com/youtube/v3/playlistItems?part=snippet&playlistId=' + this.youtube_id + '&key=AIzaSyAKmV8t81T_-MkSazI03H3xTmY28tRzBF8&maxResults=' + this.max_results; //Old: AIzaSyApmhFr5oa8bmKPcpN7bm-h0mekjkUVypU
+            this.url = 'https://www.googleapis.com/youtube/v3/playlistItems?part=snippet&playlistId=' + this.youtube_id + '&key=' + encodeURIComponent(UAMS.YouTube.apiKey()) + '&maxResults=' + this.max_results;
         }
         else if (this.type == 'single') {
             this.model = UAMS.YouTube.Video;
-            this.url = 'https://www.googleapis.com/youtube/v3/videos?part=snippet&id=' + this.youtube_id + '&key=AIzaSyAKmV8t81T_-MkSazI03H3xTmY28tRzBF8'; //Old: AIzaSyApmhFr5oa8bmKPcpN7bm-h0mekjkUVypU
+            this.url = 'https://www.googleapis.com/youtube/v3/videos?part=snippet&id=' + this.youtube_id + '&key=' + encodeURIComponent(UAMS.YouTube.apiKey());
         }
     },
 
