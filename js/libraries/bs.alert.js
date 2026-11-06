@@ -25,7 +25,8 @@
       selector = selector && selector.replace(/.*(?=#[^\s]*$)/, '') //strip for ie7
     }
 
-    $parent = $(selector)
+    // Only an id selector is looked up; anything else falls back to the alert itself.
+    $parent = $(selector && /^#[\w-]+$/.test(selector) ? selector : [])
 
     e && e.preventDefault()
 
