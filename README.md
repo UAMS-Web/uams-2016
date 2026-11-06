@@ -73,6 +73,8 @@ composer test:integration
 
 `composer lint:floor` parses every shipped PHP file with the PHP it runs under. Run it under PHP 8.2 to prove none uses newer syntax.
 
+The code-quality tools run from Composer: `composer test:pint` (formatting, Pint with the `laravel` preset), `composer test:refactor` (Rector, the gating profile) and `composer stan` (PHPStan with the WordPress extension; the level in `phpstan.neon.dist` is the gate). `composer pint` and `composer refactor` apply their changes. Once per clone, tell `git blame` to skip the formatting commit: `git config blame.ignoreRevsFile .git-blame-ignore-revs`.
+
 A coverage run needs a coverage driver such as PCOV: `php -d pcov.enabled=1 vendor/bin/pest --coverage`. It measures the theme's own PHP and leaves out the vendored and unused trees (see `phpunit.xml`).
 
 ## Bugs and feature requests ##
