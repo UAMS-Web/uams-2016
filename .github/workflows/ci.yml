@@ -21,14 +21,13 @@ name: CI
 # `.github/actions/setup/action.yml`. Its PHP is 8.4, the development PHP pinned in
 # `config.platform.php`; the supported floor (8.2) is checked by `lint-floor`.
 #
-# Pull requests to `dev`, `staging` and `master` are the branches this theme promotes through,
-# so the workflow runs for a pull request to any of them. Every pull request is covered, and a
-# push runs it on the three promotion branches.
+# This theme uses a single-branch flow: an issue branch opens one pull request to `master`.
+# The workflow runs for every pull request, and for a push to `master`.
 
 on:
   pull_request:
   push:
-    branches: [dev, staging, master]
+    branches: [master]
   # Lets the workflow be run on demand against a branch.
   workflow_dispatch:
 
