@@ -1,0 +1,118 @@
+<?php
+
+/**
+ * Stand-ins and helpers for the Unit suite, which runs without WordPress.
+ *
+ * WP_Post and WP_Error are the two core classes the theme tests with `instanceof`; the stand-ins
+ * carry only the properties the theme reads. The helpers stub the escaping functions with
+ * visible markers, so a test can tell which escaper a value went through.
+ */
+
+declare(strict_types=1);
+
+use Brain\Monkey\Functions;
+
+if (! class_exists('WP_Post')) {
+    class WP_Post
+    {
+        public int $ID = 0;
+
+        public int $post_parent = 0;
+
+        public string $post_title = '';
+    }
+}
+
+if (! class_exists('WP_Error')) {
+    class WP_Error {}
+}
+
+/**
+ * Build a post stand-in with the given properties.
+ *
+ * @param  array<string, mixed>  $properties
+ */
+function wpPost(array $properties = []): WP_Post
+{
+    $post = new WP_Post;
+
+    foreach ($properties as $name => $value) {
+        $post->{$name} = $value;
+    }
+
+    return $post;
+}
+
+/**
+ * Stub the escaping and sanitizing functions so each wraps its input in a marker:
+ * esc_attr as `A{...}`, esc_html as `H{...}`, esc_url as `U{...}`, sanitize_html_class as `S{...}`.
+ */
+function stubEscaping(): void
+{
+    Functions\when('esc_attr')->alias(static fn (string $value): string => 'A{'.$value.'}');
+    Functions\when('esc_html')->alias(static fn (string $value): string => 'H{'.$value.'}');
+    Functions\when('esc_url')->alias(static fn (string $value): string => 'U{'.$value.'}');
+    Functions\when('sanitize_html_class')->alias(static fn (string $value): string => 'S{'.$value.'}');
+    Functions\when('home_url')->alias(static fn (string $path = ''): string => 'https://site.test'.$path);
+    Functions\when('site_url')->alias(static fn (string $path = ''): string => 'https://site.test'.$path);
+    Functions\when('is_wp_error')->alias(static fn (mixed $value): bool => $value instanceof WP_Error);
+}
+
+/**
+ * Define every conditional tag the theme's template functions ask, all false unless overridden,
+ * so one test states only the conditions it depends on.
+ *
+ * @param  array<string, bool>  $overrides
+ */
+function wpConditionals(array $overrides = []): void
+{
+    $conditionals = array_merge([
+        'is_404' => false,
+        'is_archive' => false,
+        'is_search' => false,
+        'is_front_page' => false,
+        'is_home' => false,
+        'is_author' => false,
+        'is_category' => false,
+        'is_tax' => false,
+        'is_single' => false,
+        'is_page' => false,
+        'is_post_type_archive' => false,
+        'has_category' => false,
+    ], $overrides);
+
+    foreach ($conditionals as $name => $value) {
+        Functions\when($name)->justReturn($value);
+    }
+}
+
+/**
+ * Report which of the named classes exist, whatever the autoloader knows.
+ *
+ * class_exists() is redefinable through patchwork.json. Names not listed fall through to the real
+ * function, so the autoloader and Mockery are unaffected.
+ *
+ * @param  array<string, bool>  $classes  Class name => whether class_exists() reports it.
+ */
+function stubClassExists(array $classes): void
+{
+    Functions\when('class_exists')->alias(
+        static fn (string $class, bool $autoload = true): bool => $classes[$class] ?? \Patchwork\relay(func_get_args())
+    );
+}
+
+/**
+ * Run a template function that echoes, and return what it printed.
+ */
+function render(callable $template): string
+{
+    ob_start();
+
+    try {
+        $template();
+
+        return (string) ob_get_contents();
+    } finally {
+        ob_end_clean();
+    }
+}

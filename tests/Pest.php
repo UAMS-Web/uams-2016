@@ -26,6 +26,12 @@ use function Brain\Monkey\tearDown;
 uses()
     ->beforeEach(function (): void {
         setUp();
+
+        // Include, not require_once: every function in the file is declared behind a
+        // function_exists() guard, so each test runs the guards again. A mutant that breaks a
+        // guard then fails the tests that call the function it no longer defines, which loading
+        // the file once in the bootstrap (before coverage starts) could not show.
+        include __DIR__.'/../inc/template-functions.php';
     })
     ->afterEach(function (): void {
         $this->addToAssertionCount(Mockery::getContainer()->mockery_getExpectationCount());
