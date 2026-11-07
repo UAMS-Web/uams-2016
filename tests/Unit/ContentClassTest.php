@@ -17,9 +17,9 @@
 
 declare(strict_types=1);
 
-use Brain\Monkey\Filters;
 use Brain\Monkey\Functions;
 
+use function Brain\Monkey\Filters\expectApplied;
 use function Brain\Monkey\Functions\when;
 
 beforeEach(function (): void {
@@ -112,7 +112,7 @@ it('uses the full-width column without a sidebar', function (): void {
 
 it('applies the content class filter with the classes and the requested class', function (): void {
     wpConditionals(['is_404' => true]);
-    Filters\expectApplied('uams_content_class')
+    expectApplied('uams_content_class')
         ->once()
         ->with(['A{uams-content}', 'A{col-md-12}'], 'extra')
         ->andReturn(['filtered']);
@@ -122,7 +122,7 @@ it('applies the content class filter with the classes and the requested class', 
 
 it('passes an empty class to the filter by default', function (): void {
     wpConditionals(['is_404' => true]);
-    Filters\expectApplied('uams_content_class')
+    expectApplied('uams_content_class')
         ->once()
         ->with(Mockery::type('array'), '');
 
@@ -137,7 +137,7 @@ it('echoes the class attribute with the escaped, space-separated classes', funct
 
 it('passes the requested class through to the filter when echoing', function (): void {
     wpConditionals(['is_404' => true]);
-    Filters\expectApplied('uams_content_class')
+    expectApplied('uams_content_class')
         ->once()
         ->with(Mockery::type('array'), 'wide')
         ->andReturn(['one', 'two']);

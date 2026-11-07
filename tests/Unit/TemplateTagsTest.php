@@ -130,7 +130,7 @@ describe('uams_get_permalink', function (): void {
     });
 
     it('returns an empty string when the post cannot be resolved', function (): void {
-        when('get_post')->justReturn(null);
+        when('get_post')->justReturn();
         Functions\expect('get_post_meta')->never();
         Functions\expect('get_permalink')->never();
 

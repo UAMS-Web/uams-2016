@@ -207,7 +207,7 @@ describe('uams_list_pages', function (): void {
     it('treats a parent that is not a post as no parent', function (): void {
         sidebarPage(['post' => wpPost(['ID' => 5, 'post_parent' => 3]), 'stubLists' => false]);
         when('get_children')->justReturn([]);
-        when('get_post')->justReturn(null);
+        when('get_post')->justReturn();
         Functions\expect('get_pages')
             ->once()
             ->with(['parent' => 0, 'post_type' => 'page', 'exclude' => []])
@@ -464,6 +464,7 @@ describe('uams_list_mobile_pages', function (): void {
         wpConditionals(['is_front_page' => true]);
         when('get_nav_menu_locations')->justReturn(['white-bar' => 9]);
         when('wp_get_nav_menu_object')->justReturn(false);
+
         Functions\expect('wp_get_nav_menu_items')->never();
 
         expect(uams_list_mobile_pages())->toBe('');

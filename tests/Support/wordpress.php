@@ -4,7 +4,7 @@
  * Stand-ins and helpers for the Unit suite, which runs without WordPress.
  *
  * WP_Post and WP_Error are the two core classes the theme tests with `instanceof`; the stand-ins
- * carry only the properties the theme reads. The helpers stub the escaping functions with
+ * carry only the properties the theme reads, untyped as in WordPress. The helpers stub the escaping functions with
  * visible markers, so a test can tell which escaper a value went through.
  */
 
@@ -12,14 +12,17 @@ declare(strict_types=1);
 
 use Brain\Monkey\Functions;
 
+use function Brain\Monkey\Functions\when;
+use function Patchwork\relay;
+
 if (! class_exists('WP_Post')) {
     class WP_Post
     {
-        public int $ID = 0;
+        public $ID = 0;
 
-        public int $post_parent = 0;
+        public $post_parent = 0;
 
-        public string $post_title = '';
+        public $post_title = '';
     }
 }
 
@@ -49,13 +52,13 @@ function wpPost(array $properties = []): WP_Post
  */
 function stubEscaping(): void
 {
-    Functions\when('esc_attr')->alias(static fn (string $value): string => 'A{'.$value.'}');
-    Functions\when('esc_html')->alias(static fn (string $value): string => 'H{'.$value.'}');
-    Functions\when('esc_url')->alias(static fn (string $value): string => 'U{'.$value.'}');
-    Functions\when('sanitize_html_class')->alias(static fn (string $value): string => 'S{'.$value.'}');
-    Functions\when('home_url')->alias(static fn (string $path = ''): string => 'https://site.test'.$path);
-    Functions\when('site_url')->alias(static fn (string $path = ''): string => 'https://site.test'.$path);
-    Functions\when('is_wp_error')->alias(static fn (mixed $value): bool => $value instanceof WP_Error);
+    when('esc_attr')->alias(static fn (string $value): string => 'A{'.$value.'}');
+    when('esc_html')->alias(static fn (string $value): string => 'H{'.$value.'}');
+    when('esc_url')->alias(static fn (string $value): string => 'U{'.$value.'}');
+    when('sanitize_html_class')->alias(static fn (string $value): string => 'S{'.$value.'}');
+    when('home_url')->alias(static fn (string $path = ''): string => 'https://site.test'.$path);
+    when('site_url')->alias(static fn (string $path = ''): string => 'https://site.test'.$path);
+    when('is_wp_error')->alias(static fn (mixed $value): bool => $value instanceof WP_Error);
 }
 
 /**
@@ -82,7 +85,7 @@ function wpConditionals(array $overrides = []): void
     ], $overrides);
 
     foreach ($conditionals as $name => $value) {
-        Functions\when($name)->justReturn($value);
+        when($name)->justReturn($value);
     }
 }
 
@@ -96,8 +99,8 @@ function wpConditionals(array $overrides = []): void
  */
 function stubClassExists(array $classes): void
 {
-    Functions\when('class_exists')->alias(
-        static fn (string $class, bool $autoload = true): bool => $classes[$class] ?? \Patchwork\relay(func_get_args())
+    when('class_exists')->alias(
+        static fn (string $class, bool $autoload = true): bool => $classes[$class] ?? relay(func_get_args())
     );
 }
 

@@ -227,7 +227,7 @@ describe('a category', function (): void {
         expect(get_uams_breadcrumbs())->toBe(trail(''));
     })->with([
         'no category' => [null],
-        'an error' => [fn () => new WP_Error],
+        'an error' => [fn (): WP_Error => new WP_Error],
     ]);
 });
 
@@ -258,9 +258,9 @@ describe('a taxonomy archive', function (): void {
 
         expect(get_uams_breadcrumbs())->toBe(trail(''));
     })->with([
-        'no taxonomy' => [fn () => (object) ['name' => 'Flu'], fn () => false],
-        'no term' => [fn () => false, fn () => (object) ['labels' => (object) ['name' => 'Topics']]],
-        'an error term' => [fn () => new WP_Error, fn () => (object) ['labels' => (object) ['name' => 'Topics']]],
+        'no taxonomy' => [fn (): stdClass => (object) ['name' => 'Flu'], fn (): false => false],
+        'no term' => [fn (): false => false, fn (): stdClass => (object) ['labels' => (object) ['name' => 'Topics']]],
+        'an error term' => [fn (): WP_Error => new WP_Error, fn (): stdClass => (object) ['labels' => (object) ['name' => 'Topics']]],
     ]);
 
     it('prints only the term name on a post type archive', function (): void {
@@ -276,8 +276,8 @@ describe('a taxonomy archive', function (): void {
 
         expect(get_uams_breadcrumbs())->toBe(trail(''));
     })->with([
-        'no term' => [fn () => false],
-        'an error term' => [fn () => new WP_Error],
+        'no term' => [fn (): false => false],
+        'an error term' => [fn (): WP_Error => new WP_Error],
     ]);
 });
 
