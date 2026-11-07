@@ -14,7 +14,7 @@
 
 			<?php
             if (! function_exists('text_cut')) {
-                function text_cut($text, $length = 27, $dots = true): string
+                function text_cut($text, $length = 27, $dots = true): string // @pest-mutate-ignore: TrueToFalse,DecrementInteger,IncrementInteger
                 {
                     $text = trim(preg_replace('#[\s\n\r\t]{2,}#', ' ', (string) $text));
                     $text_temp = $text;

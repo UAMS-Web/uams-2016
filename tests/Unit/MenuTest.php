@@ -23,7 +23,7 @@ use Brain\Monkey\Functions;
 
 use function Brain\Monkey\Functions\when;
 
-require_once __DIR__.'/../Support/dropdowns.php';
+require_once __DIR__.'/../Support/theme-classes.php';
 
 const HOME_LINK = '<a href="U{https://site.test/}" title="Home" class="homelink">Home</a>';
 const MENU_TOGGLE = '<button class="uams-mobile-menu-toggle">Menu</button>';

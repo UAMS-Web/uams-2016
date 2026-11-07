@@ -21,3 +21,5 @@ if (! defined('ABSPATH')) {
 }
 
 require_once __DIR__.'/Support/wordpress.php';
+
+require_once __DIR__.'/Support/templates.php';

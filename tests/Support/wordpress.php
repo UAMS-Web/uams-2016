@@ -119,3 +119,58 @@ function render(callable $template): string
         ob_end_clean();
     }
 }
+
+/**
+ * Define template tags that echo a marker, as `the_title()` and its kind do: name => the text to
+ * echo, or a closure that receives the call's arguments and returns it.
+ *
+ * @param  array<string, string|Closure>  $tags
+ */
+function stubTags(array $tags): void
+{
+    foreach ($tags as $name => $text) {
+        when($name)->alias(static function (mixed ...$arguments) use ($text): void {
+            echo $text instanceof Closure ? $text(...$arguments) : $text;
+        });
+    }
+}
+
+/**
+ * Define WordPress functions that return a value: name => the value, or a closure to alias.
+ *
+ * @param  array<string, mixed>  $values
+ */
+function stubValues(array $values): void
+{
+    foreach ($values as $name => $value) {
+        $value instanceof Closure ? when($name)->alias($value) : when($name)->justReturn($value);
+    }
+}
+
+/**
+ * Include a template from the theme root and return what it printed, runs of whitespace collapsed
+ * to one space and the ends trimmed, so a test compares markup and not indentation.
+ */
+function renderTemplate(string $file): string
+{
+    $output = render(static function () use ($file): void {
+        include dirname(__DIR__, 2).'/'.$file;
+    });
+
+    return trim((string) preg_replace('/\s+/', ' ', $output));
+}
+
+/**
+ * Report which of the named functions exist, whatever has been defined.
+ *
+ * function_exists() is redefinable through patchwork.json. Names not listed fall through to the
+ * real function.
+ *
+ * @param  array<string, bool>  $functions  Function name => whether function_exists() reports it.
+ */
+function stubFunctionExists(array $functions): void
+{
+    when('function_exists')->alias(
+        static fn (string $function): bool => $functions[$function] ?? relay(func_get_args())
+    );
+}
