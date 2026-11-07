@@ -7,7 +7,9 @@
  * @return null Return early if not a singular entry.
  */
 if (function_exists('get_field') && ($url = get_field('seo_custom_redirect_url'))) {
-    wp_redirect(esc_url_raw($url), 301);
+    // Run in a child process because `exit;` ends the request (HeaderRedirectTest pins the status,
+    // the sanitizing and the stop), so mutation testing reports these mutants uncovered.
+    wp_redirect(esc_url_raw($url), 301); // @pest-mutate-ignore: DecrementInteger,IncrementInteger,RemoveFunctionCall
     exit;
 }
 

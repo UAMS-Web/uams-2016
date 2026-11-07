@@ -271,14 +271,16 @@ jobs:
       - name: Run mutation testing
         env:
           FILE: ${{ matrix.file }}
-        run: vendor/bin/pest --mutate --parallel --min=100 --path="$FILE" 2>&1 | tee mutate.log
+        run: vendor/bin/pest --mutate --parallel --min=100 --ignore-min-score-on-zero-mutations --path="$FILE" 2>&1 | tee mutate.log
 
-      # Fails on a log that holds no mutants, and prints the tally line either way.
+      # Prints the tally. A file that holds no code a mutator changes (a template of markup and
+      # a comment, say) creates no mutants, which Pest reports as "No mutations created" and
+      # which passes here; a log with neither mutants nor that line is a setup failure.
       - name: Check the mutation run
         if: always()
         run: |
-          sed 's/.\[[0-9;]*m//g' mutate.log | grep -E 'Mutations for|Score:|Mutations:' || true
-          sed 's/.\[[0-9;]*m//g' mutate.log | grep -Eq '(^|[^0-9])[1-9][0-9]* Mutations for [1-9][0-9]* Files? created' || { echo "::error::The log holds no mutants"; exit 1; }
+          sed 's/.\[[0-9;]*m//g' mutate.log | grep -E 'Mutations for|Score:|Mutations:|No mutations created' || true
+          sed 's/.\[[0-9;]*m//g' mutate.log | grep -Eq '(^|[^0-9])[1-9][0-9]* Mutations for [1-9][0-9]* Files? created|No mutations created' || { echo "::error::The log holds no mutation result"; exit 1; }
 
       - uses: actions/upload-artifact@v7
         if: always()
