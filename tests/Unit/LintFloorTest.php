@@ -20,7 +20,10 @@ declare(strict_types=1);
  */
 function lintFixture(array $files): string
 {
-    $root = sys_get_temp_dir().'/lint-floor-'.bin2hex(random_bytes(6));
+    // The script reports paths as the OS resolves them (/private/var on macOS, long names for
+    // 8.3 short ones on Windows), so the fixture root is resolved the same way.
+    $temp = (string) realpath(sys_get_temp_dir());
+    $root = $temp.'/lint-floor-'.bin2hex(random_bytes(6));
     mkdir($root.'/scripts', 0777, true);
     copy(dirname(__DIR__, 2).'/scripts/lint-floor.php', $root.'/scripts/lint-floor.php');
 
