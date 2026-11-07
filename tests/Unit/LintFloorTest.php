@@ -29,6 +29,7 @@ function lintFixture(array $files): string
         if (! is_dir($directory)) {
             mkdir($directory, 0777, true);
         }
+
         file_put_contents($root.'/'.$path, $contents);
     }
 
