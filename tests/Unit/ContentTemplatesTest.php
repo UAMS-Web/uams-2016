@@ -23,8 +23,6 @@
 
 declare(strict_types=1);
 
-use Brain\Monkey\Functions;
-
 beforeEach(function (): void {
     stubEscaping();
 });

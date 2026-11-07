@@ -448,6 +448,7 @@ if (! function_exists('text_cut')) {
             while ($length > 0 && substr($text, $length, 1) !== ' ') {
                 $length--;
             }
+
             $text = substr($text, 0, $length);
         }
 

@@ -33,7 +33,7 @@ describe('content-archive.php', function (): void {
         contentTags();
         wpConditionals($conditions);
         stubValues(array_merge([
-            'get_option' => static fn (string $name): mixed => $name === 'show_byline_on_posts' ? $byline : false,
+            'get_option' => static fn (string $name): mixed => $name === 'show_byline_on_posts' && $byline,
             'has_post_thumbnail' => $thumbnail,
             'uams_get_permalink' => '/post-7/',
         ], $values));
