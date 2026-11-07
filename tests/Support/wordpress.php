@@ -30,6 +30,42 @@ if (! class_exists('WP_Error')) {
     class WP_Error {}
 }
 
+if (! class_exists('WP_Query')) {
+    /**
+     * A query that serves the next batch of posts queued in `$queue`, one batch per query made.
+     * The post the loop is on is in `$current`, for the template tags that read it.
+     */
+    class WP_Query
+    {
+        /** @var list<list<array<string, mixed>>> */
+        public static $queue = [];
+
+        /** @var list<array<string, mixed>> */
+        public static $made = [];
+
+        /** @var array<string, mixed> */
+        public static $current = [];
+
+        public $posts = [];
+
+        public function __construct($args = [])
+        {
+            self::$made[] = $args;
+            $this->posts = array_shift(self::$queue) ?? [];
+        }
+
+        public function have_posts(): bool
+        {
+            return $this->posts !== [];
+        }
+
+        public function the_post(): void
+        {
+            self::$current = array_shift($this->posts);
+        }
+    }
+}
+
 /**
  * Build a post stand-in with the given properties.
  *
