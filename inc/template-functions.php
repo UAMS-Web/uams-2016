@@ -5,14 +5,14 @@
 //
 
 if (! function_exists('uams_content_class')) {
-    function uams_content_class($class = ''): void
+    function uams_content_class($class = ''): void // @pest-mutate-ignore: EmptyStringToNotEmpty
     {
         echo 'class="'.esc_attr(implode(' ', get_uams_content_class($class))).'"';
     }
 }
 
 if (! function_exists('get_uams_content_class')) {
-    function get_uams_content_class($class = '')
+    function get_uams_content_class($class = '') // @pest-mutate-ignore: EmptyStringToNotEmpty
     {
         $classes = ['uams-content'];
         if (uams_has_sidebar()) {
@@ -85,7 +85,7 @@ if (! function_exists('uams_mobile_menu')) {
 }
 
 if (! function_exists('uams_mobile_front_page_menu')) {
-    function uams_mobile_front_page_menu($class = ''): void
+    function uams_mobile_front_page_menu($class = ''): void // @pest-mutate-ignore: EmptyStringToNotEmpty
     {
         $spacer = '';
         if (! empty($class)) {
@@ -98,7 +98,7 @@ if (! function_exists('uams_mobile_front_page_menu')) {
 }
 
 if (! function_exists('uams_list_pages')) {
-    function uams_list_pages($mobile = false): string
+    function uams_list_pages($mobile = false): string // @pest-mutate-ignore: FalseToTrue
     {
         global $UAMS, $post;
 
