@@ -1,12 +1,13 @@
 <?php
 
 /**
- * The plain page templates, run with WordPress mocked: template-no-sidebar.php, template-blank.php
- * and template-no-title.php.
+ * The plain page templates, run with WordPress mocked: template-no-sidebar.php, template-blank.php,
+ * template-no-title.php and template-no-hero.php.
  *
  * @see templates/template-no-sidebar.php
  * @see templates/template-blank.php
  * @see templates/template-no-title.php
+ * @see templates/template-no-hero.php
  */
 
 declare(strict_types=1);
@@ -174,6 +175,54 @@ describe('template-no-title.php', function (): void {
         plainEnv(commentsOpen: $open, commentCount: $count);
 
         expect(str_contains(renderTemplate('templates/template-no-title.php'), '[comments]'))->toBe($loaded);
+    })->with([
+        'open, none yet' => [true, 0, true],
+        'closed, with comments' => [false, 3, true],
+        'closed, none' => [false, 0, false],
+    ]);
+});
+
+describe('template-no-hero.php', function (): void {
+    it('prints the title banner, breadcrumbs, mobile sidebar, each post and the sidebar', function (): void {
+        plainEnv(posts: 2);
+
+        expect(renderTemplate('templates/template-no-hero.php'))->toBe(
+            '[header] <div class="uams-hero-image hero-blank"> <h1 class="container uams-site-title-blank">[title]</h1> </div>'
+            .' <div class="container uams-body"> <div class="row"> <div class="col-md-8 uams-content" role="main"> [part:breadcrumbs]'
+            .' <div id="mobile-sidebar"> <button id="mobile-sidebar-menu" aria-hidden="true" tabindex="1">'
+            .' <div aria-hidden="true" id="ham"> <span></span> <span></span> <span></span> <span></span> </div>'
+            .' <div id="mobile-sidebar-title" class="page_item"> H{About <us>} </div> </button>'
+            .' <div id="mobile-sidebar-links" aria-hidden="true">[sidebar-menu]</div> </div>'
+            .' <div id="main_content" class="uams-body-copy" tabindex="-1"> [post][content][post][content] </div> </div>'
+            .' <div id="sidebar"> [sidebar] </div> </div> </div> [footer]'
+        );
+    });
+
+    it('drops the sidebar and widens the column when the post turns the sidebar off', function (): void {
+        plainEnv(['sidebar' => 'on']);
+
+        expect(renderTemplate('templates/template-no-hero.php'))->toContain('<div class="col-md-12 uams-content" role="main">')
+            ->and(renderTemplate('templates/template-no-hero.php'))->not->toContain('[sidebar]');
+    });
+
+    it('hides the breadcrumbs only when the post turns them on', function (string $value, bool $shown): void {
+        plainEnv(['breadcrumb' => $value]);
+
+        expect(str_contains(renderTemplate('templates/template-no-hero.php'), '[part:breadcrumbs]'))->toBe($shown);
+    })->with([
+        'unset' => ['', true],
+        'on' => ['on', false],
+        'any other value' => ['off', true],
+    ]);
+
+    it('asks for the sidebar and breadcrumb settings of the current post', function (): void {
+        expect(metaLookups('templates/template-no-hero.php'))->toBe([[7, 'sidebar', true], [7, 'breadcrumb', true]]);
+    });
+
+    it('loads the comments template when comments are open or the post has comments', function (bool $open, int $count, bool $loaded): void {
+        plainEnv(commentsOpen: $open, commentCount: $count);
+
+        expect(str_contains(renderTemplate('templates/template-no-hero.php'), '[comments]'))->toBe($loaded);
     })->with([
         'open, none yet' => [true, 0, true],
         'closed, with comments' => [false, 3, true],
