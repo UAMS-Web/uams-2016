@@ -11,22 +11,6 @@ declare(strict_types=1);
 
 require_once __DIR__.'/../Support/theme-classes.php';
 
-/**
- * Stub the theme chrome both templates share: each tag prints a bracketed marker, so the output
- * shows what was called, with which arguments, and in what order.
- */
-function chromeMarkers(): void
-{
-    stubTags([
-        'get_header' => '[header]',
-        'get_footer' => '[footer]',
-        'get_sidebar' => '[sidebar]',
-        'get_search_form' => '[search]',
-        'uams_content_class' => 'class="content"',
-        'get_template_part' => static fn (string ...$parts): string => '[part:'.implode(',', $parts).']',
-    ]);
-}
-
 describe('404.php', function (): void {
     it('prints the page chrome around Reddie and the search form', function (): void {
         chromeMarkers();

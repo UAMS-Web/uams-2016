@@ -150,10 +150,15 @@ function stubValues(array $values): void
 /**
  * Include a template from the theme root and return what it printed, runs of whitespace collapsed
  * to one space and the ends trimmed, so a test compares markup and not indentation.
+ *
+ * @param  array<string, mixed>  $variables  Variables in scope for the template, as WordPress's
+ *                                           load_template() puts `$post` and its kind in scope.
  */
-function renderTemplate(string $file): string
+function renderTemplate(string $file, array $variables = []): string
 {
-    $output = render(static function () use ($file): void {
+    $output = render(static function () use ($file, $variables): void {
+        extract($variables);
+
         include dirname(__DIR__, 2).'/'.$file;
     });
 

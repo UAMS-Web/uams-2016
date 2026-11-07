@@ -31,3 +31,31 @@ function contentTags(array $extra = []): void
         'esc_attr_e' => static fn (string $text, string $domain): string => "A{{$text}|{$domain}}",
     ], $extra));
 }
+
+/**
+ * A have_posts() stand-in that is true for the given number of passes and then false.
+ *
+ * @return Closure(): bool
+ */
+function loopOf(int $passes): Closure
+{
+    return static function () use (&$passes): bool {
+        return $passes-- > 0;
+    };
+}
+
+/**
+ * Stub the theme chrome the page templates share: each tag prints a bracketed marker, so the output
+ * shows what was called, with which arguments, and in what order.
+ */
+function chromeMarkers(): void
+{
+    stubTags([
+        'get_header' => '[header]',
+        'get_footer' => '[footer]',
+        'get_sidebar' => '[sidebar]',
+        'get_search_form' => '[search]',
+        'uams_content_class' => 'class="content"',
+        'get_template_part' => static fn (mixed ...$parts): string => '[part:'.implode(',', array_map(strval(...), $parts)).']',
+    ]);
+}
