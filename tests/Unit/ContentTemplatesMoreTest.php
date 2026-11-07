@@ -232,11 +232,6 @@ describe('content-page.php', function (): void {
     });
 
     describe('text_cut', function (): void {
-        beforeEach(function (): void {
-            pageContentEnv('x');
-            renderTemplate('content-page.php');
-        });
-
         it('collapses runs of whitespace to one space and trims', function (): void {
             expect(text_cut("  A \t\n  B  ", 27, true))->toBe('A B');
         });
