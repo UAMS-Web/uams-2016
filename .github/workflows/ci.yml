@@ -3,9 +3,9 @@ name: CI
 # Adapted from .claude/skills/code-quality/templates/ci.yml in UAMS-Web/uams-claude-skills.
 # This repository is public, so Actions minutes are free and no job is gated on RUN_REMOTE_CI.
 #
-# Dropped from the template, with no counterpart here: the mutation jobs (the theme has no
-# mutation suite), and the Pest skip-baseline, slowest-class and global-symbol checks (the
-# pest-testing skill is not synced into this repository).
+# Dropped from the template, with no counterpart here: the pull-request mutation jobs (the
+# `mutate` job below runs on demand only), and the Pest skip-baseline, slowest-class and
+# global-symbol checks (the pest-testing skill is not synced into this repository).
 #
 # Added for this theme: `lint-floor` parses every shipped PHP file under PHP 8.2, the supported
 # floor, and `build` installs the Node packages from package-lock.json and runs the Grunt
@@ -202,6 +202,91 @@ jobs:
       # The Unit suite only: the Integration suite needs WordPress and a test database, which
       # this workflow does not provide.
       - run: composer test:unit
+
+  # Run on demand only (Actions > CI > Run workflow): the closing mutation measurement for the
+  # files #102 brings to full coverage. Not part of the pull-request gate, so it is left out of
+  # the `needs:` list of `CI` on purpose (.github/aggregate-needs-allow.json records why).
+  # One matrix leg per file, so each file's mutant counts are read on their own and no leg has
+  # to fit the whole population inside one job. Ubuntu only: a Windows leg scores mutants the
+  # tests never detect as killed (UAMS-Web/uams-ci-workflows#13).
+  mutate:
+    name: Mutation score (${{ matrix.file }})
+    if: github.event_name == 'workflow_dispatch'
+    # Legs: Linux only. PCOV on Linux is the measurement that closes the coverage tickets.
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    defaults:
+      run:
+        shell: bash
+    strategy:
+      fail-fast: false
+      max-parallel: 6
+      matrix:
+        file:
+          - 404.php
+          - application.php
+          - archive.php
+          - breadcrumbs.php
+          - comments.php
+          - content.php
+          - content-archive.php
+          - content-image.php
+          - content-link.php
+          - content-page.php
+          - content-pdf.php
+          - footer.php
+          - functions.php
+          - header.php
+          - header-image.php
+          - image.php
+          - inc/template-functions.php
+          - index.php
+          - menu-mobile.php
+          - page.php
+          - rector.php
+          - rector-sweep.php
+          - scripts/lint-floor.php
+          - search.php
+          - searchform.php
+          - sidebar.php
+          - templates/template-big-hero.php
+          - templates/template-blank.php
+          - templates/template-home.php
+          - templates/template-no-hero.php
+          - templates/template-no-sidebar.php
+          - templates/template-no-title.php
+          - templates/template-sitemap.php
+          - templates/template-small-hero.php
+          - thinstrip.php
+          - woocommerce.php
+    steps:
+      - uses: actions/checkout@v7
+      - uses: ./.github/actions/setup
+        with:
+          coverage: pcov
+
+      # `--min=100` fails the step on any survivor. The run is kept in a log, because a run that
+      # mutated nothing is a setup failure that Pest's exit status may not report. Bash runs
+      # this step with pipefail, so `tee` does not hide Pest's status.
+      - name: Run mutation testing
+        env:
+          FILE: ${{ matrix.file }}
+        run: vendor/bin/pest --mutate --parallel --min=100 --ignore-min-score-on-zero-mutations --path="$FILE" 2>&1 | tee mutate.log
+
+      # Prints the tally. A file that holds no code a mutator changes (a template of markup and
+      # a comment, say) creates no mutants, which Pest reports as "No mutations created" and
+      # which passes here; a log with neither mutants nor that line is a setup failure.
+      - name: Check the mutation run
+        if: always()
+        run: |
+          sed 's/.\[[0-9;]*m//g' mutate.log | grep -E 'Mutations for|Score:|Mutations:|No mutations created' || true
+          sed 's/.\[[0-9;]*m//g' mutate.log | grep -Eq '(^|[^0-9])[1-9][0-9]* Mutations for [1-9][0-9]* Files? created|No mutations created' || { echo "::error::The log holds no mutation result"; exit 1; }
+
+      - uses: actions/upload-artifact@v7
+        if: always()
+        with:
+          name: mutate-${{ strategy.job-index }}
+          path: mutate.log
 
   # The one check a ruleset requires from this workflow. Keep `needs:` listing every other job in the file.
   ci:

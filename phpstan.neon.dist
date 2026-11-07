@@ -48,6 +48,12 @@ parameters:
     # findings are fixed, until `max`.
     level: 0
 
+    # Patchwork's relay(), which tests/Support/wordpress.php calls to fall through to the real
+    # class_exists(). Patchwork is a development dependency loaded by tests/bootstrap.php, not
+    # autoloaded, so PHPStan cannot discover the function without being told where it is.
+    scanFiles:
+        - vendor/antecedent/patchwork/Patchwork.php
+
     # The theme's first-party PHP: the directories, then the files at the root.
     # Not widgets-unused/, the vendored setup/cuztom/ (excluded below) or any
     # compiled asset.

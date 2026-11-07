@@ -1,0 +1,9 @@
+{
+    "blacklist": [
+        "vendor/symfony"
+    ],
+    "redefinable-internals": [
+        "class_exists",
+        "function_exists"
+    ]
+}

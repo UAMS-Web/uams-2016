@@ -39,23 +39,6 @@ $has_sidebar = ($sidebar !== 'on');
             <div id="mobile-sidebar-title" class="page_item">
 
                 <?php
-          if (! function_exists('text_cut')) {
-              function text_cut($text, $length = 27, $dots = true): string
-              {
-                  $text = trim(preg_replace('#[\s\n\r\t]{2,}#', ' ', (string) $text));
-                  $text_temp = $text;
-
-                  if (strlen($text) > $length) {
-                      while ($length > 0 && substr($text, $length, 1) !== ' ') {
-                          $length--;
-                      }
-                      $text = substr($text, 0, $length);
-                  }
-
-                  return $text.(($dots && $text !== '' && strlen($text_temp) > $length) ? '...' : '');
-              }
-          }
-
 echo esc_html(text_cut(get_the_title(), 27, true));
 ?>
 

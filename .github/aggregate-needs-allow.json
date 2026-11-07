@@ -1,0 +1,3 @@
+{
+    "mutate": "run on demand (workflow_dispatch) for the closing mutation measurement; skipped on pull requests, so aggregating it would fail CI"
+}

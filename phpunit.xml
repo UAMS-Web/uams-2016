@@ -18,9 +18,11 @@
         </testsuite>
     </testsuites>
     <!--
-        The population a coverage run measures: the theme's own PHP, 88 files
-        (the 24 at the theme root, setup/, widgets/, templates/ and inc/). The
-        vendored and unused trees are left out.
+        The population a coverage run measures: the theme's own PHP, 90 files
+        (the 26 at the theme root, setup/, widgets/, templates/, inc/ and
+        scripts/), as UAMS-Web/uams-2016#102 defines it. The vendored and unused
+        trees, the vendored TGM Plugin Activation library and the synced agent
+        folders are left out.
     -->
     <source>
         <include>
@@ -36,6 +38,9 @@
             <directory>./widgets-unused</directory>
             <directory>./setup/cuztom</directory>
             <directory>./setup/_cuztom</directory>
+            <file>./setup/class-tgm-plugin-activation.php</file>
+            <directory>./.agents</directory>
+            <directory>./.claude</directory>
         </exclude>
     </source>
 </phpunit>

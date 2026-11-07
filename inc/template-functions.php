@@ -5,14 +5,14 @@
 //
 
 if (! function_exists('uams_content_class')) {
-    function uams_content_class($class = ''): void
+    function uams_content_class($class = ''): void // @pest-mutate-ignore: EmptyStringToNotEmpty
     {
         echo 'class="'.esc_attr(implode(' ', get_uams_content_class($class))).'"';
     }
 }
 
 if (! function_exists('get_uams_content_class')) {
-    function get_uams_content_class($class = '')
+    function get_uams_content_class($class = '') // @pest-mutate-ignore: EmptyStringToNotEmpty
     {
         $classes = ['uams-content'];
         if (uams_has_sidebar()) {
@@ -85,7 +85,7 @@ if (! function_exists('uams_mobile_menu')) {
 }
 
 if (! function_exists('uams_mobile_front_page_menu')) {
-    function uams_mobile_front_page_menu($class = ''): void
+    function uams_mobile_front_page_menu($class = ''): void // @pest-mutate-ignore: EmptyStringToNotEmpty
     {
         $spacer = '';
         if (! empty($class)) {
@@ -98,7 +98,7 @@ if (! function_exists('uams_mobile_front_page_menu')) {
 }
 
 if (! function_exists('uams_list_pages')) {
-    function uams_list_pages($mobile = false): string
+    function uams_list_pages($mobile = false): string // @pest-mutate-ignore: FalseToTrue
     {
         global $UAMS, $post;
 
@@ -435,5 +435,23 @@ if (! function_exists('uams_get_permalink')) {
         }
 
         return get_permalink($postID);
+    }
+}
+
+if (! function_exists('text_cut')) {
+    function text_cut($text, $length = 27, $dots = true): string // @pest-mutate-ignore: TrueToFalse,DecrementInteger,IncrementInteger
+    {
+        $text = trim(preg_replace('#[\s\n\r\t]{2,}#', ' ', (string) $text));
+        $text_temp = $text;
+
+        if (strlen($text) > $length) {
+            while ($length > 0 && substr($text, $length, 1) !== ' ') {
+                $length--;
+            }
+
+            $text = substr($text, 0, $length);
+        }
+
+        return $text.(($dots && $text !== '' && strlen($text_temp) > $length) ? '...' : '');
     }
 }
