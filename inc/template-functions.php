@@ -1,7 +1,7 @@
 <?php
 
 //
-// UAMS Dropdown Menus
+// UAMS Dropdown Menus (throwaway comment-only change)
 //
 
 if (! function_exists('uams_content_class')) {
