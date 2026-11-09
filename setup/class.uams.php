@@ -43,6 +43,7 @@ class UAMS
         require_once $parent.'class.uams-carousel.php';
         require_once $parent.'class.uams-settings.php';
         require_once $parent.'class.uams-page-attributes-meta-box.php';
+        require_once $parent.'class.uams-page-scripts.php';
 
         if (file_exists($parent.'custom-post-types.php')) {
             require_once $parent.'custom-post-types.php';
@@ -87,5 +88,6 @@ class UAMS
         $this->Enclosure = class_exists('UAMS_Enclosure') ? new UAMS_Enclosure : null;
         $this->Carousel = class_exists('UAMS_Carousel') ? new UAMS_Carousel : null;
         $this->Settings = class_exists('UAMS_Settings') ? new UAMS_Settings : null;
+        $this->PageScripts = class_exists('UAMS_Page_Scripts') ? new UAMS_Page_Scripts : null;
     }
 }

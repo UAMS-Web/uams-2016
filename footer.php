@@ -36,6 +36,8 @@
 <?php wp_footer(); ?>
 
 <?php
+    // Raw markup by design: the Custom CSS/JS field holds script and style tags. Only a user with
+    // `unfiltered_html` can write it (setup/class.uams-page-scripts.php).
     $custom_footer_script = get_post_meta(get_the_ID(), 'custom_footer_script', true);
         if (! empty($custom_footer_script)) {
             echo $custom_footer_script;

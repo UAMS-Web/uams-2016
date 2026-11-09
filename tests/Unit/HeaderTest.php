@@ -172,21 +172,28 @@ describe('header.php', function (): void {
         });
     });
 
-    describe('the page scripts and styles', function (): void {
-        it('prints the page JavaScript, CSS and custom header script, unescaped, in that order', function (): void {
-            headerEnv(meta: ['javascript' => '<script>js()</script>', 'css' => '<style>c{}</style>', 'custom_header_script' => '<script>custom()</script>']);
+    describe('the custom header script', function (): void {
+        it('prints the custom header script, unescaped, at the end of the head', function (): void {
+            headerEnv(meta: ['custom_header_script' => '<script>custom()</script>']);
 
-            expect(renderTemplate('header.php'))->toContain('<script>js()</script><style>c{}</style><script>custom()</script> </head>');
+            expect(renderTemplate('header.php'))->toContain('<![endif]--> <script>custom()</script> </head>');
         });
 
-        it('prints nothing for the ones the page does not set', function (): void {
-            headerEnv(meta: ['css' => '<style>c{}</style>']);
+        it('prints nothing when the page has none', function (): void {
+            headerEnv();
+
+            expect(renderTemplate('header.php'))->toContain('<![endif]--> </head>');
+        });
+
+        it('ignores the legacy javascript and css keys', function (): void {
+            // The two keys had no field: a value could only have come from the Custom Fields box.
+            headerEnv(meta: ['javascript' => '<script>js()</script>', 'css' => '<style>c{}</style>']);
             $html = renderTemplate('header.php');
 
-            expect($html)->toContain('<style>c{}</style> </head>')->and($html)->not->toContain('js()');
+            expect($html)->not->toContain('js()')->and($html)->not->toContain('c{}');
         });
 
-        it('asks for the scripts of the current page', function (): void {
+        it('asks for the custom header script of the current page, and nothing else', function (): void {
             $calls = [];
             headerEnv(values: ['get_post_meta' => static function (int $id, string $key, bool $single) use (&$calls): string {
                 $calls[] = [$id, $key, $single];
@@ -196,7 +203,7 @@ describe('header.php', function (): void {
 
             renderTemplate('header.php');
 
-            expect($calls)->toBe([[7, 'javascript', true], [7, 'css', true], [7, 'custom_header_script', true]]);
+            expect($calls)->toBe([[7, 'custom_header_script', true]]);
         });
     });
 

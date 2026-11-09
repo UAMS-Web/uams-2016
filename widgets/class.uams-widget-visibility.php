@@ -6,6 +6,12 @@
 // Forked from the JetPack plugin.
 class UAMS_Widget_Conditions
 {
+    /**
+     * The nonce action of the `widget_conditions_options` AJAX request. The admin script sends
+     * the nonce as `_ajax_nonce`, where check_ajax_referer() reads it.
+     */
+    public const NONCE_ACTION = 'widget-conditions-options';
+
     public function __construct()
     {
         if (is_admin()) {
@@ -23,6 +29,7 @@ class UAMS_Widget_Conditions
     {
         wp_enqueue_style('widget-conditions', get_template_directory_uri().'/assets/admin/css/uams.widget-conditions.css');
         wp_enqueue_script('widget-conditions', get_template_directory_uri().'/assets/admin/js/uams.widget-conditions.js', ['jquery', 'jquery-ui-core'], '20140422', true);
+        wp_localize_script('widget-conditions', 'uamsWidgetConditions', ['nonce' => wp_create_nonce(self::NONCE_ACTION)]);
         wp_enqueue_style('widget-cards', get_template_directory_uri().'/assets/admin/css/uams.widgets-misc.css');
     }
 
@@ -137,6 +144,12 @@ class UAMS_Widget_Conditions
 
     public static function widget_conditions_options(): void
     {
+        // The options list users and terms, so only a user who can manage widgets may ask for it.
+        check_ajax_referer(self::NONCE_ACTION);
+        if (! current_user_can('edit_theme_options')) {
+            wp_die(-1, 403);
+        }
+
         $major = isset($_REQUEST['major']) ? sanitize_text_field($_REQUEST['major']) : '';
         $minor = isset($_REQUEST['minor']) ? sanitize_text_field($_REQUEST['minor']) : '';
         self::widget_conditions_options_echo($major, $minor);

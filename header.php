@@ -74,15 +74,8 @@ $gtmvalue = ! empty($gtm) ? esc_attr($gtm) : 'GTM-NGG4P7F';
         <![endif]-->
 
         <?php
-$page_js = get_post_meta(get_the_ID(), 'javascript', true);
-$page_css = get_post_meta(get_the_ID(), 'css', true);
-if (! empty($page_js)) {
-    echo $page_js;
-}
-if (! empty($page_css)) {
-    echo $page_css;
-}
-
+// Raw markup by design: the Custom CSS/JS field holds script and style tags. Only a user with
+// `unfiltered_html` can write it (setup/class.uams-page-scripts.php).
 $custom_header_script = get_post_meta(get_the_ID(), 'custom_header_script', true);
 if (! empty($custom_header_script)) {
     echo $custom_header_script;

@@ -103,7 +103,8 @@ jQuery( function( $ ) {
 
       var data = {
         action: 'widget_conditions_options',
-        major: $conditionsRuleMajor.val()
+        major: $conditionsRuleMajor.val(),
+        _ajax_nonce: window.uamsWidgetConditions ? window.uamsWidgetConditions.nonce : ''
       };
 
       jQuery.post( ajaxurl, data, function( html ) {
