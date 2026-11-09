@@ -455,3 +455,10 @@ if (! function_exists('text_cut')) {
         return $text.(($dots && $text !== '' && strlen($text_temp) > $length) ? '...' : '');
     }
 }
+
+if (! function_exists('uams_throwaway_probe')) {
+    function uams_throwaway_probe(int $value): int
+    {
+        return $value + 1;
+    }
+}
