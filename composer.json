@@ -38,7 +38,11 @@
         ],
         "test:unit": "pest",
         "test:integration": "@php tests/Integration/vendor/bin/phpunit --configuration tests/Integration/phpunit.xml",
-        "stan": "phpstan analyse --no-progress --memory-limit=2G",
+        "mutate": "pest --mutate --parallel --path=404.php,application.php,archive.php,breadcrumbs.php,comments.php,content.php,content-archive.php,content-image.php,content-link.php,content-page.php,content-pdf.php,footer.php,functions.php,header.php,header-image.php,image.php,inc/template-functions.php,index.php,menu-mobile.php,page.php,rector.php,rector-sweep.php,scripts/lint-floor.php,search.php,searchform.php,sidebar.php,templates/template-big-hero.php,templates/template-blank.php,templates/template-home.php,templates/template-no-hero.php,templates/template-no-sidebar.php,templates/template-no-title.php,templates/template-sitemap.php,templates/template-small-hero.php,thinstrip.php,woocommerce.php",
+        "stan": [
+            "@setup:integration",
+            "phpstan analyse --no-progress --memory-limit=2G"
+        ],
         "refactor": "rector",
         "refactor:sweep": "rector --clear-cache --config=rector-sweep.php",
         "test:refactor": "rector --dry-run",
@@ -52,7 +56,8 @@
         "test": "Run both suites, each in its own process, so the Unit suite never sees WordPress.",
         "test:unit": "Run the Pest suite that needs no WordPress and no database.",
         "test:integration": "Run the PHPUnit 9.6 suite that boots WordPress through wp-phpunit against the test database.",
-        "stan": "Run PHPStan at the level in phpstan.neon.dist.",
+        "mutate": "Run Pest mutation testing over the files brought to the Full coverage bar (the #102 slices so far); pass --path=<files> to narrow it.",
+        "stan": "Install the Integration suite's Composer setup (PHPStan scans its WordPress test classes), then run PHPStan at the level in phpstan.neon.dist.",
         "refactor": "Apply the gating Rector profile.",
         "refactor:sweep": "Apply the sweep Rector profile (run deliberately, review the diff).",
         "test:refactor": "Preview the gating Rector profile; fails when it would change anything.",

@@ -1,15 +1,34 @@
 name: CI
 
-# Adapted from .claude/skills/code-quality/templates/ci.yml in UAMS-Web/uams-claude-skills.
-# This repository is public, so Actions minutes are free and no job is gated on RUN_REMOTE_CI.
+# Calls the shared reusable workflow (`.claude/skills/code-quality/templates/ci-reusable.yml` in
+# UAMS-Web/uams-claude-skills, published as UAMS-Web/uams-ci-workflows) for the repository-wide
+# checks: composer validate, synced files, no-emoji, aggregate-needs, Pint, Rector, PHPStan, the
+# `@pest-mutate-ignore` annotation check, and mutation testing. This repository is public, so
+# Actions minutes are free and no job is gated on RUN_REMOTE_CI.
 #
-# Dropped from the template, with no counterpart here: the pull-request mutation jobs (the
-# `mutate` job below runs on demand only), and the Pest skip-baseline, slowest-class and
-# global-symbol checks (the pest-testing skill is not synced into this repository).
+# Kept as jobs of its own, beside the call:
+# - `lint-floor` parses every shipped PHP file under PHP 8.2, the supported floor.
+# - `build` installs the Node packages from package-lock.json and runs the Grunt build.
+# - `pest` runs the Unit suite on three operating systems. The shared `pest` job runs `composer
+#   test`, which includes the Integration suite, and that needs WordPress and a test database
+#   this workflow does not provide, so the call passes `pest: false`.
+# - `workflow-copies` runs the synced-workflow drift check, which the published workflow's
+#   `synced-files` job does not run yet (UAMS-Web/uams-ci-workflows#17); drop it when that ships.
 #
-# Added for this theme: `lint-floor` parses every shipped PHP file under PHP 8.2, the supported
-# floor, and `build` installs the Node packages from package-lock.json and runs the Grunt
-# build, so a broken build fails the workflow.
+# Inputs to the call:
+# - `linux-only: true`: every shared job runs on ubuntu-latest. The annotation check reports a
+#   trailing `@pest-mutate-ignore` marker where PHP_EOL is CRLF and the files are LF (a Windows
+#   runner under `eol=lf`), and mutation scores are taken on Linux only
+#   (UAMS-Web/uams-ci-workflows#13). The suite itself still runs on all three systems in `pest`.
+# - `mutate-paths` names the files the #102 coverage slices have brought to the Full coverage
+#   bar. Extend it, and the `mutate` script in composer.json, as each slice lands. A pull request
+#   mutates only the changed files among them; a manual run (Actions > CI > Run workflow)
+#   mutates all of them (`composer mutate`).
+# - `mutate-ignore-paths` names the directories the annotation check scans. The script reads
+#   directories only, so a marker in a root-level file (`functions.php`, `header.php`) is not
+#   checked, and `.` would walk into `vendor/`.
+#
+# The shared workflow is pinned to a commit (tag v0.7.0), so it takes a change when this file does.
 #
 # The `CI` job at the end `needs:` every other job, runs `if: always()`, and fails unless every
 # needed job reports `success`. A ruleset requires `CI` (with `Attribution footer` and
@@ -41,26 +60,18 @@ permissions:
   contents: read
 
 jobs:
-  composer-validate:
-    name: Composer validate (composer.lock freshness)
-    # Legs: Linux only. It compares composer.json and composer.lock, which read the same on any platform.
-    runs-on: ubuntu-latest
-    timeout-minutes: 10
-    steps:
-      - uses: actions/checkout@v7
+  checks:
+    # Reported as `checks / <job> (ubuntu-latest)`. Pinned to the commit of tag v0.7.0.
+    uses: UAMS-Web/uams-ci-workflows/.github/workflows/ci.yml@abb784de084db03d78e14880f451c61eaa514212
+    with:
+      linux-only: true
+      pest: false
+      mutate-paths: '*.php templates inc scripts'
+      mutate-ignore-paths: 'inc scripts templates tests'
 
-      - uses: shivammathur/setup-php@v2
-        with:
-          php-version: '8.4'
-          coverage: none
-          tools: composer:v2
-
-      # Fails when composer.json and composer.lock have drifted apart.
-      - run: composer validate --no-check-publish --no-check-all
-
-  synced-files:
-    name: Synced files (no hand-edited rules or skills)
-    # Legs: Linux only. It hashes tracked files against the sync manifest; the repository pins line endings, so the bytes match on every platform.
+  workflow-copies:
+    name: Workflow copies (no drift from the shared templates)
+    # Legs: Linux only. It hashes tracked workflow files against the shared templates with Node alone.
     runs-on: ubuntu-latest
     timeout-minutes: 10
     steps:
@@ -69,43 +80,9 @@ jobs:
       - uses: actions/setup-node@v7
         with:
           node-version: '22'
-
-      # Fails, naming the file, when a synced rule or skill was edited by hand.
-      - run: node .claude/skills/synced-files/scripts/check-synced-files.mjs
 
       # Fails when a workflow copied from a shared template differs from the template.
       - run: node .claude/skills/synced-files/scripts/check-workflow-copies.mjs
-
-  no-emoji:
-    name: No emoji in durable records
-    # Legs: Linux only. It sweeps tracked prose for banned code points with Node alone; no platform branch in the script.
-    runs-on: ubuntu-latest
-    timeout-minutes: 10
-    steps:
-      - uses: actions/checkout@v7
-
-      - uses: actions/setup-node@v7
-        with:
-          node-version: '22'
-
-      # Fails, naming the file, line and code point, when prose carries a banned glyph.
-      - run: node .claude/skills/writing-comments/scripts/check-no-emoji.mjs
-
-  aggregate-needs:
-    name: Aggregate needs
-    # Legs: Linux only. It parses the workflow files and the allow-list with Node alone; no platform branch in the script.
-    runs-on: ubuntu-latest
-    timeout-minutes: 10
-    steps:
-      - uses: actions/checkout@v7
-
-      - uses: actions/setup-node@v7
-        with:
-          node-version: '22'
-
-      # Fails, naming the job, when a job is missing from the `needs:` list of `CI` or a
-      # fixed required name is reported by no job. Allow-list: .github/aggregate-needs-allow.json.
-      - run: node .claude/skills/code-quality/scripts/check-aggregate-needs.mjs
 
   lint-floor:
     name: Floor lint (PHP 8.2)
@@ -147,47 +124,8 @@ jobs:
       # The default task: jshint, concat, uglify, notify, less. A failing task fails the job.
       - run: npx grunt
 
-  pint:
-    name: Pint
-    needs: [composer-validate, synced-files]
-    # Legs: Linux only. Pint formats PHP source and reads the same rules on any platform.
-    runs-on: ubuntu-latest
-    timeout-minutes: 10
-    steps:
-      - uses: actions/checkout@v7
-      - uses: ./.github/actions/setup
-      - run: composer test:pint
-
-  rector:
-    name: Rector
-    needs: [pint]
-    # Legs: Linux only. Rector reads PHP source and its own config; the result does not depend on the platform.
-    runs-on: ubuntu-latest
-    timeout-minutes: 15
-    steps:
-      - uses: actions/checkout@v7
-      - uses: ./.github/actions/setup
-      - run: composer test:refactor
-
-  phpstan:
-    name: PHPStan
-    needs: [pint]
-    # Legs: Linux only. PHPStan analyses PHP source; the result does not depend on the platform.
-    runs-on: ubuntu-latest
-    timeout-minutes: 15
-    steps:
-      - uses: actions/checkout@v7
-      - uses: ./.github/actions/setup
-
-      # phpstan.neon.dist scans WordPress' test classes from the Integration suite's own
-      # Composer install, and stops when the directory is missing.
-      - run: composer setup:integration
-
-      - run: composer stan
-
   pest:
     name: Pest (${{ matrix.os }})
-    needs: [rector, phpstan]
     # Legs: all three. The suite is what runs on the platforms the code ships to: paths, command-line length, BSD tools, case-insensitive file systems.
     runs-on: ${{ matrix.os }}
     strategy:
@@ -203,95 +141,10 @@ jobs:
       # this workflow does not provide.
       - run: composer test:unit
 
-  # Run on demand only (Actions > CI > Run workflow): the closing mutation measurement for the
-  # files #102 brings to full coverage. Not part of the pull-request gate, so it is left out of
-  # the `needs:` list of `CI` on purpose (.github/aggregate-needs-allow.json records why).
-  # One matrix leg per file, so each file's mutant counts are read on their own and no leg has
-  # to fit the whole population inside one job. Ubuntu only: a Windows leg scores mutants the
-  # tests never detect as killed (UAMS-Web/uams-ci-workflows#13).
-  mutate:
-    name: Mutation score (${{ matrix.file }})
-    if: github.event_name == 'workflow_dispatch'
-    # Legs: Linux only. PCOV on Linux is the measurement that closes the coverage tickets.
-    runs-on: ubuntu-latest
-    timeout-minutes: 60
-    defaults:
-      run:
-        shell: bash
-    strategy:
-      fail-fast: false
-      max-parallel: 6
-      matrix:
-        file:
-          - 404.php
-          - application.php
-          - archive.php
-          - breadcrumbs.php
-          - comments.php
-          - content.php
-          - content-archive.php
-          - content-image.php
-          - content-link.php
-          - content-page.php
-          - content-pdf.php
-          - footer.php
-          - functions.php
-          - header.php
-          - header-image.php
-          - image.php
-          - inc/template-functions.php
-          - index.php
-          - menu-mobile.php
-          - page.php
-          - rector.php
-          - rector-sweep.php
-          - scripts/lint-floor.php
-          - search.php
-          - searchform.php
-          - sidebar.php
-          - templates/template-big-hero.php
-          - templates/template-blank.php
-          - templates/template-home.php
-          - templates/template-no-hero.php
-          - templates/template-no-sidebar.php
-          - templates/template-no-title.php
-          - templates/template-sitemap.php
-          - templates/template-small-hero.php
-          - thinstrip.php
-          - woocommerce.php
-    steps:
-      - uses: actions/checkout@v7
-      - uses: ./.github/actions/setup
-        with:
-          coverage: pcov
-
-      # `--min=100` fails the step on any survivor. The run is kept in a log, because a run that
-      # mutated nothing is a setup failure that Pest's exit status may not report. Bash runs
-      # this step with pipefail, so `tee` does not hide Pest's status.
-      - name: Run mutation testing
-        env:
-          FILE: ${{ matrix.file }}
-        run: vendor/bin/pest --mutate --parallel --min=100 --ignore-min-score-on-zero-mutations --path="$FILE" 2>&1 | tee mutate.log
-
-      # Prints the tally. A file that holds no code a mutator changes (a template of markup and
-      # a comment, say) creates no mutants, which Pest reports as "No mutations created" and
-      # which passes here; a log with neither mutants nor that line is a setup failure.
-      - name: Check the mutation run
-        if: always()
-        run: |
-          sed 's/.\[[0-9;]*m//g' mutate.log | grep -E 'Mutations for|Score:|Mutations:|No mutations created' || true
-          sed 's/.\[[0-9;]*m//g' mutate.log | grep -Eq '(^|[^0-9])[1-9][0-9]* Mutations for [1-9][0-9]* Files? created|No mutations created' || { echo "::error::The log holds no mutation result"; exit 1; }
-
-      - uses: actions/upload-artifact@v7
-        if: always()
-        with:
-          name: mutate-${{ strategy.job-index }}
-          path: mutate.log
-
   # The one check a ruleset requires from this workflow. Keep `needs:` listing every other job in the file.
   ci:
     name: CI
-    needs: [composer-validate, synced-files, no-emoji, aggregate-needs, lint-floor, build, pint, rector, phpstan, pest]
+    needs: [checks, workflow-copies, lint-floor, build, pest]
     if: always()
     runs-on: ubuntu-latest
     timeout-minutes: 5
