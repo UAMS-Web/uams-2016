@@ -66,8 +66,8 @@ jobs:
     with:
       linux-only: true
       pest: false
-      mutate-paths: '*.php templates inc scripts'
-      mutate-ignore-paths: 'inc scripts templates tests'
+      mutate-paths: '*.php templates inc scripts setup/class.uams-shortcodes.php setup/class.*-shortcode.php'
+      mutate-ignore-paths: 'inc scripts setup templates tests'
 
   workflow-copies:
     name: Workflow copies (no drift from the shared templates)

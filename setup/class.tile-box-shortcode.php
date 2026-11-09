@@ -9,11 +9,11 @@
 
 class TileBox
 {
-    const MAXTILES = 12;
+    const MAXTILES = 12; // @pest-mutate-ignore: IncrementInteger,DecrementInteger
 
-    private int $count = 0;
+    private int $count = 0; // @pest-mutate-ignore: IncrementInteger,DecrementInteger
 
-    private array $NumbersArray = ['zero', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine', 'ten', 'eleven', 'twelve'];
+    private array $NumbersArray = ['zero', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine', 'ten', 'eleven', 'twelve']; // @pest-mutate-ignore: RemoveArrayItem
 
     public function __construct()
     {

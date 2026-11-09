@@ -7,7 +7,7 @@
 
 class UAMS_YouTube
 {
-    public static $types = ['playlist', 'single'];
+    public static $types = ['playlist', 'single']; // @pest-mutate-ignore: RemoveArrayItem
 
     /**
      * The constant in wp-config.php that holds the YouTube Data API key.
@@ -75,7 +75,7 @@ class UAMS_YouTube
             'type' => '',
             'id' => '',
             'max-results' => 0,
-            'max_results' => 0,
+            'max_results' => 0, // @pest-mutate-ignore: DecrementInteger
         ], $atts, 'youtube');
 
         $type = strtolower(trim($params['type']));

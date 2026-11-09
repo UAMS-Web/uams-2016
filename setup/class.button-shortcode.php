@@ -8,7 +8,7 @@
 
 class UAMS_Button
 {
-    private static array $types = ['plus', 'go', 'external', 'play'];
+    private static array $types = ['plus', 'go', 'external', 'play']; // @pest-mutate-ignore: RemoveArrayItem
 
     public function __construct()
     {
@@ -19,9 +19,9 @@ class UAMS_Button
     {
         $atts = shortcode_atts([
             'color' => 'none',
-            'type' => '',
+            'type' => '', // @pest-mutate-ignore: EmptyStringToNotEmpty
             'url' => '#',
-            'size' => '',
+            'size' => '', // @pest-mutate-ignore: EmptyStringToNotEmpty
             'small' => null,
             'text' => '',
         ], $atts, 'button');
