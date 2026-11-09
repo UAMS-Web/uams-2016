@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Floor lint: parse every PHP file the theme ships.
+ * Floor lint: parses every PHP file the theme ships.
  *
  * Run it under the supported floor (PHP 8.2), not the development PHP, so a file
  * that uses newer syntax fails here before it fails on a site:
