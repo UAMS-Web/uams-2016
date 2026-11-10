@@ -3,12 +3,13 @@
 /**
  * The theme classes under setup/ that the templates and template functions name: the dropdown menu
  * classes (looked up with class_exists()) are the real ones, so the tests of the classes themselves can
- * run in the same process, and the sidebar's id constant is a stand-in.
+ * run in the same process, and WP_Widget is a stand-in.
  */
 
 declare(strict_types=1);
 
 use function Brain\Monkey\Actions\expectAdded;
+use function Brain\Monkey\Functions\when;
 
 if (! class_exists('UamsTestWalkerNavMenu', false)) {
     /**
@@ -105,4 +106,25 @@ function loadSidebarWidgetFile(): bool
     }
 
     return $hooked;
+}
+
+/**
+ * Load a widget file once, recording what its file-scope code registers, and run the `widgets_init`
+ * callback it added so the widget it registers is observed.
+ *
+ * @return list<string>
+ */
+function loadWidgetFile(string $file): array
+{
+    $registered = [];
+    when('register_widget')->alias(static function (string $class) use (&$registered): void {
+        $registered[] = $class;
+    });
+    expectAdded('widgets_init')->once()->whenHappen(static function (callable $callback): void {
+        $callback();
+    });
+
+    require_once dirname(__DIR__, 2).'/widgets/'.$file;
+
+    return $registered;
 }

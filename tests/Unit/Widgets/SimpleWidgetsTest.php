@@ -11,31 +11,9 @@
 
 declare(strict_types=1);
 
-use function Brain\Monkey\Actions\expectAdded;
 use function Brain\Monkey\Functions\when;
 
 require_once __DIR__.'/../../Support/theme-classes.php';
-
-/**
- * Load a widget file once, recording what its file-scope code registers, and run the `widgets_init`
- * callback it added so the widget it registers is observed.
- *
- * @return list<string>
- */
-function loadWidgetFile(string $file): array
-{
-    $registered = [];
-    when('register_widget')->alias(static function (string $class) use (&$registered): void {
-        $registered[] = $class;
-    });
-    expectAdded('widgets_init')->once()->whenHappen(static function (callable $callback): void {
-        $callback();
-    });
-
-    require_once dirname(__DIR__, 3).'/widgets/'.$file;
-
-    return $registered;
-}
 
 beforeEach(function (): void {
     stubEscaping();
