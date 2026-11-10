@@ -4,8 +4,8 @@
  * The menu helpers in inc/template-functions.php, with WordPress mocked: the dropdown navigation,
  * the sidebar and mobile menus, and the page lists behind them.
  *
- * The dropdown classes live in setup/class.uams-dropdowns.php. class_exists() is redefinable
- * (patchwork.json), so a test states whether each class "exists" without loading the real ones.
+ * The dropdown classes live in setup/class.uams-dropdowns.php and are loaded for real. class_exists() is
+ * redefinable (patchwork.json), so a test states whether each class "exists" for the code under test.
  *
  * Mutants not killed here, and why. The defaults of `uams_mobile_front_page_menu($class = '')` and
  * `uams_list_pages($mobile = false)` carry `@pest-mutate-ignore`: coverage attributes no line to a
@@ -100,7 +100,7 @@ describe('uams_dropdowns', function (): void {
 
         render(uams_dropdowns(...));
 
-        expect($received['theme_location'])->toBe('stub-location')
+        expect($received['theme_location'])->toBe('white-bar')
             ->and($received['walker'])->toBe('');
     });
 
@@ -370,7 +370,7 @@ describe('uams_list_front_page_menu_items', function (): void {
         dropdowns(true, false);
         Functions\expect('wp_nav_menu')
             ->once()
-            ->with(Mockery::on(fn (array $args): bool => $args['theme_location'] === 'stub-location'))
+            ->with(Mockery::on(fn (array $args): bool => $args['theme_location'] === 'white-bar'))
             ->andReturn('');
 
         uams_list_front_page_menu_items();
@@ -446,15 +446,15 @@ describe('uams_list_mobile_pages', function (): void {
     it('looks the menu up by the dropdown location', function (): void {
         dropdowns(true, false);
         wpConditionals(['is_front_page' => true]);
-        when('get_nav_menu_locations')->justReturn(['stub-location' => 4, 'white-bar' => 9]);
-        Functions\expect('wp_get_nav_menu_object')->once()->with(4)->andReturn(false);
+        when('get_nav_menu_locations')->justReturn(['white-bar' => 9]);
+        Functions\expect('wp_get_nav_menu_object')->once()->with(9)->andReturn(false);
 
         expect(uams_list_mobile_pages())->toBe('');
     });
 
     it('looks the menu up by the white-bar location without the dropdown class', function (): void {
         wpConditionals(['is_front_page' => true]);
-        when('get_nav_menu_locations')->justReturn(['stub-location' => 4, 'white-bar' => 9]);
+        when('get_nav_menu_locations')->justReturn(['white-bar' => 9]);
         Functions\expect('wp_get_nav_menu_object')->once()->with(9)->andReturn(false);
 
         expect(uams_list_mobile_pages())->toBe('');

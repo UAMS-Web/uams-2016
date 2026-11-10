@@ -43,6 +43,8 @@ if (! function_exists('uams_has_sidebar')) {
     }
 }
 
+// The Unit tests load the real dropdown classes and make class_exists() answer for them, so the
+// `UAMS_Dropdowns::LOCATION` fallbacks below read the same string whichever branch runs.
 if (! function_exists('uams_dropdowns')) {
     function uams_dropdowns(): void
     {
