@@ -98,7 +98,7 @@ class UAMS_Scripts
     {
         foreach ($this->SCRIPTS as $script) {
             if (! empty($script['style_dir'])) {
-                wp_localize_script($script['id'], 'style_dir', $script['style_dir']);
+                wp_add_inline_script($script['id'], 'var style_dir = '.wp_json_encode($script['style_dir']).';', 'before');
             }
         }
     }
