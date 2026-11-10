@@ -5,6 +5,9 @@
  */
 class UAMS_Mimes
 {
+    // Coverage attributes no line to a property default, so its mutants are reported uncovered, not
+    // surviving. 'hooks the upload types with both arguments' asserts the list.
+    // @pest-mutate-ignore: RemoveArrayItem
     public $MIMES = [
         'ai|eps' => 'application/postscript',
     ];

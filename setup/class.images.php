@@ -6,6 +6,9 @@
 
 class UAMS_Images
 {
+    // Coverage attributes no line to a property default, so its mutants are reported uncovered, not
+    // surviving. 'defines the sizes the theme ships' asserts the whole value, so any change to it fails.
+    // @pest-mutate-ignore: RemoveArrayItem,DecrementInteger,IncrementInteger,TrueToFalse,FalseToTrue
     // If `$show` is true it will appear in the image dropdown menu
     public $IMAGE_SIZES = [
         'mug-shot' => [
