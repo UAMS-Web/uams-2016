@@ -6,6 +6,9 @@
 
 class UAMS_Filters
 {
+    // Coverage attributes no line to a property default, so its mutants are reported uncovered, not
+    // surviving. 'strips the template prefix and suffix from page template body classes' fails if either item is removed.
+    // @pest-mutate-ignore: RemoveArrayItem
     private array $REPLACE_TEMPLATE_CLASS = ['templatestemplate-', '-php'];
 
     public function __construct()

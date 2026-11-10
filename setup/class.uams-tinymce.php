@@ -5,6 +5,9 @@
  */
 class UAMS_TinyMCE
 {
+    // Coverage attributes no line to a property default, so its mutants are reported uncovered, not
+    // surviving. 'removes the justify full button from the second row' fails if the group or the button is removed.
+    // @pest-mutate-ignore: RemoveArrayItem
     private array $remove = [
         'theme_advanced_buttons2' => ['justifyfull'],
     ];

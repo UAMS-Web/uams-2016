@@ -9,8 +9,14 @@
  */
 class UAMS_Install_Theme
 {
+    // Coverage attributes no line to a property default, so its mutants are reported uncovered, not
+    // surviving. 'sets the embed size to the content width and a capped height' asserts the width.
+    // @pest-mutate-ignore: IncrementInteger,DecrementInteger
     const WIDTH = 750;
 
+    // Coverage attributes no line to a property default, so its mutants are reported uncovered, not
+    // surviving. 'declares theme support and the default header' asserts the registered headers.
+    // @pest-mutate-ignore: RemoveArrayItem
     public $DEFAULT_HEADERS = [
         'blossoms' => [
             'url' => '%s/assets/headers/uams-pattern-grey.png',
