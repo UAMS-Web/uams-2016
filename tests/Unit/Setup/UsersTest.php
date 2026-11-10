@@ -41,17 +41,17 @@ if (! class_exists('WP_Role')) {
 if (! class_exists('WP_User')) {
     class WP_User
     {
-        /** @var list<string> */
-        public array $roles = [];
+        /** @var list<string>|null */
+        public $roles = [];
     }
 }
 
 /**
  * A user with the given roles.
  *
- * @param  list<string>  $roles
+ * @param  list<string>|null  $roles
  */
-function userWithRoles(array $roles): WP_User
+function userWithRoles(?array $roles): WP_User
 {
     $user = new WP_User;
     $user->roles = $roles;
@@ -202,6 +202,7 @@ describe('custom_admin_menu', function (): void {
     })->with([
         'an author' => [fn (): WP_User => userWithRoles(['author'])],
         'no roles' => [fn (): WP_User => new WP_User],
+        'roles that are not set' => [fn (): WP_User => userWithRoles(null)],
         'not a user' => [false],
     ]);
 });
