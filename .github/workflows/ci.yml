@@ -2,9 +2,9 @@ name: CI
 
 # Calls the shared reusable workflow (`.claude/skills/code-quality/templates/ci-reusable.yml` in
 # UAMS-Web/uams-claude-skills, published as UAMS-Web/uams-ci-workflows) for the repository-wide
-# checks: composer validate, synced files, no-emoji, aggregate-needs, Pint, Rector, PHPStan, the
-# `@pest-mutate-ignore` annotation check, and mutation testing. This repository is public, so
-# Actions minutes are free and no job is gated on RUN_REMOTE_CI.
+# checks: composer validate, synced files and workflow copies, no-emoji, aggregate-needs, Pint,
+# Rector, PHPStan, the `@pest-mutate-ignore` annotation check, and mutation testing. This
+# repository is public, so Actions minutes are free and no job is gated on RUN_REMOTE_CI.
 #
 # Kept as jobs of its own, beside the call:
 # - `lint-floor` parses every shipped PHP file under PHP 8.2, the supported floor.
@@ -12,8 +12,6 @@ name: CI
 # - `pest` runs the Unit suite on three operating systems. The shared `pest` job runs `composer
 #   test`, which includes the Integration suite, and that needs WordPress and a test database
 #   this workflow does not provide, so the call passes `pest: false`.
-# - `workflow-copies` runs the synced-workflow drift check, which the published workflow's
-#   `synced-files` job does not run yet (UAMS-Web/uams-ci-workflows#17); drop it when that ships.
 #
 # Inputs to the call:
 # - `linux-only: true`: every shared job runs on ubuntu-latest. The annotation check reports a
@@ -28,7 +26,7 @@ name: CI
 #   directories only, so a marker in a root-level file (`functions.php`, `header.php`) is not
 #   checked, and `.` would walk into `vendor/`.
 #
-# The shared workflow is pinned to a commit (tag v0.7.0), so it takes a change when this file does.
+# The shared workflow is pinned to a commit (tag v0.9.0), so it takes a change when this file does.
 #
 # The `CI` job at the end `needs:` every other job, runs `if: always()`, and fails unless every
 # needed job reports `success`. A ruleset requires `CI` (with `Attribution footer` and
@@ -61,28 +59,13 @@ permissions:
 
 jobs:
   checks:
-    # Reported as `checks / <job> (ubuntu-latest)`. Pinned to the commit of tag v0.7.0.
-    uses: UAMS-Web/uams-ci-workflows/.github/workflows/ci.yml@abb784de084db03d78e14880f451c61eaa514212
+    # Reported as `checks / <job> (ubuntu-latest)`. Pinned to the commit of tag v0.9.0.
+    uses: UAMS-Web/uams-ci-workflows/.github/workflows/ci.yml@5523d479fa9cdc1c3bfdd581f3f07f730da93451
     with:
       linux-only: true
       pest: false
       mutate-paths: '*.php templates inc scripts setup/class.uams-shortcodes.php setup/class.*-shortcode.php'
       mutate-ignore-paths: 'inc scripts setup templates tests'
-
-  workflow-copies:
-    name: Workflow copies (no drift from the shared templates)
-    # Legs: Linux only. It hashes tracked workflow files against the shared templates with Node alone.
-    runs-on: ubuntu-latest
-    timeout-minutes: 10
-    steps:
-      - uses: actions/checkout@v7
-
-      - uses: actions/setup-node@v7
-        with:
-          node-version: '22'
-
-      # Fails when a workflow copied from a shared template differs from the template.
-      - run: node .claude/skills/synced-files/scripts/check-workflow-copies.mjs
 
   lint-floor:
     name: Floor lint (PHP 8.2)
@@ -144,7 +127,7 @@ jobs:
   # The one check a ruleset requires from this workflow. Keep `needs:` listing every other job in the file.
   ci:
     name: CI
-    needs: [checks, workflow-copies, lint-floor, build, pest]
+    needs: [checks, lint-floor, build, pest]
     if: always()
     runs-on: ubuntu-latest
     timeout-minutes: 5
