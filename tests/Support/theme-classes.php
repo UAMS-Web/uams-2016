@@ -8,6 +8,8 @@
 
 declare(strict_types=1);
 
+use function Brain\Monkey\Actions\expectAdded;
+
 if (! class_exists('UamsTestWalkerNavMenu', false)) {
     /**
      * Stands in for the WordPress walker the dropdown walker extends: display_element() records what the
@@ -48,9 +50,59 @@ if (! class_exists('Walker_Page', false)) {
 require_once dirname(__DIR__, 2).'/setup/class.uams-dropdowns.php';
 require_once dirname(__DIR__, 2).'/setup/class.dropdowns_walker.php';
 
-if (! class_exists('UAMS_Sidebar', false)) {
-    class UAMS_Sidebar
+if (! class_exists('UamsTestWidget', false)) {
+    /**
+     * Stands in for WP_Widget: it keeps what the widget classes pass to the parent constructor and builds
+     * field ids and names the way a test can read. Aliased to the WordPress name below, so static analysis
+     * keeps reading the WordPress stubs for `WP_Widget`.
+     */
+    class UamsTestWidget
     {
-        public const ID = 'stub-sidebar';
+        /**
+         * @param  array<string, mixed>  $widget_options
+         */
+        public function __construct(
+            public mixed $id_base = '',
+            public mixed $name = '',
+            /** @var array<string, mixed> */
+            public array $widget_options = []
+        ) {}
+
+        public function get_field_id($field_name): string
+        {
+            return 'id-'.$field_name;
+        }
+
+        public function get_field_name($field_name): string
+        {
+            return 'name-'.$field_name;
+        }
     }
+}
+
+if (! class_exists('WP_Widget', false)) {
+    class_alias(UamsTestWidget::class, 'WP_Widget');
+}
+
+/**
+ * Load the real sidebar widget file once per process, with the hook registration it makes at file scope
+ * recorded. Every test that needs UAMS_Sidebar goes through here, so the answer does not depend on which
+ * test ran first. Call it while Brain Monkey is active.
+ *
+ * @return bool Whether loading the file hooked the sidebar registration to `widgets_init`.
+ */
+function loadSidebarWidgetFile(): bool
+{
+    static $hooked = null;
+
+    if ($hooked === null) {
+        $hooked = false;
+        expectAdded('widgets_init')->once()->whenHappen(static function () use (&$hooked): void {
+            $hooked = true;
+        });
+
+        require_once dirname(__DIR__, 2).'/widgets/class.uams-sidebar.php';
+    }
+
+    return $hooked;
 }
