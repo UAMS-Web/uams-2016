@@ -33,6 +33,8 @@ if (! class_exists('WP_Post')) {
         public $menu_order = 0;
 
         public $page_template = '';
+
+        public $ancestors = [];
     }
 }
 

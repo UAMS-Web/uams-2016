@@ -7,6 +7,9 @@
 #[AllowDynamicProperties]
 class UAMS_Dropdowns_Walker_Menu extends Walker_Nav_Menu
 {
+    // Coverage attributes no line to a property default, so its mutant is reported uncovered, not
+    // surviving. 'opens an empty current id before any item' asserts the value.
+    // @pest-mutate-ignore: EmptyStringToNotEmpty
     private $CURRENT = '';
 
     public function __construct()
