@@ -5,9 +5,9 @@
  *
  * The file declares global functions and runs file-scope code, so it can be included once per
  * process. `loadThemeFunctions()` includes it on first use, with the template directory pointed at
- * a fixture root (tests/Support/theme-root) that stands in for `setup/class.uams.php` and the
- * bundled ACF Pro, and records what the file-scope code registered. Every test reads that record
- * or calls a function the include declared.
+ * a fixture root (tests/Support/theme-root) that holds empty files for what `setup/class.uams.php`
+ * requires and a stand-in for the bundled ACF Pro, and records what the file-scope code registered.
+ * Every test reads that record or calls a function the include declared.
  *
  * @see functions.php
  */
@@ -35,7 +35,7 @@ function loadThemeFunctions(): array
     $actions = [];
     $GLOBALS['uams_fixture_acf_included'] = 0;
 
-    stubClassExists(['acf' => false]);
+    stubClassExists(['acf' => false] + loaderClassesAbsent());
     when('get_template_directory')->justReturn(__DIR__.'/../Support/theme-root');
     when('get_template_directory_uri')->justReturn('https://t.test/theme');
     when('add_action')->alias(static function (mixed ...$args) use (&$hooks): void {

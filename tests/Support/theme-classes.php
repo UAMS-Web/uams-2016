@@ -38,6 +38,13 @@ if (! class_exists('Walker_Nav_Menu', false)) {
     class_alias(UamsTestWalkerNavMenu::class, 'Walker_Nav_Menu');
 }
 
+if (! class_exists('Walker_Page', false)) {
+    /**
+     * The WordPress page walker the sidebar menu walker extends.
+     */
+    class Walker_Page {}
+}
+
 require_once dirname(__DIR__, 2).'/setup/class.uams-dropdowns.php';
 require_once dirname(__DIR__, 2).'/setup/class.dropdowns_walker.php';
 

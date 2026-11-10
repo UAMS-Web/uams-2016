@@ -25,3 +25,5 @@ require_once __DIR__.'/Support/wordpress.php';
 require_once __DIR__.'/Support/templates.php';
 
 require_once __DIR__.'/Support/shortcodes.php';
+
+require_once __DIR__.'/Support/uams-loader.php';

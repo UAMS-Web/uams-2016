@@ -11,9 +11,7 @@ declare(strict_types=1);
 use function Brain\Monkey\Filters\expectApplied;
 use function Brain\Monkey\Functions\when;
 
-if (! class_exists('Walker_Page')) {
-    class Walker_Page {}
-}
+require_once __DIR__.'/../../Support/theme-classes.php';
 
 beforeEach(function (): void {
     require_once dirname(__DIR__, 3).'/setup/class.uams-sidebar-menu-walker.php';
