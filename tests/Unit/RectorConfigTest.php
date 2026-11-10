@@ -18,7 +18,6 @@ use Rector\CodeQuality\Rector\ClassMethod\LocallyCalledStaticMethodToNonStaticRe
 use Rector\Config\RectorConfig;
 use Rector\Configuration\Option;
 use Rector\Configuration\Parameter\SimpleParameterProvider;
-use Rector\DeadCode\Rector\ClassMethod\RemoveDuplicatedReturnSelfDocblockRector;
 use Rector\DeadCode\Rector\Property\RemoveUselessVarTagRector;
 use Rector\Php81\Rector\Array_\ArrayToFirstClassCallableRector;
 use Rector\Php81\Rector\Property\ReadOnlyPropertyRector;
@@ -83,7 +82,6 @@ const SWEEP_ONLY_RULES = [
     ReadOnlyPropertyRector::class,
     LocallyCalledStaticMethodToNonStaticRector::class,
     RemoveUselessVarTagRector::class,
-    RemoveDuplicatedReturnSelfDocblockRector::class,
     StrictArrayParamDimFetchRector::class,
     AddParamFromDimFetchKeyUseRector::class,
     ArrayToFirstClassCallableRector::class,
