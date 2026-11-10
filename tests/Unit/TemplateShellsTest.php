@@ -52,11 +52,12 @@ describe('sidebar.php', function (): void {
     });
 
     it('prints the sidebar menu and then the widget area', function (): void {
+        loadSidebarWidgetFile();
         Functions\expect('uams_has_sidebar')->once()->andReturn(true);
         Functions\expect('uams_sidebar_menu')->once()->andReturnUsing(function (): void {
             echo '[menu]';
         });
-        Functions\expect('dynamic_sidebar')->once()->with('stub-sidebar')->andReturnUsing(function (): void {
+        Functions\expect('dynamic_sidebar')->once()->with('sidebar')->andReturnUsing(function (): void {
             echo '[widgets]';
         });
 
