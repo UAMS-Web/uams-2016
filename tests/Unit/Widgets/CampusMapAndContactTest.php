@@ -30,14 +30,6 @@ beforeEach(function (): void {
     });
 });
 
-/**
- * Collapse every run of whitespace so markup compares by content.
- */
-function squishWidgetHtml(string $html): string
-{
-    return trim((string) preg_replace('/\s+/', ' ', $html));
-}
-
 describe('UAMS_Campus_Map', function (): void {
     it('registers the widget when the file loads', function (): void {
         expect(loadWidgetFile('class.uams-campus-map.php'))->toBe(['UAMS_Campus_Map']);

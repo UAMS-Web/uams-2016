@@ -128,3 +128,11 @@ function loadWidgetFile(string $file): array
 
     return $registered;
 }
+
+/**
+ * Collapse every run of whitespace so markup compares by content.
+ */
+function squishWidgetHtml(string $html): string
+{
+    return trim((string) preg_replace('/\s+/', ' ', $html));
+}

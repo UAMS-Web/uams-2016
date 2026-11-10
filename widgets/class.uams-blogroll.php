@@ -10,6 +10,9 @@ class UAMS_Blogroll extends WP_Widget
 
     const DESCRIPTION = 'Pull and display your sites blog posts';
 
+    // Coverage attributes no line to a constant default, so its mutants are reported uncovered, not
+    // surviving. The widget and form tests assert the fallback of 2.
+    // @pest-mutate-ignore: IncrementInteger,DecrementInteger
     const LIMIT = 2;
 
     public function __construct()
