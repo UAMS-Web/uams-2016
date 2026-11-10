@@ -59,7 +59,7 @@ class UAMS_Users
     {
         $user = wp_get_current_user();
 
-        if ($user instanceof WP_User && in_array('editor', (array) $user->roles, true)) {
+        if ($user instanceof WP_User && in_array('editor', $user->roles, true)) {
             remove_submenu_page('themes.php', 'themes.php');
 
             global $submenu;
