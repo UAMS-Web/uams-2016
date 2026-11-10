@@ -11,8 +11,14 @@ class UAMS_RSS extends WP_Widget
 
     const DESCRIPTION = 'Similar to the Wordpress RSS widget but allows a blurb before the RSS feed is listed.';
 
+    // Coverage attributes no line to a constant default, so its mutants are reported uncovered, not
+    // surviving. The update and widget tests assert the fallback of 10.
+    // @pest-mutate-ignore: IncrementInteger,DecrementInteger
     const ITEMS = 10;
 
+    // Coverage attributes no line to a property default, so its mutants are reported uncovered, not
+    // surviving. The form, widget and shortcode tests assert the value each default gives.
+    // @pest-mutate-ignore: RemoveArrayItem,IncrementInteger,DecrementInteger,TrueToFalse,FalseToTrue,EmptyStringToNotEmpty
     private static array $WIDGET_DEFAULTS = [
         'url' => '',
         'title' => '',
@@ -24,6 +30,9 @@ class UAMS_RSS extends WP_Widget
         'show_image' => true,
     ];
 
+    // Coverage attributes no line to a property default, so its mutants are reported uncovered, not
+    // surviving. The form, widget and shortcode tests assert the value each default gives.
+    // @pest-mutate-ignore: RemoveArrayItem,IncrementInteger,DecrementInteger,TrueToFalse,FalseToTrue,EmptyStringToNotEmpty
     private static array $SHORTCODE_DEFAULTS = [
         'url' => null,
         'number' => 5,

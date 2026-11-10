@@ -32,12 +32,21 @@ if (defined('TWITTER_OAUTH_TOKEN')) {
 
         const RETWEET_TEXT = '<small>Retweeted by <a href="//twitter.com/%s"> @%s</a></small>';
 
+        // Coverage attributes no line to a constant default, so its mutants are reported uncovered, not
+        // surviving. The update, form and widget tests assert the fallback of 5.
+        // @pest-mutate-ignore: IncrementInteger,DecrementInteger
         const COUNT = 5;
 
         const ACCOUNT = 'twitter';
 
+        // Coverage attributes no line to a constant default, so its mutants are reported uncovered, not
+        // surviving. The shortcode test asserts the 60 second cache.
+        // @pest-mutate-ignore: IncrementInteger,DecrementInteger
         const EXPIRES = 60;
 
+        // Coverage attributes no line to a property default, so its mutants are reported uncovered, not
+        // surviving. The test that checks the settings handed to the API wrapper asserts all four.
+        // @pest-mutate-ignore: RemoveArrayItem
         public static $SETTINGS = [
             'oauth_access_token' => TWITTER_OAUTH_TOKEN,
             'oauth_access_token_secret' => TWITTER_OAUTH_TOKEN_SECRET,
