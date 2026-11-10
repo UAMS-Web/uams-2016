@@ -10,12 +10,21 @@ Author: Automattic
 
 class UAMS_Carousel
 {
+    // Coverage attributes no line to a property or constant default, so its mutants are reported
+    // uncovered, not surviving. 'initializes on init' asserts the value.
+    // @pest-mutate-ignore: IncrementInteger,DecrementInteger
     const COLUMNS = 5;
 
     const LINK = 'none';
 
+    // Coverage attributes no line to a property or constant default, so its mutants are reported
+    // uncovered, not surviving. 'initializes on init' asserts the value.
+    // @pest-mutate-ignore: IncrementInteger,DecrementInteger,RemoveArrayItem
     public $prebuilt_widths = [370, 700, 1000, 1200, 1400, 2000];
 
+    // Coverage attributes no line to a property or constant default, so its mutants are reported
+    // uncovered, not surviving. 'initializes on init' asserts the value.
+    // @pest-mutate-ignore: TrueToFalse
     public $first_run = true;
 
     public function __construct()
