@@ -23,6 +23,10 @@ if (! class_exists('WP_Post')) {
         public $post_parent = 0;
 
         public $post_title = '';
+
+        public $post_excerpt = '';
+
+        public $post_author = 0;
     }
 }
 

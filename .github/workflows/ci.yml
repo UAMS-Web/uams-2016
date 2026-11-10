@@ -64,8 +64,8 @@ jobs:
     with:
       linux-only: true
       pest: false
-      mutate-paths: '*.php templates inc scripts'
-      mutate-ignore-paths: 'inc scripts templates tests'
+      mutate-paths: '*.php templates inc scripts setup/class.uams-shortcodes.php setup/class.*-shortcode.php'
+      mutate-ignore-paths: 'inc scripts setup templates tests'
 
   lint-floor:
     name: Floor lint (PHP 8.2)

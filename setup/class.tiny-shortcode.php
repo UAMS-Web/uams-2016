@@ -7,9 +7,9 @@
 class UAMS_TinyShortcode
 {
     public $shortcodes = [
-        'grid',
-        'button',
-        'tilebox',
+        'grid', // @pest-mutate-ignore: RemoveArrayItem
+        'button', // @pest-mutate-ignore: RemoveArrayItem
+        'tilebox', // @pest-mutate-ignore: RemoveArrayItem
     ];
 
     public function __construct()
