@@ -10,6 +10,9 @@ class UAMS_QuickLinks
 
     const LOCATION = 'quick-links';
 
+    // Coverage attributes no line to a property or constant default, so its mutants are reported
+    // uncovered, not surviving. 'the allowed blog' asserts the value.
+    // @pest-mutate-ignore: IncrementInteger,DecrementInteger
     const ALLOWED_BLOG = 1;
 
     public $MULTISITE;

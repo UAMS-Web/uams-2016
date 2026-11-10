@@ -27,6 +27,12 @@ if (! class_exists('WP_Post')) {
         public $post_excerpt = '';
 
         public $post_author = 0;
+
+        public $post_type = 'post';
+
+        public $menu_order = 0;
+
+        public $page_template = '';
     }
 }
 
