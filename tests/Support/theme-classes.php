@@ -11,6 +11,11 @@ declare(strict_types=1);
 use function Brain\Monkey\Actions\expectAdded;
 use function Brain\Monkey\Functions\when;
 
+// The WordPress output-type constant wp_get_recent_posts() takes.
+if (! defined('OBJECT')) {
+    define('OBJECT', 'OBJECT');
+}
+
 if (! class_exists('UamsTestWalkerNavMenu', false)) {
     /**
      * Stands in for the WordPress walker the dropdown walker extends: display_element() records what the

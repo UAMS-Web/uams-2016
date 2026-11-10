@@ -8,10 +8,19 @@ class UAMS_Recent_Posts extends WP_Widget
 
     const DESC = 'A widget that shows recent posts on your blog';
 
+    // Coverage attributes no line to a constant default, so its mutants are reported uncovered, not
+    // surviving. The update and form tests assert the fallback of 5.
+    // @pest-mutate-ignore: IncrementInteger,DecrementInteger
     const ITEMS = 5;
 
+    // Nothing in the theme reads this constant, and coverage attributes no line to a constant default,
+    // so its mutants are reported uncovered and no behavior depends on them.
+    // @pest-mutate-ignore: IncrementInteger,DecrementInteger
     const FETCH = 20;
 
+    // Nothing in the theme reads this constant, and coverage attributes no line to a constant default,
+    // so its mutants are reported uncovered and no behavior depends on them.
+    // @pest-mutate-ignore: IncrementInteger,DecrementInteger
     const DAYS = 14;
 
     public function __construct()
