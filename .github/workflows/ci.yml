@@ -45,6 +45,11 @@ on:
   pull_request:
   push:
     branches: [master]
+  # The full mutation pass, weekly: a `schedule` run mutates everything `composer mutate` covers,
+  # under the shared workflow's default `mutate-full-timeout-minutes` (180), while a pull request
+  # keeps the 45-minute cap and mutates only the changed files. 11:00 UTC on Mondays.
+  schedule:
+    - cron: '0 11 * * 1'
   # Lets the workflow be run on demand against a branch.
   workflow_dispatch:
 
