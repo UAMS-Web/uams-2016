@@ -138,6 +138,9 @@ if (! function_exists('uams_list_pages')) {
             'walker' => $walker,
         ]);
 
+        // The wordpress-stubs type wp_list_pages() as void for the `'echo' => 0` argument, so PHPStan
+        // reads $pages as always falsy; core returns the markup (see the function.void entry in phpstan.neon.dist).
+        // @phpstan-ignore empty.variable
         if (empty($pages) || ! is_string($pages)) {
             return '';
         }

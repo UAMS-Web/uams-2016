@@ -1,4 +1,5 @@
 <?php get_header();
+/** @var WP_Post $post The queried post; WordPress includes this template where $post is global. */
 $sidebar = get_post_meta($post->ID, 'sidebar');
 $breadcrumbs = get_post_meta($post->ID, 'breadcrumb');
 ?>
