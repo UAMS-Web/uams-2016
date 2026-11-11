@@ -41,6 +41,7 @@ This is an overview of the custom widgets, plugins and various features it inclu
 
 - [Creators](#creators)
 - [Contributors](#contributors)
+- [Credits](#credits)
 - [License](#license)
 
 ## Quick Start ##
@@ -552,6 +553,24 @@ Each tile is setup as a series of shortcodes wrapped in `[box]` shortcode.
 ## UAMS 2016 Contributors
 [Todd McKee](https://github.com/todd-uams)  
 [Brent Passmore](https://github.com/bpmore) 
+
+## Credits
+
+Developed and maintained by UAMS Web Services.
+
+Developers:
+
+- Bradley Bell
+- Greg Bueno
+- Josh Daugherty
+- Ben Erickson
+- Kilian Frey
+- Ryan Grant
+- Todd McKee
+- Dane Odekirk
+- Brent Passmore
+- Jon Swanson
+- Nick Winkelbauer
 
 ## License
 - - - 
