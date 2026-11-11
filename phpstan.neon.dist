@@ -46,7 +46,7 @@ parameters:
     # The highest level the code passes today (the code-quality skill's "Finding
     # the starting static-analysis level"), raised one level per change as
     # findings are fixed, until `max`.
-    level: 0
+    level: 1
 
     # Patchwork's relay(), which tests/Support/wordpress.php calls to fall through to the real
     # class_exists(). Patchwork is a development dependency loaded by tests/bootstrap.php, not
@@ -145,6 +145,20 @@ parameters:
     # dynamicConstantNames:
     #     - MY_PLUGIN_URL
     #     - MY_PLUGIN_DIR
+
+    # Constants the site defines, not the theme: the Twitter widget reads its four API credentials
+    # from `wp-config.php`, and the vendored Cuztom library defines CUZTOM_URL when it loads. PHPStan
+    # sees neither definition, so tests/Support/phpstan-bootstrap.php defines stand-ins for it.
+    bootstrapFiles:
+        - tests/Support/phpstan-bootstrap.php
+
+    # Pest binds `$this` in a `beforeEach()` / `afterEach()` closure to the running test at runtime,
+    # so a test file keeps its fixtures as properties on it (`$this->dir = ...`). PHPStan types the
+    # closure's `$this` as Pest's TestCall and reports each such property as undefined. Pest's own
+    # extension (included above) treats its expectation classes as universal object crates for the
+    # same reason; TestCall is the one it leaves out.
+    universalObjectCratesClasses:
+        - Pest\PendingCalls\TestCall
 
     # Checkout-scoped cache. PHPStan's default tmpDir is
     # `sys_get_temp_dir()/phpstan`: machine-global, shared by every checkout and
