@@ -100,6 +100,7 @@ describe('uams_dropdowns', function (): void {
 
         render(uams_dropdowns(...));
 
+        /** @var array<string, mixed> $received */
         expect($received['theme_location'])->toBe('white-bar')
             ->and($received['walker'])->toBe('');
     });
@@ -113,6 +114,7 @@ describe('uams_dropdowns', function (): void {
 
         render(uams_dropdowns(...));
 
+        /** @var array<string, mixed> $received */
         expect($received['walker'])->toBeInstanceOf(UAMS_Dropdowns_Walker_Menu::class)
             ->and($received['theme_location'])->toBe('white-bar');
     });

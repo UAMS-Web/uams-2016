@@ -119,6 +119,8 @@ class UAMS_Widget_Conditions
 				</optgroup>
 				<optgroup label="<?php esc_attr_e('Static page:', 'jetpack'); ?>">
 					<?php
+                // preg_replace() returns null only on a regex error, and the pattern is a constant.
+                // @phpstan-ignore argument.type
                 echo str_replace(' value="'.esc_attr($minor).'"', ' value="'.esc_attr($minor).'" selected="selected"', preg_replace('/<\/?select[^>]*?>/i', '', wp_dropdown_pages(['echo' => false])));
                 ?>
 				</optgroup>

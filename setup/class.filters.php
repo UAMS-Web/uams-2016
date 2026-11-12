@@ -167,6 +167,8 @@ class UAMS_Filters
         $new_content = preg_replace($regex, '<em>$1</em>', $content);
 
         if (in_array('&', $words, true)) {
+            // The pattern is built from preg_quote() output, so preg_replace() does not return null.
+            // @phpstan-ignore argument.type
             $new_content = str_replace([' &#038; ', ' & ', ' &amp; '], ' <em>&</em> ', $new_content);
         }
 

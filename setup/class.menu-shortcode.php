@@ -17,7 +17,7 @@ class UAMS_MenuShortcode
      *
      * @param  array<string, mixed>|string  $atts  The shortcode attributes.
      * @param  string|null  $content  The enclosed content.
-     * @return string|false The menu markup, or false when there is no menu.
+     * @return string|false|null The menu markup, or false when there is no menu.
      */
     public function vo_custom_menu_shortcode($atts, $content = null)
     {

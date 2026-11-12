@@ -176,7 +176,7 @@ describe('UAMS_Social_Icons', function (): void {
     });
 
     it('prints the default title and empty links without an instance', function (): void {
-        $html = preg_replace('/\s+/', ' ', render(fn () => (new UAMS_Social_Icons)->form([])));
+        $html = (string) preg_replace('/\s+/', ' ', render(fn () => (new UAMS_Social_Icons)->form([])));
 
         expect($html)->toContain('type="text" value="Connect with us:"')
             ->and(substr_count($html, 'value=""'))->toBe(6);
