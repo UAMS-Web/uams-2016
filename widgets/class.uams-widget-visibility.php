@@ -120,6 +120,8 @@ class UAMS_Widget_Conditions
 						<option value="<?php echo esc_attr($taxonomy->name); ?>" <?php selected($taxonomy->name, $minor); ?>><?php echo 'All '.esc_html($taxonomy->name).' pages'; ?></option>
 						<?php
                         $terms = get_terms(['taxonomy' => $taxonomy->name, 'number' => 250, 'hide_empty' => false]);
+                    // get_terms() can return a non-array; wordpress-stubs type it as an array here.
+                    // @phpstan-ignore function.alreadyNarrowedType
                     if (! is_wp_error($terms) && is_array($terms)) {
                         foreach ($terms as $term) {
                             ?>
@@ -383,6 +385,8 @@ class UAMS_Widget_Conditions
 
                 case 'taxonomy':
                     $term = explode('_tax_', $minor);
+                    // The fallback is kept as written: PHPStan reads offset 0 as always present after the split.
+                    // @phpstan-ignore nullCoalesce.offset
                     $tax = $term[0] ?? '';
                     $term_id = $term[1] ?? '';
                     $terms = (isset($post->ID) && $tax) ? get_the_terms($post->ID, $tax) : false;

@@ -75,6 +75,8 @@ class UAMS_Home_Slider_Meta_Box
             return $post_id;
         }
 
+        // Core defines DOING_AUTOSAVE only during an autosave; after defined() PHPStan reads the constant as a fixed value.
+        // @phpstan-ignore booleanAnd.rightAlwaysTrue
         if (defined('DOING_AUTOSAVE') && DOING_AUTOSAVE) {
             return $post_id;
         }

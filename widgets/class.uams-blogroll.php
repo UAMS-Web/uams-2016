@@ -113,6 +113,9 @@ class UAMS_Blogroll extends WP_Widget
             $atts
         );
 
+        // wordpress-stubs shape shortcode_atts() to the defaults above, so PHPStan reads the key as never present; the check is
+        // kept as written.
+        // @phpstan-ignore function.impossibleType
         if (! array_key_exists('numberposts', $params)) {
             $params['numberposts'] = $params['number'];
         }

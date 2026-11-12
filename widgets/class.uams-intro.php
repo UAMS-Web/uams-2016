@@ -11,8 +11,6 @@ class UAMS_Intro_Text extends WP_Widget
 
     const DESCRIPTION = 'Italicized block of intro text.';
 
-    private static array $SHORTCODE_DEFAULTS = [];
-
     public function __construct()
     {
         add_shortcode('intro', [$this, 'intro_shortcode']);
@@ -35,7 +33,13 @@ class UAMS_Intro_Text extends WP_Widget
             return;
         }
 
+        // WordPress passes every sidebar argument in a sidebar, but widget() also runs outside one (shortcode, tests) with a partial array,
+        // so the fallbacks are kept; the tests pin them.
+        // @phpstan-ignore nullCoalesce.offset
         $before_widget = $args['before_widget'] ?? '';
+        // WordPress passes every sidebar argument in a sidebar, but widget() also runs outside one (shortcode, tests) with a partial array,
+        // so the fallbacks are kept; the tests pin them.
+        // @phpstan-ignore nullCoalesce.offset
         $after_widget = $args['after_widget'] ?? '';
 
         echo $before_widget;

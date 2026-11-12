@@ -30,6 +30,8 @@ class UAMS_SubpageList
 
         $output = '';
 
+        // get_pages() returns false when there are no pages; wordpress-stubs type it as an array.
+        // @phpstan-ignore function.alreadyNarrowedType
         if (! empty($subpages) && is_array($subpages)) {
             $tiles = 0;
             foreach ($subpages as $page) {

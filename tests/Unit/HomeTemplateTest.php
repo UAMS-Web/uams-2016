@@ -23,6 +23,7 @@ function homeEnv(array $meta = [], array $fields = [], array $rows = [], int $th
     chromeMarkers();
     contentTags();
     $position = [];
+    /** @var array<string, mixed> $current */
     $current = [];
     stubValues(array_merge([
         'get_the_ID' => 7,

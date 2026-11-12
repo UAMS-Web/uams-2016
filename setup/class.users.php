@@ -59,6 +59,8 @@ class UAMS_Users
     {
         $user = wp_get_current_user();
 
+        // The filter argument is documented as WP_User; the check is kept in case a caller passes another value.
+        // @phpstan-ignore instanceof.alwaysTrue
         if ($user instanceof WP_User && in_array('editor', (array) $user->roles, true)) {
             remove_submenu_page('themes.php', 'themes.php');
 

@@ -54,6 +54,8 @@ function hs_content_character_count( $valid, $value, $field, $input ){
 if (! class_exists('acf')) {
     // 1. customize ACF path
     add_filter('acf/settings/path', 'my_acf_settings_path');
+    // A filter callback: the filter passes this value and the signature must accept it.
+    // @phpstan-ignore function.unusedParameter
     function my_acf_settings_path($path): string
     {
         return get_template_directory().'/_includes/acf-pro/';
@@ -62,6 +64,8 @@ if (! class_exists('acf')) {
     // 2. customize ACF dir
     add_filter('acf/settings/dir', 'my_acf_settings_dir');
 
+    // A filter callback: the filter passes this value and the signature must accept it.
+    // @phpstan-ignore function.unusedParameter
     function my_acf_settings_dir($dir): string
     {
         return get_template_directory_uri().'/_includes/acf-pro/';
@@ -189,6 +193,8 @@ function access_entry_via_field($entry, $form): void
 
 add_filter('embed_oembed_html', 'wrap_oembed_html', 99, 4);
 add_filter('video_embed_html', 'wrap_oembed_html', 10, 4); // Pass all 4 expected args
+// An oEmbed filter callback: the filter passes all four arguments and the signature must accept them.
+// @phpstan-ignore function.unusedParameter, function.unusedParameter
 function wrap_oembed_html($cached_html, $url = '', $attr = [], $post_id = 0) // @pest-mutate-ignore: DecrementInteger,IncrementInteger,EmptyStringToNotEmpty
 {
     if (empty($url) || ! is_string($url)) {

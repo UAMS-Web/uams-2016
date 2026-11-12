@@ -39,6 +39,8 @@ if (! function_exists('uams_has_sidebar')) {
         $post_id = ($post instanceof WP_Post) ? $post->ID : get_the_ID();
         $format = $post_id ? get_post_format($post_id) : false;
 
+        // PHPStan reads these calls as always false after the checks above; the template tag test pins each branch, so the condition is kept as written.
+        // @phpstan-ignore booleanOr.rightAlwaysFalse
         return ($format !== 'gallery') || is_archive() || is_search() || is_404();
     }
 }
@@ -116,7 +118,13 @@ if (! function_exists('uams_list_pages')) {
             return '';
         }
 
+        // Read only by the code after the wp_list_pages() check below, which PHPStan reads as unreachable (wordpress-stubs type
+        // that call as void; see the function.void entry in phpstan.neon.dist).
+        // @phpstan-ignore variable.unused
         $toggle = $mobile ? '<button class="uams-mobile-menu-toggle">Menu</button>' : '';
+        // Read only by the code after the wp_list_pages() check below, which PHPStan reads as unreachable (wordpress-stubs type
+        // that call as void; see the function.void entry in phpstan.neon.dist).
+        // @phpstan-ignore variable.unused
         $class = $mobile ? 'uams-mobile-menu' : 'uams-sidebar-menu';
 
         $siblings = get_pages([
@@ -138,13 +146,15 @@ if (! function_exists('uams_list_pages')) {
             'walker' => $walker,
         ]);
 
-        // The wordpress-stubs type wp_list_pages() as void for the `'echo' => 0` argument, so PHPStan
-        // reads $pages as always falsy; core returns the markup (see the function.void entry in phpstan.neon.dist).
-        // @phpstan-ignore empty.variable
+        // wordpress-stubs type wp_list_pages() as void for this call, so these checks read as decided; core returns the markup,
+        // and the tests pin the empty and non-string results.
+        // @phpstan-ignore booleanOr.alwaysTrue, empty.variable, function.alreadyNarrowedType
         if (empty($pages) || ! is_string($pages)) {
             return '';
         }
 
+        // Unreachable only because of the void return type noted above.
+        // @phpstan-ignore deadCode.unreachable
         $bool = str_contains($pages, 'child-page-existance-tester');
 
         return ($bool && ! is_search()) ? sprintf('%s<ul class="%s first-level">%s</ul>', $toggle, esc_attr($class), $pages) : '';
@@ -177,6 +187,8 @@ if (! function_exists('uams_list_mobile_pages')) {
         }
 
         $items = wp_get_nav_menu_items($menu->term_id);
+        // wp_get_nav_menu_items() returns false for a menu without items; wordpress-stubs type it as an array.
+        // @phpstan-ignore function.alreadyNarrowedType
         if (empty($items) || ! is_array($items)) {
             return '';
         }
@@ -208,6 +220,8 @@ if (! function_exists('uams_list_mobile_pages')) {
             'walker' => $walker,
         ]);
 
+        // Same void return type as above.
+        // @phpstan-ignore ternary.alwaysFalse
         return $pages ? sprintf('%s<ul class="uams-mobile-menu first-level">%s</ul>', $toggle, $pages) : '';
     }
 }

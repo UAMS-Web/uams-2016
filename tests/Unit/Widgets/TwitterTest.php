@@ -286,7 +286,7 @@ describe('shortcode with a live feed', function (): void {
 
     it('takes the picture of a mentioned author from a second request', function (): void {
         $tweet = apiTweet(['entities' => (object) ['user_mentions' => [(object) ['screen_name' => 'bo']]]]);
-        $log = stubTransients();
+        stubTransients();
         scriptTwitterResponses([[$tweet], (object) ['profile_image_url_https' => 'https://img.test/bo.png']]);
 
         $html = (twitterWidget())->shortcode([]);
