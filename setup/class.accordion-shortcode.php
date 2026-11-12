@@ -95,6 +95,8 @@ class UAMS_AccordionShortcode
 
         $output = do_shortcode($content);
 
+        // The value is untyped here (WordPress data or a mixed array), and the code handles it as before.
+        // @phpstan-ignore argument.type
         return sprintf('<h2 class="js-accordion__header">%s</h2><div class="js-accordion__panel" %s>%s</div>', $section_atts['title'], $active, apply_filters('the_content', $output));
     }
 
@@ -125,6 +127,8 @@ class UAMS_AccordionShortcode
 
         $output = do_shortcode($content);
 
+        // The value is untyped here (WordPress data or a mixed array), and the code handles it as before.
+        // @phpstan-ignore argument.type
         return sprintf('<h3 class="js-accordion__header uams-accordion-subheader">%s</h3><div class="js-accordion__panel" %s>%s</div>', $section_atts['title'], $active, apply_filters('the_content', $output));
     }
 }

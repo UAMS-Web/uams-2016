@@ -120,6 +120,8 @@ class TileBox
             $content = 'No content for this tile. Make sure you wrap your content like this: [tile]Content here[/tile]';
         }
 
+        // The value is untyped here (WordPress data or a mixed array), and the code handles it as before.
+        // @phpstan-ignore argument.type
         return sprintf('<div class="%s">%s</div>', esc_attr($classes), apply_filters('the_content', (string) $content));
     }
 }

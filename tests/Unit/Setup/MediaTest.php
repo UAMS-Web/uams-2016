@@ -39,7 +39,11 @@ describe('UAMS_Media_Caption', function (): void {
     });
 
     it('returns the content when there is no usable width or caption', function (array $attr): void {
+        // The value is untyped here (WordPress data or a mixed array), and the code handles it as before.
+        // @phpstan-ignore argument.type
         expect((new UAMS_Media_Caption)->add_media_credit_to_caption_shortcode_filter('', $attr, 'inner'))->toBe('inner')
+            // The value is untyped here (WordPress data or a mixed array), and the code handles it as before.
+            // @phpstan-ignore argument.type
             ->and((new UAMS_Media_Caption)->add_media_credit_to_caption_shortcode_filter('', $attr))->toBeNull()
             ->and($GLOBALS['uams_test_media_shortcode'])->toBe(['caption', 'caption']);
     })->with([
@@ -265,6 +269,8 @@ describe('UAMS_Media_Credit', function (): void {
         });
 
         it('saves nothing without the credit or the id', function (array $post, array $attachment): void {
+            // The value is untyped here (WordPress data or a mixed array), and the code handles it as before.
+            // @phpstan-ignore argument.type, argument.type
             $result = (new UAMS_Media_Credit)->custom_image_attachment_fields_to_save($post, $attachment);
 
             expect($result)->toBe($post)

@@ -80,6 +80,8 @@ describe('content.php', function (): void {
     })->with(['archive' => ['is_archive'], 'home' => ['is_home']]);
 
     it('prints the mobile menu only on a page that is not the posts page, a search or an archive', function (array $conditions, bool $menu): void {
+        // The value is untyped here (WordPress data or a mixed array), and the code handles it as before.
+        // @phpstan-ignore argument.type
         contentEnv($conditions);
 
         expect(str_contains(renderTemplate('content.php'), '[mobile-menu]'))->toBe($menu);
@@ -159,6 +161,8 @@ describe('content.php', function (): void {
 
         it('prints the linked image with its alt text and title', function () use ($featured): void {
             $setup = $featured();
+            // The value is untyped here (WordPress data or a mixed array), and the code handles it as before.
+            // @phpstan-ignore argument.type, argument.type, argument.type, argument.type
             contentEnv($setup['conditions'], [], $setup['meta'], $setup['fields'], $setup['thumbnail']);
 
             expect(renderTemplate('content.php'))->toStartWith(

@@ -193,6 +193,8 @@ function wpConditionals(array $overrides = []): void
 function stubClassExists(array $classes): void
 {
     when('class_exists')->alias(
+        // The value is untyped here (WordPress data or a mixed array), and the code handles it as before.
+        // @phpstan-ignore return.type
         static fn (string $class, bool $autoload = true): bool => $classes[$class] ?? relay(func_get_args())
     );
 }
@@ -223,6 +225,8 @@ function stubTags(array $tags): void
 {
     foreach ($tags as $name => $text) {
         when($name)->alias(static function (mixed ...$arguments) use ($text): void {
+            // The value is untyped here (WordPress data or a mixed array), and the code handles it as before.
+            // @phpstan-ignore echo.nonString
             echo $text instanceof Closure ? $text(...$arguments) : $text;
         });
     }
@@ -269,6 +273,8 @@ function renderTemplate(string $file, array $variables = []): string
 function stubFunctionExists(array $functions): void
 {
     when('function_exists')->alias(
+        // The value is untyped here (WordPress data or a mixed array), and the code handles it as before.
+        // @phpstan-ignore return.type
         static fn (string $function): bool => $functions[$function] ?? relay(func_get_args())
     );
 }

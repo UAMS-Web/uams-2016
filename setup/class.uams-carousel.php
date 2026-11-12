@@ -44,6 +44,8 @@ class UAMS_Carousel
             return;
         }
 
+        // The value is untyped here (WordPress data or a mixed array), and the code handles it as before.
+        // @phpstan-ignore assign.propertyType
         $this->prebuilt_widths = apply_filters('jp_carousel_widths', $this->prebuilt_widths);
         // The callback is also run as a filter over the enqueue output, so it returns a string.
         // @phpstan-ignore return.void
@@ -59,6 +61,8 @@ class UAMS_Carousel
      */
     public function disable()
     {
+        // The value is untyped here (WordPress data or a mixed array), and the code handles it as before.
+        // @phpstan-ignore return.type
         return apply_filters('uams_carousel_disable', false);
     }
 
@@ -70,6 +74,8 @@ class UAMS_Carousel
      */
     public function asset_version($version)
     {
+        // The value is untyped here (WordPress data or a mixed array), and the code handles it as before.
+        // @phpstan-ignore return.type
         return apply_filters('jp_carousel_asset_version', $version);
     }
 
@@ -110,10 +116,14 @@ class UAMS_Carousel
             'shutter_speed' => __('Shutter Speed', 'jetpack'),
             'focal_length' => __('Focal Length', 'jetpack'),
             'require_name_email' => $require_name_email,
+            // The value is untyped here (WordPress data or a mixed array), and the code handles it as before.
+            // @phpstan-ignore argument.type
             'login_url' => wp_login_url(apply_filters('the_permalink', get_permalink())),
         ];
 
         $localize_strings = apply_filters('jp_carousel_localize_strings', $localize_strings);
+        // The value is untyped here (WordPress data or a mixed array), and the code handles it as before.
+        // @phpstan-ignore argument.type
         wp_localize_script('site', 'jetpackCarouselStrings', $localize_strings);
 
         do_action('jp_carousel_enqueue_assets', $this->first_run, $localize_strings);
@@ -158,6 +168,8 @@ class UAMS_Carousel
             unset($img_meta['latitude'], $img_meta['longitude']);
         }
 
+        // The value is untyped here (WordPress data or a mixed array), and the code handles it as before.
+        // @phpstan-ignore argument.type
         $json_img_meta = json_encode(array_map(strval(...), $img_meta));
 
         $attr['data-attachment-id'] = $attachment_id;

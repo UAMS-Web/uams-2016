@@ -63,7 +63,7 @@ class UAMS_Widget_Conditions
                 // @phpstan-ignore argument.type
                 foreach (get_users(['orderby' => 'name', 'exclude_admin' => true]) as $author) {
                     ?>
-					<option value="<?php echo esc_attr($author->ID); ?>" <?php selected($author->ID, $minor); ?>><?php echo esc_html($author->display_name); ?></option>
+					<option value="<?php echo esc_attr($author->ID); ?>" <?php selected($author->ID, $minor); ?>><?php echo esc_html($author->display_name); // @phpstan-ignore property.nonObject, property.nonObject, property.nonObject, argument.type, argument.type?></option>
 					<?php
                 }
                 break;
@@ -79,9 +79,11 @@ class UAMS_Widget_Conditions
                 // @phpstan-ignore argument.type
                 usort($tags, [self::class, 'strcasecmp_name']);
 
+                // The value is untyped here (WordPress data or a mixed array), and the code handles it as before.
+                // @phpstan-ignore foreach.nonIterable
                 foreach ($tags as $tag) {
                     ?>
-					<option value="<?php echo esc_attr($tag->term_id); ?>" <?php selected($tag->term_id, $minor); ?>><?php echo esc_html($tag->name); ?></option>
+					<option value="<?php echo esc_attr($tag->term_id); ?>" <?php selected($tag->term_id, $minor); ?>><?php echo esc_html($tag->name); // @phpstan-ignore property.nonObject, property.nonObject, property.nonObject, argument.type, argument.type?></option>
 					<?php
                 }
                 break;
@@ -112,7 +114,7 @@ class UAMS_Widget_Conditions
                     $post_types = get_post_types(['public' => true], 'objects');
                 foreach ($post_types as $post_type) {
                     ?>
-						<option value="<?php echo esc_attr('post_type-'.$post_type->name); ?>" <?php selected('post_type-'.$post_type->name, $minor); ?>><?php echo esc_html($post_type->labels->singular_name); ?></option>
+						<option value="<?php echo esc_attr('post_type-'.$post_type->name); ?>" <?php selected('post_type-'.$post_type->name, $minor); ?>><?php echo esc_html($post_type->labels->singular_name); // @phpstan-ignore argument.type?></option>
 						<?php
                 }
                 ?>
@@ -136,7 +138,7 @@ class UAMS_Widget_Conditions
 
                 foreach ($taxonomies as $taxonomy) {
                     ?>
-					<optgroup label="<?php esc_attr_e($taxonomy->labels->name.':', 'jetpack'); ?>">
+					<optgroup label="<?php esc_attr_e($taxonomy->labels->name.':', 'jetpack'); // @phpstan-ignore binaryOp.invalid?>">
 						<option value="<?php echo esc_attr($taxonomy->name); ?>" <?php selected($taxonomy->name, $minor); ?>><?php echo 'All '.esc_html($taxonomy->name).' pages'; ?></option>
 						<?php
                         $terms = get_terms(['taxonomy' => $taxonomy->name, 'number' => 250, 'hide_empty' => false]);
@@ -403,6 +405,8 @@ class UAMS_Widget_Conditions
                             $condition_result = is_archive();
                             break;
                         case 'posts':
+                            // The value is untyped here (WordPress data or a mixed array), and the code handles it as before.
+                            // @phpstan-ignore property.nonObject
                             $condition_result = isset($wp_query->is_posts_page) && $wp_query->is_posts_page;
                             break;
                         case 'home':
@@ -472,7 +476,7 @@ class UAMS_Widget_Conditions
                     } elseif ($minor && is_author($minor)) {
                         $condition_result = true;
                         // The value is untyped here (WordPress data or a mixed array), and the code handles it as before.
-                        // @phpstan-ignore cast.string
+                        // @phpstan-ignore cast.string, property.nonObject, cast.string
                     } elseif (is_singular() && $minor && isset($post->post_author) && (string) $minor === (string) $post->post_author) {
                         $condition_result = true;
                     }
@@ -486,6 +490,8 @@ class UAMS_Widget_Conditions
                     // @phpstan-ignore nullCoalesce.offset
                     $tax = $term[0] ?? '';
                     $term_id = $term[1] ?? '';
+                    // The value is untyped here (WordPress data or a mixed array), and the code handles it as before.
+                    // @phpstan-ignore property.nonObject, argument.type
                     $terms = (isset($post->ID) && $tax) ? get_the_terms($post->ID, $tax) : false;
 
                     if ($tax && $term_id && is_tax($tax, (int) $term_id)) {

@@ -62,6 +62,8 @@ describe('content-archive.php', function (): void {
     });
 
     it('prints the mobile menu only outside the posts page, a search and an archive', function (array $conditions, bool $menu): void {
+        // The value is untyped here (WordPress data or a mixed array), and the code handles it as before.
+        // @phpstan-ignore argument.type
         archiveItemEnv($conditions);
 
         expect(str_contains(renderTemplate('content-archive.php'), '[mobile-menu]'))->toBe($menu);
@@ -96,6 +98,8 @@ describe('content-image.php', function (): void {
         contentTags();
         stubValues(array_merge([
             'get_the_ID' => 7,
+            // The value is untyped here (WordPress data or a mixed array), and the code handles it as before.
+            // @phpstan-ignore binaryOp.invalid
             'wp_get_attachment_image' => static fn (int $id, string $size, bool $icon, array $attributes): string => '[image:'.$id.'|'.$size.'|'.var_export($icon, true).'|'.$attributes['class'].']',
             'get_the_excerpt' => 'An <i>excerpt</i>',
             'get_post_meta' => static fn (int $id, string $key, bool $single): string => $credit,

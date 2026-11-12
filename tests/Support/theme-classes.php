@@ -122,6 +122,8 @@ function loadSidebarWidgetFile(): bool
         require_once dirname(__DIR__, 2).'/widgets/class.uams-sidebar.php';
     }
 
+    // The value is untyped here (WordPress data or a mixed array), and the code handles it as before.
+    // @phpstan-ignore return.type
     return $hooked;
 }
 

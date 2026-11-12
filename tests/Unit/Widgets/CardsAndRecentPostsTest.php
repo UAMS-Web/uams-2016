@@ -221,6 +221,8 @@ describe('UAMS_Recent_Posts', function (): void {
     });
 
     it('sanitizes the settings on update', function (array $new, array $expected): void {
+        // The value is untyped here (WordPress data or a mixed array), and the code handles it as before.
+        // @phpstan-ignore argument.type
         expect((new UAMS_Recent_Posts)->update($new, []))->toBe($expected);
     })->with([
         'all' => [['title' => 'Hi', 'items' => '-3', 'more' => '1'], ['title' => 'T{Hi}', 'items' => 3, 'more' => true]],

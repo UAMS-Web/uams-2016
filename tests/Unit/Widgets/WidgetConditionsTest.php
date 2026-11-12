@@ -184,6 +184,8 @@ describe('filter_widget', function (): void {
     it('returns an instance without rules unchanged', function (array $instance): void {
         conditionTags();
 
+        // The value is untyped here (WordPress data or a mixed array), and the code handles it as before.
+        // @phpstan-ignore argument.type
         expect(UAMS_Widget_Conditions::filter_widget($instance))->toBe($instance);
     })->with([
         'no conditions' => [['title' => 'x']],

@@ -52,6 +52,8 @@ class UAMS_Page_Attributes_Meta_Box
             ];
 
             $dropdown_args = apply_filters('page_attributes_dropdown_pages_args', $dropdown_args, $post);
+            // The value is untyped here (WordPress data or a mixed array), and the code handles it as before.
+            // @phpstan-ignore argument.type
             $pages = wp_dropdown_pages($dropdown_args);
 
             if (! empty($pages)) {

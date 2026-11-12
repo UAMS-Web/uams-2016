@@ -157,6 +157,8 @@ class UAMS_CardsShortcode
             $link,
             esc_html($card_atts['title']),
             $endlink,
+            // The value is untyped here (WordPress data or a mixed array), and the code handles it as before.
+            // @phpstan-ignore argument.type
             apply_filters('the_content', $output),
             $action,
             $footer

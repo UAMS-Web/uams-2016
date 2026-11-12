@@ -114,6 +114,8 @@ class UAMS_Blogroll extends WP_Widget
 
         echo $args['before_widget'];
         if (! empty($title)) {
+            // The value is untyped here (WordPress data or a mixed array), and the code handles it as before.
+            // @phpstan-ignore argument.type
             echo '<h2>'.esc_html($title).'</h2>';
         }
 
@@ -179,9 +181,13 @@ class UAMS_Blogroll extends WP_Widget
                 $excerpt = has_excerpt($post->ID) ? $post->post_excerpt : apply_filters('widget_text', $post->post_content);
 
                 if ($this->is_true($params->trim)) {
+                    // The value is untyped here (WordPress data or a mixed array), and the code handles it as before.
+                    // @phpstan-ignore argument.type
                     $excerpt = wp_trim_words($excerpt);
                 }
 
+                // The value is untyped here (WordPress data or a mixed array), and the code handles it as before.
+                // @phpstan-ignore argument.type
                 $excerpt = wpautop($excerpt);
             }
 

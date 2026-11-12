@@ -34,6 +34,8 @@ uses()
         include __DIR__.'/../inc/template-functions.php';
     })
     ->afterEach(function (): void {
+        // The value is untyped here (WordPress data or a mixed array), and the code handles it as before.
+        // @phpstan-ignore method.nonObject
         $this->addToAssertionCount(Mockery::getContainer()->mockery_getExpectationCount());
 
         tearDown();

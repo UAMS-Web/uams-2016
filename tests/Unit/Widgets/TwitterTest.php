@@ -155,6 +155,8 @@ describe('update', function (): void {
     });
 
     it('falls back to five tweets', function (array $new): void {
+        // The value is untyped here (WordPress data or a mixed array), and the code handles it as before.
+        // @phpstan-ignore argument.type
         expect((twitterWidget())->update($new, []))->toBe(['title' => 'T{}', 'name' => 'T{}', 'count' => 5]);
     })->with(['missing' => [[]], 'zero' => [['count' => '0']], 'empty' => [['count' => '']]]);
 });

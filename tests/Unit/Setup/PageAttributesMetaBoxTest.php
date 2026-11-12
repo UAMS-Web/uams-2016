@@ -151,6 +151,8 @@ describe('page_attributes_meta_box', function (): void {
 
             return $args;
         });
+        // The value is untyped here (WordPress data or a mixed array), and the code handles it as before.
+        // @phpstan-ignore binaryOp.invalid
         when('wp_dropdown_pages')->alias(static fn (array $args): string => '<select>'.$args['selected'].'</select>');
         when('get_page_templates')->justReturn([]);
         when('get_post_meta')->alias(static fn (int $id, string $key, bool $single): string => match ($key) {

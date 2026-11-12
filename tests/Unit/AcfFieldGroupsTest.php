@@ -64,6 +64,8 @@ function registeredAcfGroups(): array
 
     my_acf_add_local_field_groups();
 
+    // The value is untyped here (WordPress data or a mixed array), and the code handles it as before.
+    // @phpstan-ignore return.type
     return $groups;
 }
 

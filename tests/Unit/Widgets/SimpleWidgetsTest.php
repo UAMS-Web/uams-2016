@@ -69,6 +69,8 @@ describe('UAMS_Intro_Text', function (): void {
     it('prints the intro text between the widget wrappers', function (array $args, string $expected): void {
         when('add_shortcode')->justReturn(true);
 
+        // The value is untyped here (WordPress data or a mixed array), and the code handles it as before.
+        // @phpstan-ignore argument.type
         $html = render(fn () => (new UAMS_Intro_Text)->widget($args, ['introContent' => 'Hello <b>']));
 
         expect($html)->toBe($expected);
@@ -80,6 +82,8 @@ describe('UAMS_Intro_Text', function (): void {
     it('prints nothing without intro text', function (array $instance): void {
         when('add_shortcode')->justReturn(true);
 
+        // The value is untyped here (WordPress data or a mixed array), and the code handles it as before.
+        // @phpstan-ignore argument.type
         $html = render(fn () => (new UAMS_Intro_Text)->widget(['before_widget' => '<aside>', 'after_widget' => '</aside>'], $instance));
 
         expect($html)->toBe('');
@@ -92,6 +96,8 @@ describe('UAMS_Intro_Text', function (): void {
     it('sanitizes the intro text on update', function (array $new, string $expected): void {
         when('add_shortcode')->justReturn(true);
 
+        // The value is untyped here (WordPress data or a mixed array), and the code handles it as before.
+        // @phpstan-ignore argument.type
         expect((new UAMS_Intro_Text)->update($new, []))->toBe(['introContent' => $expected]);
     })->with([
         'text' => [['introContent' => 'Hi'], 'T{Hi}'],
@@ -101,6 +107,8 @@ describe('UAMS_Intro_Text', function (): void {
     it('prints the form field', function (array $instance, string $value): void {
         when('add_shortcode')->justReturn(true);
 
+        // The value is untyped here (WordPress data or a mixed array), and the code handles it as before.
+        // @phpstan-ignore argument.type
         $html = render(fn () => (new UAMS_Intro_Text)->form($instance));
 
         expect(preg_replace('/\s+/', ' ', $html))->toBe(' <p> <label for="A{id-introContent}">Intro text:</label> <input class="widefat" id="A{id-introContent}" name="A{name-introContent}" type="text" value="'.$value.'" /> </p> ');

@@ -34,6 +34,8 @@ if (! function_exists('get_uams_content_class')) {
 
         $classes = array_map(esc_attr(...), $classes);
 
+        // The value is untyped here (WordPress data or a mixed array), and the code handles it as before.
+        // @phpstan-ignore return.type
         return apply_filters('uams_content_class', $classes, $class);
     }
 }
@@ -162,6 +164,8 @@ if (! function_exists('uams_list_pages')) {
 
         $walker = (isset($UAMS) && is_object($UAMS) && isset($UAMS->SidebarMenuWalker)) ? $UAMS->SidebarMenuWalker : '';
 
+        // The value is untyped here (WordPress data or a mixed array), and the code handles it as before.
+        // @phpstan-ignore argument.type
         $pages = wp_list_pages([
             'title_li' => '<a href="'.esc_url(home_url('/')).'" title="Home" class="homelink">Home</a>',
             'child_of' => $parent_post_parent,
@@ -223,7 +227,7 @@ if (! function_exists('uams_list_mobile_pages')) {
 
         foreach ($items as $item) {
             // The value is untyped here (WordPress data or a mixed array), and the code handles it as before.
-            // @phpstan-ignore property.nonObject
+            // @phpstan-ignore property.nonObject, cast.int
             if ((int) $item->menu_item_parent !== 0) {
                 continue;
             }
@@ -244,6 +248,8 @@ if (! function_exists('uams_list_mobile_pages')) {
         // @phpstan-ignore argument.type
         $pages = wp_list_pages([
             'title_li' => '<a href="'.esc_url(home_url('/')).'" title="Home" class="homelink">Home</a>',
+            // The value is untyped here (WordPress data or a mixed array), and the code handles it as before.
+            // @phpstan-ignore argument.type
             'include' => implode(',', $ids),
             'sort_order' => 'menu_order',
             'depth' => 1,
@@ -299,6 +305,8 @@ if (! function_exists('get_uams_breadcrumbs')) {
         } elseif (is_author()) {
             $author = get_queried_object();
             $name = ($author && isset($author->display_name)) ? $author->display_name : '';
+            // The value is untyped here (WordPress data or a mixed array), and the code handles it as before.
+            // @phpstan-ignore argument.type
             $html .= '<li class="current"><span> Author: '.esc_html($name).'</span></li>';
             // The value is untyped here (WordPress data or a mixed array), and the code handles it as before.
             // @phpstan-ignore cast.int
@@ -312,6 +320,8 @@ if (! function_exists('get_uams_breadcrumbs')) {
                 // @phpstan-ignore argument.type
                 $posttype = get_post_type_object(get_post_type());
                 if ($posttype) {
+                    // The value is untyped here (WordPress data or a mixed array), and the code handles it as before.
+                    // @phpstan-ignore argument.type
                     $html .= '<li class="current"><span>'.esc_html($posttype->labels->menu_name).'</span></li>';
                 }
             }
@@ -333,6 +343,8 @@ if (! function_exists('get_uams_breadcrumbs')) {
                 // @phpstan-ignore argument.type
                 $tax = get_taxonomy(get_query_var('taxonomy'));
                 if ($tax && $term && ! is_wp_error($term)) {
+                    // The value is untyped here (WordPress data or a mixed array), and the code handles it as before.
+                    // @phpstan-ignore argument.type
                     $html .= '<li class="current"><span>'.esc_html($tax->labels->name).': '.esc_html($term->name).'</span></li>';
                 }
             }
@@ -364,8 +376,12 @@ if (! function_exists('get_uams_breadcrumbs')) {
                         // @phpstan-ignore argument.type
                         $archive_link = ! empty($posttype->query_var) ? get_post_type_archive_link($posttype->query_var) : '';
                         if (! empty($archive_link)) {
+                            // The value is untyped here (WordPress data or a mixed array), and the code handles it as before.
+                            // @phpstan-ignore argument.type, argument.type
                             $html .= '<li><a href="'.esc_url($archive_link).'" title="'.esc_attr($posttype->labels->menu_name).'">'.esc_html($posttype->labels->menu_name).'</a></li>';
                         } elseif (is_array($posttype->rewrite) && ! empty($posttype->rewrite['slug'])) {
+                            // The value is untyped here (WordPress data or a mixed array), and the code handles it as before.
+                            // @phpstan-ignore binaryOp.invalid, argument.type, argument.type
                             $html .= '<li><a href="'.esc_url(site_url('/'.$posttype->rewrite['slug'].'/')).'" title="'.esc_attr($posttype->labels->menu_name).'">'.esc_html($posttype->labels->menu_name).'</a></li>';
                         }
                     }

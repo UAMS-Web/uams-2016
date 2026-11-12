@@ -62,6 +62,8 @@ describe('UAMS_Campus_Map', function (): void {
     });
 
     it('prints the title before the map, with the wrappers it was given or the default ones', function (array $args, string $before, string $after): void {
+        // The value is untyped here (WordPress data or a mixed array), and the code handles it as before.
+        // @phpstan-ignore argument.type
         $html = render(fn () => (new UAMS_Campus_Map)->widget($args + ['before_widget' => '', 'after_widget' => ''], ['title' => 'Find us']));
 
         expect($html)->toStartWith($before.'H{Find us}'.$after.'<div class="uams-campus-map-widget">');
@@ -85,6 +87,8 @@ describe('UAMS_Campus_Map', function (): void {
     });
 
     it('sanitizes the title and the building on update', function (array $new, array $expected): void {
+        // The value is untyped here (WordPress data or a mixed array), and the code handles it as before.
+        // @phpstan-ignore argument.type
         expect((new UAMS_Campus_Map)->update($new, []))->toBe($expected);
     })->with([
         'both' => [['title' => 'A', 'buildingCode' => '5'], ['title' => 'T{A}', 'buildingCode' => 'T{5}']],

@@ -187,7 +187,11 @@ describe('UAMS_Enclosure', function (): void {
     });
 
     afterEach(function (): void {
+        // The value is untyped here (WordPress data or a mixed array), and the code handles it as before.
+        // @phpstan-ignore argument.type
         @unlink($this->dir.'/2026/thumb.jpg');
+        // The value is untyped here (WordPress data or a mixed array), and the code handles it as before.
+        // @phpstan-ignore argument.type
         @rmdir($this->dir.'/2026');
         @rmdir($this->dir);
     });

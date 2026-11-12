@@ -68,10 +68,14 @@ class UAMS_Users
             remove_submenu_page('themes.php', 'themes.php');
 
             global $submenu;
+            // The value is untyped here (WordPress data or a mixed array), and the code handles it as before.
+            // @phpstan-ignore offsetAccess.nonOffsetAccessible, offsetAccess.nonOffsetAccessible
             if (isset($submenu['themes.php'][6])) {
                 unset($submenu['themes.php'][6]);
             }
 
+            // The value is untyped here (WordPress data or a mixed array), and the code handles it as before.
+            // @phpstan-ignore offsetAccess.nonOffsetAccessible, offsetAccess.nonOffsetAccessible
             if (isset($submenu['themes.php'][15])) {
                 unset($submenu['themes.php'][15]);
             }

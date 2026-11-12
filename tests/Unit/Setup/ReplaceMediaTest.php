@@ -167,6 +167,8 @@ describe('uams_save_attachment_slug', function (): void {
     });
 
     it('replaces the file with the one chosen and deletes the chosen attachment', function (array $attachment): void {
+        // The value is untyped here (WordPress data or a mixed array), and the code handles it as before.
+        // @phpstan-ignore argument.type
         $result = (new UAMS_Replace_Media)->uams_save_attachment_slug($attachment + ['replace_media_for_5' => '9', 'replace-media-nonce' => 'good'], []);
 
         expect(file_get_contents($this->current))->toBe('new')
@@ -184,6 +186,8 @@ describe('uams_save_attachment_slug', function (): void {
     ]);
 
     it('does nothing without a media id', function (array $attachment): void {
+        // The value is untyped here (WordPress data or a mixed array), and the code handles it as before.
+        // @phpstan-ignore argument.type
         $result = (new UAMS_Replace_Media)->uams_save_attachment_slug($attachment, []);
 
         expect($result)->toBe($attachment)
@@ -260,6 +264,8 @@ describe('uams_save_attachment_slug', function (): void {
     });
 
     it('carries the slug over from the posted data', function (array $postData, mixed $expected): void {
+        // The value is untyped here (WordPress data or a mixed array), and the code handles it as before.
+        // @phpstan-ignore argument.type
         $result = (new UAMS_Replace_Media)->uams_save_attachment_slug(['post_ID' => 5], $postData);
 
         expect($result['post_name'] ?? null)->toBe($expected);

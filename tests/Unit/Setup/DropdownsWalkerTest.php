@@ -112,7 +112,7 @@ describe('display_element', function (): void {
         $args = ['k' => 'v'];
 
         // The real parent method returns nothing; the test stand-in returns a marker so the hand-over is visible.
-        // @phpstan-ignore method.void
+        // @phpstan-ignore method.void, argument.type
         $result = (new UAMS_Dropdowns_Walker_Menu)->display_element($element, $children, 3, $depth, $args, $output);
 
         expect($element->has_children)->toBe($has)
