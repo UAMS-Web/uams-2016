@@ -28,6 +28,9 @@ class UAMS_Widget_Contact extends WP_Widget
         wp_enqueue_media();
     }
 
+    /**
+     * @param  array<string, string>  $args  The sidebar arguments. A key can be missing when the widget renders outside a sidebar.
+     */
     public function widget($args, $instance): void
     {
         $title = apply_filters('widget_title', empty($instance['title']) ? __('List', 'uams') : $instance['title']);

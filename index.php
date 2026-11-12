@@ -38,7 +38,7 @@
                 }
 ?>
 
-            <span class="next-page"><?php next_posts_link('Next page', ''); ?></span>
+            <span class="next-page"><?php next_posts_link('Next page', ''); // @phpstan-ignore argument.type (core reads an empty string as its default of 0)?></span>
 
       </div>
 

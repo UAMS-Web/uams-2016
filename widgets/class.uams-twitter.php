@@ -142,20 +142,17 @@ if (defined('TWITTER_OAUTH_TOKEN')) {
             return $output;
         }
 
+        /**
+         * @param  array<string, string>  $args  The sidebar arguments. A key can be missing when the widget renders outside a sidebar.
+         */
         public function widget($args, $instance): void
         {
             $title = ! empty($instance['title']) ? esc_attr($instance['title']) : '';
             $count = ! empty($instance['count']) ? absint($instance['count']) : self::COUNT;
             $name = ! empty($instance['name']) ? esc_attr($instance['name']) : self::ACCOUNT;
 
-            // WordPress passes every sidebar argument in a sidebar, but widget() also runs outside one (shortcode, tests) with a partial array,
-            // so the fallbacks are kept; the tests pin them.
-            // @phpstan-ignore nullCoalesce.offset
             echo $args['before_widget'] ?? '';
             echo do_shortcode(sprintf('[twitter title="%s" count="%d" name="%s"]', $title, $count, $name));
-            // WordPress passes every sidebar argument in a sidebar, but widget() also runs outside one (shortcode, tests) with a partial array,
-            // so the fallbacks are kept; the tests pin them.
-            // @phpstan-ignore nullCoalesce.offset
             echo $args['after_widget'] ?? '';
         }
 

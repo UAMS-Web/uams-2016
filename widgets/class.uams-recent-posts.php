@@ -35,6 +35,9 @@ class UAMS_Recent_Posts extends WP_Widget
         );
     }
 
+    /**
+     * @param  array<string, string>  $args  The sidebar arguments. A key can be missing when the widget renders outside a sidebar.
+     */
     public function widget($args, $instance): void
     {
         $title = ! empty($instance['title']) ? $instance['title'] : self::TITLE;

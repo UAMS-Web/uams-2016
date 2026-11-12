@@ -46,7 +46,7 @@ class UAMS_Widget_Cards extends WP_Widget
 
 		<p>
 			<div class="card-image-preview wp-get-posts-image-preview" style="width:33%; display:block;">
-				<img src="<?php echo esc_url(wp_get_attachment_url($image) ?: ''); ?>" width="100%" class="wp-get-posts-image" />
+				<img src="<?php echo esc_url(wp_get_attachment_url($image) ?: ''); // @phpstan-ignore argument.type (the setting is a numeric attachment id)?>" width="100%" class="wp-get-posts-image" />
 			</div>
 
 			<a class="select-a-card-image button" href="#">Select an Image</a>
@@ -89,6 +89,9 @@ class UAMS_Widget_Cards extends WP_Widget
         return ['title' => sanitize_text_field($new_instance['title'] ?? ''), 'text' => wp_kses_post($new_instance['text'] ?? ''), 'image' => absint($new_instance['image'] ?? 0), 'src' => esc_url_raw($new_instance['src'] ?? ''), 'link' => esc_url_raw($new_instance['link'] ?? ''), 'link-text' => sanitize_text_field($new_instance['link-text'] ?? ''), 'radio_card' => sanitize_text_field($new_instance['radio_card'] ?? 'default-card')];
     }
 
+    /**
+     * @param  array<string, string>  $args  The sidebar arguments. A key can be missing when the widget renders outside a sidebar.
+     */
     public function widget($args, $instance): void
     {
         $title = $instance['title'] ?? '';

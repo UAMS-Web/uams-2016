@@ -55,6 +55,9 @@ if (! function_exists('uams_dropdowns')) {
 
         echo '<nav id="reddiedrops" aria-label="Main menu"><div class="reddiedrops-inner container" role="application">';
 
+        // wordpress-stubs type fallback_cb as callable|false; core also accepts an empty string, the long-standing way to
+        // switch the fallback off.
+        // @phpstan-ignore argument.type
         wp_nav_menu([
             'theme_location' => $location,
             'container' => false,
@@ -142,7 +145,7 @@ if (! function_exists('uams_list_pages')) {
             'child_of' => $parent_post_parent,
             'exclude_tree' => $ids,
             'depth' => 3,
-            'echo' => 0,
+            'echo' => false,
             'walker' => $walker,
         ]);
 
@@ -211,12 +214,14 @@ if (! function_exists('uams_list_mobile_pages')) {
         global $UAMS;
         $walker = (isset($UAMS) && is_object($UAMS) && isset($UAMS->SidebarMenuWalker)) ? $UAMS->SidebarMenuWalker : '';
 
+        // wordpress-stubs type 'include' as an array; core also accepts the comma-separated list of ids this passes.
+        // @phpstan-ignore argument.type
         $pages = wp_list_pages([
             'title_li' => '<a href="'.esc_url(home_url('/')).'" title="Home" class="homelink">Home</a>',
             'include' => implode(',', $ids),
             'sort_order' => 'menu_order',
             'depth' => 1,
-            'echo' => 0,
+            'echo' => false,
             'walker' => $walker,
         ]);
 
@@ -232,6 +237,9 @@ if (! function_exists('uams_list_front_page_menu_items')) {
         $location = class_exists('UAMS_Dropdowns') ? UAMS_Dropdowns::LOCATION : 'white-bar';
         $toggle = '<button class="uams-mobile-menu-toggle">Menu</button>';
 
+        // wordpress-stubs type fallback_cb as callable|false; core also accepts an empty string, the long-standing way to
+        // switch the fallback off.
+        // @phpstan-ignore argument.type
         $items = wp_nav_menu([
             'title_li' => '<a href="'.esc_url(home_url('/')).'" title="Home" class="homelink">Home</a>',
             'theme_location' => $location,
@@ -393,6 +401,8 @@ if (! function_exists('uams_get_sticky_posts')) {
         $defaults = ['post__in' => ! empty($stickyposts) ? $stickyposts : [0]];
         $options = wp_parse_args($args, $defaults);
 
+        // The arguments come from the caller through wp_parse_args(), so PHPStan cannot narrow them to the stub's get_posts() shape.
+        // @phpstan-ignore argument.type
         return get_posts($options);
     }
 }
