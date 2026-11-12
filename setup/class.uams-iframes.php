@@ -27,6 +27,8 @@ class UAMS_Iframes
             'src' => '',
             'height' => get_option('embed_size_h'),
             'width' => get_option('embed_size_w'),
+            // WordPress passes an empty string for a shortcode with no attributes, and shortcode_atts() casts it to an array.
+            // @phpstan-ignore argument.type
         ], $atts, 'iframe');
 
         $params['src'] = esc_url($params['src'], ['http', 'https']);

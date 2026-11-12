@@ -30,7 +30,7 @@ use Rector\TypeDeclaration\Rector\ClassMethod\StrictArrayParamDimFetchRector;
 /**
  * Apply a config file to Rector's parameter store and read back what it set.
  *
- * @return array{paths: list<string>, skip: list<string>, php: int, import: bool, docImport: bool, shortImport: bool, removeUnused: bool, sets: list<string>}
+ * @return array{paths: array<string>, skip: array<string>, php: int, import: bool, docImport: bool, shortImport: bool, removeUnused: bool, sets: array<string>}
  */
 function readRectorProfile(string $file): array
 {

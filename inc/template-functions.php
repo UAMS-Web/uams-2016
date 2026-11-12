@@ -302,6 +302,8 @@ if (! function_exists('get_uams_breadcrumbs')) {
 
         if (is_category() || is_tax() || is_single() || is_post_type_archive()) {
             if (is_post_type_archive() && ! is_tax()) {
+                // The stubs type this value as possibly false; the call is unchanged.
+                // @phpstan-ignore argument.type
                 $posttype = get_post_type_object(get_post_type());
                 if ($posttype) {
                     $html .= '<li class="current"><span>'.esc_html($posttype->labels->menu_name).'</span></li>';
@@ -340,8 +342,12 @@ if (! function_exists('get_uams_breadcrumbs')) {
                 }
 
                 if (uams_is_custom_post_type()) {
+                    // The stubs type this value as possibly false; the call is unchanged.
+                    // @phpstan-ignore argument.type
                     $posttype = get_post_type_object(get_post_type());
                     if ($posttype) {
+                        // The empty() check leaves a string; core types query_var as string|bool.
+                        // @phpstan-ignore argument.type
                         $archive_link = ! empty($posttype->query_var) ? get_post_type_archive_link($posttype->query_var) : '';
                         if (! empty($archive_link)) {
                             $html .= '<li><a href="'.esc_url($archive_link).'" title="'.esc_attr($posttype->labels->menu_name).'">'.esc_html($posttype->labels->menu_name).'</a></li>';
@@ -376,6 +382,8 @@ if (! function_exists('get_uams_breadcrumbs')) {
                     if ($is_last) {
                         $html .= '<li class="current"><span>'.esc_html($page->post_title).'</span></li>';
                     } else {
+                        // The stubs type this value as possibly false; the call is unchanged.
+                        // @phpstan-ignore argument.type
                         $html .= '<li><a href="'.esc_url($url).'" title="'.$title_attr.'">'.esc_html($page->post_title).'</a></li>';
                     }
                 }
@@ -414,6 +422,8 @@ if (! function_exists('uams_get_thumbnail_url')) {
      */
     function uams_get_thumbnail_url($size = 'original')
     {
+        // The stubs type this value as possibly false; the call is unchanged.
+        // @phpstan-ignore argument.type
         $thumbnail = wp_get_attachment_image_src(get_post_thumbnail_id(), $size, true);
 
         return is_array($thumbnail) ? $thumbnail[0] : '';

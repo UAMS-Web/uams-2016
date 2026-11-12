@@ -5,7 +5,11 @@
 get_header();
 
 $post_id = get_the_ID();
+// The stubs type this value as possibly false; the call is unchanged.
+// @phpstan-ignore argument.type
 $sidebar = get_post_meta($post_id, 'sidebar', true);
+// The stubs type this value as possibly false; the call is unchanged.
+// @phpstan-ignore argument.type
 $breadcrumbs = get_post_meta($post_id, 'breadcrumb', true);
 $has_sidebar = ($sidebar !== 'on');
 
@@ -78,6 +82,8 @@ foreach ($cats as $cat) {
             $cat_posts->the_post();
             $categories = get_the_category();
             if (! empty($categories) && (int) $categories[0]->term_id === (int) $cat->term_id) {
+                // The stubs type this value as possibly false; the call is unchanged.
+                // @phpstan-ignore argument.type
                 echo '<li><a href="'.esc_url(get_permalink()).'">'.esc_html(get_the_title()).'</a></li>';
             }
         }

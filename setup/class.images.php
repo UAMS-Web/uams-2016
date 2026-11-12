@@ -7,7 +7,7 @@
 class UAMS_Images
 {
     /**
-     * @var array<string, array<string, bool|int|string>>
+     * @var array<string, array{name: string, width: int, height: int, crop: bool, show: bool}>
      */
     // Coverage attributes no line to a property default, so its mutants are reported uncovered, not
     // surviving. 'defines the sizes the theme ships' asserts the whole value, so any change to it fails.

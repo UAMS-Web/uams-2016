@@ -53,6 +53,8 @@ class UAMS_AccordionShortcode
     {
         $accordion_atts = shortcode_atts([
             'name' => '',
+            // WordPress passes an empty string for a shortcode with no attributes, and shortcode_atts() casts it to an array.
+            // @phpstan-ignore argument.type
         ], $atts);
 
         if (empty($content)) {
@@ -76,6 +78,8 @@ class UAMS_AccordionShortcode
         $section_atts = shortcode_atts([
             'title' => '',
             'active' => false,
+            // WordPress passes an empty string for a shortcode with no attributes, and shortcode_atts() casts it to an array.
+            // @phpstan-ignore argument.type
         ], $atts);
 
         $active = '';
@@ -104,6 +108,8 @@ class UAMS_AccordionShortcode
         $section_atts = shortcode_atts([
             'title' => '',
             'active' => false,
+            // WordPress passes an empty string for a shortcode with no attributes, and shortcode_atts() casts it to an array.
+            // @phpstan-ignore argument.type
         ], $atts);
 
         $active = '';

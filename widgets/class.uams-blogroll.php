@@ -129,6 +129,8 @@ class UAMS_Blogroll extends WP_Widget
                 'style' => 'default',
                 'date' => 'show',
             ],
+            // WordPress passes an empty string for a shortcode with no attributes, and shortcode_atts() casts it to an array.
+            // @phpstan-ignore argument.type
             $atts
         );
 
@@ -174,13 +176,19 @@ class UAMS_Blogroll extends WP_Widget
                     $post->ID,
                     'thumbnail',
                     [
+                        // The stubs type this value as possibly false; the call is unchanged.
+                        // @phpstan-ignore argument.type
                         'alt' => get_post_meta(get_post_thumbnail_id($post->ID), '_wp_attachment_image_alt', true),
                     ]
                 );
                 $class = ' class="pull-left"';
             }
 
+            // The stubs type this value as possibly false; the call is unchanged.
+            // @phpstan-ignore argument.type
             $author = $this->is_true($params->author) ? '<p class="author-info">'.esc_html(get_the_author_meta('display_name', $post->post_author)).'</p>' : '';
+            // The stubs type this value as possibly false; the call is unchanged.
+            // @phpstan-ignore argument.type
             $author_mini = $this->is_true($params->author) ? esc_html(get_the_author_meta('display_name', $post->post_author)) : '';
 
             $date = '';
@@ -202,8 +210,12 @@ class UAMS_Blogroll extends WP_Widget
             if ($mini) {
                 $html .= sprintf(
                     "<li><a class='widget-thumbnail' href='%s'>%s</a><a class='widget-link' href='%s'>%s<span>%s</span></a></li>",
+                    // The stubs type this value as possibly false; the call is unchanged.
+                    // @phpstan-ignore argument.type
                     esc_url($link),
                     $image,
+                    // The stubs type this value as possibly false; the call is unchanged.
+                    // @phpstan-ignore argument.type
                     esc_url($link),
                     esc_html($post->post_title),
                     $byline
@@ -211,6 +223,8 @@ class UAMS_Blogroll extends WP_Widget
             } elseif ($style === 'card') {
                 $html .= '<div class="cards-widget"><div class="default-card">';
                 if (has_post_thumbnail($post->ID)) {
+                    // The stubs type this value as possibly false; the call is unchanged.
+                    // @phpstan-ignore argument.type
                     $img_src = wp_get_attachment_image_src(get_post_thumbnail_id($post->ID), 'large');
                     if (! empty($img_src[0])) {
                         $html .= '<div class="card-image" style="background-image:url('.esc_url($img_src[0]).')"></div>';
@@ -232,6 +246,8 @@ class UAMS_Blogroll extends WP_Widget
                 }
                 $html .= '</div></div></div>';
             } else {
+                // The stubs type this value as possibly false; the call is unchanged.
+                // @phpstan-ignore argument.type
                 $html .= "<li><span><{$params->titletag}><a href=\"".esc_url($link).'">'.esc_html($post->post_title)."</a><span class=\"date\">{$date}</span></{$params->titletag}>{$author}<span{$class}>{$image}</span>{$excerpt}</span></li>";
             }
         }

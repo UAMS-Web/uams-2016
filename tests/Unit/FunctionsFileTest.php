@@ -21,7 +21,7 @@ use function Brain\Monkey\Functions\when;
 /**
  * Include functions.php once, and return what its file-scope code did.
  *
- * @return array{hooks: list<array{string, list<mixed>}>, actions: list<list<mixed>>, acf_includes: int, uams: mixed}
+ * @return array{hooks: list<array{string, array<int|string, mixed>}>, actions: list<array<int|string, mixed>>, acf_includes: mixed, uams: mixed}
  */
 function loadThemeFunctions(): array
 {
@@ -146,7 +146,7 @@ describe('uams_custom_field_body_class', function (): void {
      * Run the body class filter on a page with the given meta and option values.
      *
      * @param  list<string>  $classes
-     * @return list<string>
+     * @return array<int, string>
      */
     function bodyClass(array $classes, bool $page, mixed $actionMenu, mixed $primary): array
     {

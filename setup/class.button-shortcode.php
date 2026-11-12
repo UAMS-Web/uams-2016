@@ -34,6 +34,8 @@ class UAMS_Button
             'size' => '', // @pest-mutate-ignore: EmptyStringToNotEmpty
             'small' => null,
             'text' => '',
+            // WordPress passes an empty string for a shortcode with no attributes, and shortcode_atts() casts it to an array.
+            // @phpstan-ignore argument.type
         ], $atts, 'button');
 
         $classes = ['uams-btn'];

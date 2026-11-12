@@ -245,6 +245,8 @@ describe('add_data_to_images', function (): void {
         $carousel = new UAMS_Carousel;
         $carousel->first_run = $first;
 
+        // A plain object stands in for the attachment post.
+        // @phpstan-ignore argument.type
         expect($carousel->add_data_to_images(['class' => 'x'], $attachment))->toBe(['class' => 'x']);
     })->with([
         'first run' => [true, new stdClass],
@@ -255,6 +257,8 @@ describe('add_data_to_images', function (): void {
         $carousel = new UAMS_Carousel;
         $carousel->first_run = false;
 
+        // A plain object stands in for the attachment post.
+        // @phpstan-ignore argument.type
         expect($carousel->add_data_to_images(['class' => 'x'], carouselAttachment()))->toBe([
             'class' => 'x',
             'data-attachment-id' => 42,
@@ -277,6 +281,8 @@ describe('add_data_to_images', function (): void {
         $carousel = new UAMS_Carousel;
         $carousel->first_run = false;
 
+        // A plain object stands in for the attachment post.
+        // @phpstan-ignore argument.type
         $attr = $carousel->add_data_to_images([], carouselAttachment());
 
         expect($attr)->toBe([
@@ -297,6 +303,8 @@ describe('add_data_to_images', function (): void {
         $carousel = new UAMS_Carousel;
         $carousel->first_run = false;
 
+        // A plain object stands in for the attachment post.
+        // @phpstan-ignore argument.type
         $attr = $carousel->add_data_to_images([], carouselAttachment());
 
         expect($attr['data-image-meta'])->toBe('A{[]}')

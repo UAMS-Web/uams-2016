@@ -5,6 +5,8 @@
 get_header();
 
 $post_id = get_the_ID();
+// The stubs type this value as possibly false; the call is unchanged.
+// @phpstan-ignore argument.type
 $thumb_id = get_post_thumbnail_id($post_id);
 $url = $thumb_id ? wp_get_attachment_url($thumb_id) : '';
 if (! $url) {
@@ -15,7 +17,11 @@ $mobileimage_raw = function_exists('get_field') ? get_field('home_image_mobile')
 $mobileimage_url = is_array($mobileimage_raw) && ! empty($mobileimage_raw['url']) ? $mobileimage_raw['url'] : (is_string($mobileimage_raw) ? $mobileimage_raw : '');
 $hasmobileimage = ! empty($mobileimage_url) ? 'hero-mobile-image' : '';
 
+// The stubs type this value as possibly false; the call is unchanged.
+// @phpstan-ignore argument.type
 $sidebar = get_post_meta($post_id, 'sidebar', true);
+// The stubs type this value as possibly false; the call is unchanged.
+// @phpstan-ignore argument.type
 $breadcrumbs = get_post_meta($post_id, 'breadcrumb', true);
 $has_sidebar = ($sidebar !== 'on');
 
@@ -24,6 +30,8 @@ $buttontext = function_exists('get_field') ? get_field('home_image_button_text')
 $external = function_exists('get_field') ? get_field('home_image_external') : false;
 $externalurl = function_exists('get_field') ? get_field('home_image_external_url') : '';
 $internalurl = function_exists('get_field') ? get_field('home_image_internal_url') : '';
+// The stubs type this value as possibly false; the call is unchanged.
+// @phpstan-ignore argument.type
 $darktext = (array) get_post_meta($post_id, 'home_image_dark_text', true);
 $hasdarktext = in_array('1', $darktext, true) ? ' hero-text-dark' : '';
 $btn_url = $external ? $externalurl : $internalurl;

@@ -41,6 +41,8 @@ class UAMS_Map
                 'width' => '100%',
                 'height' => '480px',
             ],
+            // WordPress passes an empty string for a shortcode with no attributes, and shortcode_atts() casts it to an array.
+            // @phpstan-ignore argument.type
             $atts,
             'map'
         );

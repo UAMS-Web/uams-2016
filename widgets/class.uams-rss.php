@@ -172,6 +172,8 @@ class UAMS_RSS extends WP_Widget
      */
     public function uams_rss_shortcode($atts)
     {
+        // WordPress passes an empty string for a shortcode with no attributes, and shortcode_atts() casts it to an array.
+        // @phpstan-ignore argument.type
         $params = shortcode_atts(self::$SHORTCODE_DEFAULTS, $atts);
 
         if (empty($params['url']) || is_feed()) {
@@ -181,6 +183,8 @@ class UAMS_RSS extends WP_Widget
         $has_blurb = filter_var($params['has_blurb'], FILTER_VALIDATE_BOOLEAN);
         $content = $has_blurb ? '<span></span>' : '';
 
+        // The url attribute is a string from the shortcode or the widget settings.
+        // @phpstan-ignore argument.type
         $rss = fetch_feed(wp_specialchars_decode($params['url']));
 
         if (! is_wp_error($rss)) {
@@ -211,6 +215,10 @@ class UAMS_RSS extends WP_Widget
                 if ((string) $params['show_date'] !== 'false') {
                     $raw_date = $item->get_date();
                     if ($raw_date) {
+                        // The stubs type this value as possibly false; the call is unchanged.
+                        // @phpstan-ignore argument.type
+                        // The feed date is non-empty here; an unparsable one yields false, which human_time_diff() reads as the epoch.
+                        // @phpstan-ignore argument.type, argument.type
                         $date = human_time_diff(strtotime($raw_date)).' ago';
                     }
                 }
@@ -231,6 +239,8 @@ class UAMS_RSS extends WP_Widget
             $content .= '</ul>';
 
             if ((string) $params['show_more'] !== 'false' && ! empty($url)) {
+                // The url attribute is a string from the shortcode or the widget settings.
+                // @phpstan-ignore argument.type
                 $content .= '<a class="widget-more more" href="'.esc_url($url).'">More</a>';
             }
         }

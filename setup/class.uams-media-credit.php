@@ -51,6 +51,8 @@ class UAMS_Media_Credit
         $width = isset($img[1]) ? (int) $img[1] : 0;
 
         return ! empty($credit) ?
+            // The size reaches this markup as the name the editor wrote into the shortcode.
+            // @phpstan-ignore argument.type
             "<dl class='mediacredit align".esc_attr($align)."' data-credit='".esc_attr($credit)."' data-align='align".esc_attr($align)."' data-size='".esc_attr($size)."' style='width:{$width}px'>
                 <dt class='mediacredit-dt'>{$html}</dt>
                 <dd class='wp-caption-dd'>".esc_html($credit).'</dd>
@@ -70,6 +72,8 @@ class UAMS_Media_Credit
             'align' => '',
             'size' => 'full',
             'credit' => '',
+            // WordPress passes an empty string for a shortcode with no attributes, and shortcode_atts() casts it to an array.
+            // @phpstan-ignore argument.type
         ], $attrs, 'mediacredit');
 
         $post_id = (int) $atts['id'];

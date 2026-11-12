@@ -53,6 +53,8 @@ class UAMS_Dropdowns_Walker_Menu extends Walker_Nav_Menu
         // A non-object element is handed on untouched, which the walker test pins; walker callers normally pass an object.
         // @phpstan-ignore function.alreadyNarrowedType
         if (is_object($element)) {
+            // Menu items are objects carrying the properties wp_setup_nav_menu_item() adds.
+            // @phpstan-ignore property.notFound, property.notFound
             $element->has_children = ! empty($children_elements[$element->ID]);
         }
 
@@ -67,7 +69,11 @@ class UAMS_Dropdowns_Walker_Menu extends Walker_Nav_Menu
      */
     public function start_el(&$output, $item, $depth = 0, $args = null, $id = 0): void
     {
+        // Menu items are objects carrying the properties wp_setup_nav_menu_item() adds.
+        // @phpstan-ignore property.notFound
         $this->CURRENT = ! empty($item->post_name) ? $item->post_name : sanitize_title($item->title);
+        // Menu items are objects carrying the properties wp_setup_nav_menu_item() adds.
+        // @phpstan-ignore property.notFound
         $title = ! empty($item->title) ? $item->title : $item->post_title;
         $title = strip_tags((string) $title);
 
@@ -109,6 +115,8 @@ class UAMS_Dropdowns_Walker_Menu extends Walker_Nav_Menu
 
         $item_output = $before;
         $item_output .= '<a'.$attributes.'>';
+        // Menu items are objects carrying the properties wp_setup_nav_menu_item() adds.
+        // @phpstan-ignore property.notFound
         $item_output .= $link_before.apply_filters('the_title', $title, $item->ID).$link_after;
         $item_output .= '</a>';
         $item_output .= $after;

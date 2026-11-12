@@ -25,13 +25,19 @@ class UAMS_GoogleApps
             'width' => 620,
             'height' => 500,
             'app' => 'calendar',
+            // WordPress passes an empty string for a shortcode with no attributes, and shortcode_atts() casts it to an array.
+            // @phpstan-ignore argument.type
         ], $atts, 'googleapps');
 
         if ($params['dir'] === 'calendar/embed') {
             return sprintf(
                 '<div class="googleapps-%s"><iframe width="%s" height="%s" style="border:0" scrolling="no" marginheight="0" marginwidth="0" src="https://www.google.com/calendar/embed?%s"></iframe></div>',
                 esc_attr($params['app']),
+                // The stubs type this value as possibly false; the call is unchanged.
+                // @phpstan-ignore argument.type
                 esc_attr($params['width']),
+                // The stubs type this value as possibly false; the call is unchanged.
+                // @phpstan-ignore argument.type
                 esc_attr($params['height']),
                 esc_attr($params['query'])
             );

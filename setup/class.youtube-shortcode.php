@@ -84,6 +84,8 @@ class UAMS_YouTube
             'id' => '',
             'max-results' => 0,
             'max_results' => 0, // @pest-mutate-ignore: DecrementInteger
+            // WordPress passes an empty string for a shortcode with no attributes, and shortcode_atts() casts it to an array.
+            // @phpstan-ignore argument.type
         ], $atts, 'youtube');
 
         $type = strtolower(trim($params['type']));

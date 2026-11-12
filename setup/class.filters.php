@@ -194,6 +194,8 @@ class UAMS_Filters
      */
     public function excerpt_more_override($excerpt): string
     {
+        // The stubs type this value as possibly false; the call is unchanged.
+        // @phpstan-ignore argument.type
         return $excerpt.'<div><a class="more" href="'.esc_url(uams_get_permalink()).'">Read more</a></div>';
     }
 

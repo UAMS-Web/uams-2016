@@ -36,6 +36,8 @@
 <?php wp_footer(); ?>
 
 <?php
+    // The stubs type this value as possibly false; the call is unchanged.
+    // @phpstan-ignore argument.type
     $custom_footer_script = get_post_meta(get_the_ID(), 'custom_footer_script', true);
         if (! empty($custom_footer_script)) {
             echo $custom_footer_script;

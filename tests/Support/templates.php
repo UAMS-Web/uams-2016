@@ -13,7 +13,7 @@ declare(strict_types=1);
  */
 function contentTags(array $extra = []): void
 {
-    $json = static fn (mixed $value): string => json_encode($value, JSON_UNESCAPED_SLASHES);
+    $json = static fn (mixed $value): string => (string) json_encode($value, JSON_UNESCAPED_SLASHES);
 
     stubTags(array_merge([
         'the_title' => '[title]',

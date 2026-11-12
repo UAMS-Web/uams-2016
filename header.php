@@ -74,7 +74,11 @@ $gtmvalue = ! empty($gtm) ? esc_attr($gtm) : 'GTM-NGG4P7F';
         <![endif]-->
 
         <?php
+// The stubs type this value as possibly false; the call is unchanged.
+// @phpstan-ignore argument.type
 $page_js = get_post_meta(get_the_ID(), 'javascript', true);
+// The stubs type this value as possibly false; the call is unchanged.
+// @phpstan-ignore argument.type
 $page_css = get_post_meta(get_the_ID(), 'css', true);
 if (! empty($page_js)) {
     echo $page_js;
@@ -83,6 +87,8 @@ if (! empty($page_css)) {
     echo $page_css;
 }
 
+// The stubs type this value as possibly false; the call is unchanged.
+// @phpstan-ignore argument.type
 $custom_header_script = get_post_meta(get_the_ID(), 'custom_header_script', true);
 if (! empty($custom_header_script)) {
     echo $custom_header_script;

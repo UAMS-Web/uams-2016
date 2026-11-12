@@ -85,12 +85,12 @@ class UAMS_Recent_Posts extends WP_Widget
 			    ?>
 				<li>
 					<?php if (has_post_thumbnail($post->ID)) { ?>
-						<a class="widget-thumbnail" href="<?php echo esc_url($permalink); ?>" title="<?php echo esc_attr(get_the_title($post->ID)); ?>">
+						<a class="widget-thumbnail" href="<?php echo esc_url($permalink); ?>" title="<?php echo esc_attr(get_the_title($post->ID)); // @phpstan-ignore argument.type?>">
 							<?php echo get_the_post_thumbnail($post->ID, 'thumbnail'); ?>
 						</a>
 					<?php } ?>
 
-					<a class="widget-link" href="<?php echo esc_url($permalink); ?>" title="<?php echo esc_attr(get_the_title($post->ID)); ?>">
+					<a class="widget-link" href="<?php echo esc_url($permalink); ?>" title="<?php echo esc_attr(get_the_title($post->ID)); // @phpstan-ignore argument.type?>">
 						<?php echo esc_html(get_the_title($post->ID)); ?>
 						<p><small><?php echo esc_html($this->humanTime($post->ID)); ?> ago</small></p>
 					</a>
@@ -99,7 +99,7 @@ class UAMS_Recent_Posts extends WP_Widget
 		</ul>
 
 		<?php if (get_option('page_for_posts') && $more) { ?>
-			<a class="more" href="<?php echo esc_url(get_permalink(get_option('page_for_posts'))); ?>"><?php _e('More', 'uams'); ?></a>
+			<a class="more" href="<?php echo esc_url(get_permalink(get_option('page_for_posts'))); ?>"><?php _e('More', 'uams'); // @phpstan-ignore argument.type?></a>
 		<?php } ?>
 
 		<?php
@@ -153,6 +153,8 @@ class UAMS_Recent_Posts extends WP_Widget
      */
     public function humanTime($post_id)
     {
+        // get_the_time() with the U format returns a timestamp that human_time_diff() reads as a number.
+        // @phpstan-ignore argument.type
         return human_time_diff(get_the_time('U', $post_id), time());
     }
 }
