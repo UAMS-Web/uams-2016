@@ -41,6 +41,9 @@ class UAMS_Dropdowns_Walker_Menu extends Walker_Nav_Menu
             $element->has_children = ! empty($children_elements[$element->ID]);
         }
 
+        // Walker::display_element() returns nothing in core, so this result is always null; the override
+        // hands it on as it always has, and the walker test pins that hand-over.
+        // @phpstan-ignore staticMethod.void, return.void
         return parent::display_element($element, $children_elements, $max_depth, $depth, $args, $output);
     }
 

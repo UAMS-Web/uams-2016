@@ -21,10 +21,11 @@ beforeEach(function (): void {
 /**
  * Record the script registrations, deregistrations and enqueues the class makes.
  *
- * @return ArrayObject<int, array<int, mixed>>
+ * @return ArrayObject<int, array<int|string, mixed>>
  */
 function recordScripts(): ArrayObject
 {
+    /** @var ArrayObject<int, array<int|string, mixed>> $calls */
     $calls = new ArrayObject;
     when('wp_deregister_script')->alias(static function (string $handle) use ($calls): void {
         $calls[] = ['deregister', $handle];

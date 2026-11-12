@@ -99,7 +99,9 @@ beforeEach(function (): void {
 afterEach(function (): void {
     $_POST = $this->savedPost;
     $_REQUEST = $this->savedRequest;
-    [$GLOBALS['post'], $GLOBALS['wp_query']] = $this->savedGlobals;
+    /** @var array{mixed, mixed} $saved */
+    $saved = $this->savedGlobals;
+    [$GLOBALS['post'], $GLOBALS['wp_query']] = $saved;
 });
 
 describe('construction', function (): void {
@@ -502,7 +504,7 @@ describe('sidebars_widgets', function (): void {
     });
 
     /**
-     * @return array<string, mixed>
+     * @return array<int, array<string, mixed>>
      */
     function widgetSettings(string $action): array
     {

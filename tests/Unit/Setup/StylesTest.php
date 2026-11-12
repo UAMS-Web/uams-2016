@@ -22,10 +22,11 @@ beforeEach(function (): void {
 /**
  * Record the style registrations and enqueues the class makes.
  *
- * @return ArrayObject<int, array<int, mixed>>
+ * @return ArrayObject<int, array<int|string, mixed>>
  */
 function recordStyles(): ArrayObject
 {
+    /** @var ArrayObject<int, array<int|string, mixed>> $calls */
     $calls = new ArrayObject;
     when('wp_register_style')->alias(static function (mixed ...$args) use ($calls): void {
         $calls[] = ['register', ...$args];
