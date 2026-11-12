@@ -44,6 +44,9 @@ class UAMS_Dropdowns_Walker_Menu extends Walker_Nav_Menu
         return parent::display_element($element, $children_elements, $max_depth, $depth, $args, $output);
     }
 
+    /**
+     * @param  object  $item  A navigation menu item as wp_setup_nav_menu_item() returns it.
+     */
     public function start_el(&$output, $item, $depth = 0, $args = null, $id = 0): void
     {
         $this->CURRENT = ! empty($item->post_name) ? $item->post_name : sanitize_title($item->title);

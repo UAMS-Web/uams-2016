@@ -24,6 +24,10 @@ if (! class_exists('WP_Post')) {
 
         public $post_title = '';
 
+        public $post_name = '';
+
+        public $post_content = '';
+
         public $post_excerpt = '';
 
         public $post_author = 0;
@@ -39,7 +43,15 @@ if (! class_exists('WP_Post')) {
 }
 
 if (! class_exists('WP_Error')) {
-    class WP_Error {}
+    class WP_Error
+    {
+        public array $errors = [];
+
+        public function get_error_message(string $code = ''): string
+        {
+            return '';
+        }
+    }
 }
 
 if (! class_exists('WP_Query')) {

@@ -162,7 +162,7 @@ add_filter('script_loader_tag', 'add_defer_attribute', 10, 2);
  *
  * @param  string  $tag  The <script> tag for the enqueued script.
  * @param  string  $handle  The script's registered handle.
- * @return Filtered HTML script tag.
+ * @return string Filtered HTML script tag.
  */
 function add_defer_attribute($tag, $handle)
 {
