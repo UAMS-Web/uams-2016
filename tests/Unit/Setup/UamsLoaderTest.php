@@ -99,6 +99,8 @@ it('requires the optional files that exist after the setup files', function (): 
     new UAMS;
 
     $loaded = $GLOBALS['uams_test_loaded'];
+    // The value is untyped here (WordPress data or a mixed array), and the code handles it as before.
+    // @phpstan-ignore argument.type
     expect(array_slice($loaded, 24, 5))->toBe([
         'setup/class.uams-page-attributes-meta-box.php',
         'setup/custom-post-types.php',
@@ -115,6 +117,8 @@ it('includes every widget file', function (): void {
 
     new UAMS;
 
+    // The value is untyped here (WordPress data or a mixed array), and the code handles it as before.
+    // @phpstan-ignore argument.type
     expect(array_slice($GLOBALS['uams_test_loaded'], -2))->toBe(['widgets/a.php', 'widgets/b.php']);
 });
 

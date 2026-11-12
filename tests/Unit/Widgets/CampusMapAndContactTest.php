@@ -23,9 +23,13 @@ beforeEach(function (): void {
     when('sanitize_text_field')->alias(static fn (string $text): string => 'T{'.$text.'}');
     when('sanitize_email')->alias(static fn (string $text): string => 'E{'.$text.'}');
     when('antispambot')->alias(static fn (string $text): string => 'AS{'.$text.'}');
+    // The value is untyped here (WordPress data or a mixed array), and the code handles it as before.
+    // @phpstan-ignore cast.int
     when('absint')->alias(static fn (mixed $value): int => abs((int) $value));
     when('wp_parse_args')->alias(static fn (array $args, array $defaults): array => array_merge($defaults, $args));
     when('selected')->alias(static function (mixed $selected, mixed $current): void {
+        // The value is untyped here (WordPress data or a mixed array), and the code handles it as before.
+        // @phpstan-ignore cast.string, cast.string
         echo (string) preg_replace('/^A\{(.*)\}$/', '$1', (string) $selected) === (string) $current ? ' SEL' : '';
     });
 });

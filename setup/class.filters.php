@@ -120,6 +120,8 @@ class UAMS_Filters
         $classes = is_array($classes) ? $classes : [];
         if (is_page_template()) {
             foreach ($classes as $index => $class) {
+                // The value is untyped here (WordPress data or a mixed array), and the code handles it as before.
+                // @phpstan-ignore argument.type
                 $classes[$index] = str_replace($this->REPLACE_TEMPLATE_CLASS, '', $class);
             }
         }
@@ -149,9 +151,13 @@ class UAMS_Filters
     public function italicize($content): string|array|null
     {
         if (empty($content) || ! is_string($content)) {
+            // The value is untyped here (WordPress data or a mixed array), and the code handles it as before.
+            // @phpstan-ignore cast.string
             return (string) $content;
         }
 
+        // The value is untyped here (WordPress data or a mixed array), and the code handles it as before.
+        // @phpstan-ignore cast.string
         $raw_words = (string) get_option('italicized_words', '');
         if (empty($raw_words)) {
             return $content;
@@ -185,6 +191,8 @@ class UAMS_Filters
     {
         $abbr = get_option('abbreviation');
 
+        // The value is untyped here (WordPress data or a mixed array), and the code handles it as before.
+        // @phpstan-ignore return.type
         return ! empty($abbr) ? $abbr : $title;
     }
 

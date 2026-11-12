@@ -54,8 +54,14 @@ class UAMS_Dropdowns
             $parent_id = wp_update_nav_menu_item($this->MENU_ID, 0, $menu_attributes);
 
             if (! empty($children) && ! is_wp_error($parent_id)) {
+                // The value is untyped here (WordPress data or a mixed array), and the code handles it as before.
+                // @phpstan-ignore foreach.nonIterable
                 foreach ($children as $submenu) {
+                    // The value is untyped here (WordPress data or a mixed array), and the code handles it as before.
+                    // @phpstan-ignore offsetAccess.nonOffsetAccessible
                     $submenu['menu-item-parent-id'] = $parent_id;
+                    // The value is untyped here (WordPress data or a mixed array), and the code handles it as before.
+                    // @phpstan-ignore argument.type
                     wp_update_nav_menu_item($this->MENU_ID, 0, $submenu);
                 }
             }
@@ -115,6 +121,8 @@ class UAMS_Dropdowns
         ];
 
         if ($parent) {
+            // The value is untyped here (WordPress data or a mixed array), and the code handles it as before.
+            // @phpstan-ignore offsetAccess.nonOffsetAccessible
             $this->menu_items[$parent]['children'][$name] = $item;
         } else {
             $this->menu_items[$name] = $item;

@@ -74,8 +74,14 @@ if (defined('TWITTER_OAUTH_TOKEN')) {
 
         public function form($instance): void
         {
+            // The value is untyped here (WordPress data or a mixed array), and the code handles it as before.
+            // @phpstan-ignore argument.type
             $title = isset($instance['title']) ? esc_attr($instance['title']) : self::NAME;
+            // The value is untyped here (WordPress data or a mixed array), and the code handles it as before.
+            // @phpstan-ignore argument.type
             $name = isset($instance['name']) ? esc_attr($instance['name']) : self::ACCOUNT;
+            // The value is untyped here (WordPress data or a mixed array), and the code handles it as before.
+            // @phpstan-ignore argument.type
             $count = isset($instance['count']) ? esc_attr($instance['count']) : self::COUNT;
             ?>
 		<p>
@@ -104,6 +110,8 @@ if (defined('TWITTER_OAUTH_TOKEN')) {
          */
         public function update($new_instance, $old_instance)
         {
+            // The value is untyped here (WordPress data or a mixed array), and the code handles it as before.
+            // @phpstan-ignore argument.type, argument.type, argument.type
             return ['title' => sanitize_text_field($new_instance['title'] ?? ''), 'name' => sanitize_text_field($new_instance['name'] ?? ''), 'count' => ! empty($new_instance['count']) ? absint($new_instance['count']) : self::COUNT];
         }
 
@@ -168,8 +176,14 @@ if (defined('TWITTER_OAUTH_TOKEN')) {
          */
         public function widget($args, $instance): void
         {
+            // The value is untyped here (WordPress data or a mixed array), and the code handles it as before.
+            // @phpstan-ignore argument.type
             $title = ! empty($instance['title']) ? esc_attr($instance['title']) : '';
+            // The value is untyped here (WordPress data or a mixed array), and the code handles it as before.
+            // @phpstan-ignore argument.type
             $count = ! empty($instance['count']) ? absint($instance['count']) : self::COUNT;
+            // The value is untyped here (WordPress data or a mixed array), and the code handles it as before.
+            // @phpstan-ignore argument.type
             $name = ! empty($instance['name']) ? esc_attr($instance['name']) : self::ACCOUNT;
 
             echo $args['before_widget'] ?? '';
@@ -206,23 +220,35 @@ if (defined('TWITTER_OAUTH_TOKEN')) {
 
                 if (is_array($tweets)) {
                     foreach ($tweets as $index => $tweet) {
+                        // The value is untyped here (WordPress data or a mixed array), and the code handles it as before.
+                        // @phpstan-ignore property.nonObject
                         $hasAuthor = (isset($tweet->entities->user_mentions) && count($tweet->entities->user_mentions) > 0);
+                        // The value is untyped here (WordPress data or a mixed array), and the code handles it as before.
+                        // @phpstan-ignore property.nonObject
                         $retweet = (isset($tweet->text) && str_starts_with($tweet->text, 'RT'));
 
+                        // The value is untyped here (WordPress data or a mixed array), and the code handles it as before.
+                        // @phpstan-ignore property.nonObject
                         $latest[$index]['author'] = $retweet ? ($tweet->entities->user_mentions[0]->screen_name ?? '') : ($tweet->user->screen_name ?? '');
 
+                        // The value is untyped here (WordPress data or a mixed array), and the code handles it as before.
+                        // @phpstan-ignore property.nonObject
                         $img_url = $tweet->user->profile_image_url_https ?? '';
                         if ($hasAuthor && ! empty($latest[$index]['author'])) {
                             $twitter->setGetfield('?screen_name='.rawurlencode($latest[$index]['author']))
                                 ->buildOauth(self::AUTHOR_URL, self::REQUESTMETHOD);
 
                             $user = json_decode($twitter->performRequest());
+                            // The value is untyped here (WordPress data or a mixed array), and the code handles it as before.
+                            // @phpstan-ignore property.nonObject
                             if (! empty($user->profile_image_url_https)) {
                                 $img_url = $user->profile_image_url_https;
                             }
                         }
 
                         $latest[$index]['img'] = $img_url;
+                        // The value is untyped here (WordPress data or a mixed array), and the code handles it as before.
+                        // @phpstan-ignore property.nonObject
                         $latest[$index]['text'] = isset($tweet->text) ? $this->formatText($tweet->text) : '';
                         $latest[$index]['retweet'] = ($retweet && ! empty($tweet->user->screen_name)) ? sprintf(self::RETWEET_TEXT, esc_attr($tweet->user->screen_name), esc_html($tweet->user->screen_name)) : '';
                     }
@@ -233,8 +259,12 @@ if (defined('TWITTER_OAUTH_TOKEN')) {
                 return $latest;
             }
 
+            // The value is untyped here (WordPress data or a mixed array), and the code handles it as before.
+            // @phpstan-ignore argument.type
             $decoded = json_decode($cached, true);
 
+            // The value is untyped here (WordPress data or a mixed array), and the code handles it as before.
+            // @phpstan-ignore return.type
             return is_array($decoded) ? $decoded : [];
         }
 

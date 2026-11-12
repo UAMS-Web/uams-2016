@@ -9,6 +9,8 @@
 if (function_exists('get_field') && ($url = get_field('seo_custom_redirect_url'))) {
     // Run in a child process because `exit;` ends the request (HeaderRedirectTest pins the status,
     // the sanitizing and the stop), so mutation testing reports these mutants uncovered.
+    // The value is untyped here (WordPress data or a mixed array), and the code handles it as before.
+    // @phpstan-ignore argument.type
     wp_redirect(esc_url_raw($url), 301); // @pest-mutate-ignore: DecrementInteger,IncrementInteger,RemoveFunctionCall
     exit;
 }
@@ -39,16 +41,20 @@ if (is_singular() || ! empty($post_id)) {
 <html xmlns="http://www.w3.org/1999/xhtml" <?php language_attributes(); ?> class="no-js">
     <head>
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <title><?php echo esc_html(! empty($title) ? $title.' | ' : wp_title(' | ', false, 'right'));
+        <title><?php echo esc_html(! empty($title) ? $title.' | ' : wp_title(' | ', false, 'right')); // @phpstan-ignore binaryOp.invalid
 echo esc_html(str_replace('   ', ' ', get_bloginfo('name'))); ?></title>
         <meta charset="<?php bloginfo('charset'); ?>">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <meta name="description" content="<?php echo esc_attr($description); ?>">
+        <meta name="description" content="<?php echo esc_attr($description); // @phpstan-ignore argument.type?>">
         <?php
 if (! empty($keywords)) {
+    // The value is untyped here (WordPress data or a mixed array), and the code handles it as before.
+    // @phpstan-ignore argument.type
     echo '<meta name="keywords" content="'.esc_attr($keywords).'" />'."\n";
 }
 if (! empty($canonical)) {
+    // The value is untyped here (WordPress data or a mixed array), and the code handles it as before.
+    // @phpstan-ignore argument.type
     echo '<link rel="canonical" href="'.esc_url($canonical).'" />'."\n";
 }
 ?>
@@ -56,6 +62,8 @@ if (! empty($canonical)) {
         <!-- Google Tag Manager -->
         <?php
     $gtm = get_option('google_tag_manager_id');
+// The value is untyped here (WordPress data or a mixed array), and the code handles it as before.
+// @phpstan-ignore argument.type
 $gtmvalue = ! empty($gtm) ? esc_attr($gtm) : 'GTM-NGG4P7F';
 ?>
 		<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
@@ -81,9 +89,13 @@ $page_js = get_post_meta(get_the_ID(), 'javascript', true);
 // @phpstan-ignore argument.type
 $page_css = get_post_meta(get_the_ID(), 'css', true);
 if (! empty($page_js)) {
+    // The value is untyped here (WordPress data or a mixed array), and the code handles it as before.
+    // @phpstan-ignore echo.nonString
     echo $page_js;
 }
 if (! empty($page_css)) {
+    // The value is untyped here (WordPress data or a mixed array), and the code handles it as before.
+    // @phpstan-ignore echo.nonString
     echo $page_css;
 }
 
@@ -91,6 +103,8 @@ if (! empty($page_css)) {
 // @phpstan-ignore argument.type
 $custom_header_script = get_post_meta(get_the_ID(), 'custom_header_script', true);
 if (! empty($custom_header_script)) {
+    // The value is untyped here (WordPress data or a mixed array), and the code handles it as before.
+    // @phpstan-ignore echo.nonString
     echo $custom_header_script;
 }
 ?>

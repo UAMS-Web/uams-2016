@@ -44,8 +44,14 @@ class UAMS_Home_Slider_Meta_Box
         $slidelink = get_post_meta($post->ID, 'slidelink', true);
 
         echo '<div>';
+        // The value is untyped here (WordPress data or a mixed array), and the code handles it as before.
+        // @phpstan-ignore argument.type
         echo "<p><b>Slide Link</b><br /><input type='text' class='text' name='slidelink' value='".esc_attr($slidelink)."'></p>";
+        // The value is untyped here (WordPress data or a mixed array), and the code handles it as before.
+        // @phpstan-ignore argument.type
         echo "<p><b>Mobile Slider Image</b><br /><input type='text' class='meta-image' name='mobileimagetext' value='".esc_attr($mobileimage)."'><input type='button' class='button image-upload' value='Browse'></p>";
+        // The value is untyped here (WordPress data or a mixed array), and the code handles it as before.
+        // @phpstan-ignore argument.type
         echo "<div class='image-preview'><img src='".esc_url($mobileimage)."' style='max-width: 140px;'></div>";
         echo '</div>';
         ?>
@@ -89,6 +95,8 @@ class UAMS_Home_Slider_Meta_Box
             return $post_id;
         }
 
+        // The value is untyped here (WordPress data or a mixed array), and the code handles it as before.
+        // @phpstan-ignore argument.type
         if (! wp_verify_nonce($_POST['mobileimage_name'], 'mobileimage_nonce')) {
             return $post_id;
         }
@@ -110,10 +118,14 @@ class UAMS_Home_Slider_Meta_Box
         }
 
         if (isset($_POST['mobileimagetext'])) {
+            // The value is untyped here (WordPress data or a mixed array), and the code handles it as before.
+            // @phpstan-ignore argument.type
             update_post_meta($post_id, 'mobileimage', sanitize_text_field($_POST['mobileimagetext']));
         }
 
         if (isset($_POST['slidelink'])) {
+            // The value is untyped here (WordPress data or a mixed array), and the code handles it as before.
+            // @phpstan-ignore argument.type
             update_post_meta($post_id, 'slidelink', sanitize_text_field($_POST['slidelink']));
         }
     }

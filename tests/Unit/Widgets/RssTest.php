@@ -47,11 +47,15 @@ function rssItem(array $fields = []): object
 
         public function get_title(): string
         {
+            // The value is untyped here (WordPress data or a mixed array), and the code handles it as before.
+            // @phpstan-ignore return.type
             return $this->fields['title'];
         }
 
         public function get_link(): string
         {
+            // The value is untyped here (WordPress data or a mixed array), and the code handles it as before.
+            // @phpstan-ignore return.type
             return $this->fields['link'];
         }
 
@@ -67,6 +71,8 @@ function rssItem(array $fields = []): object
 
         public function get_description(): string
         {
+            // The value is untyped here (WordPress data or a mixed array), and the code handles it as before.
+            // @phpstan-ignore return.type
             return $this->fields['description'];
         }
     };
@@ -81,6 +87,8 @@ function rssItem(array $fields = []): object
 function stubFeed(array $items, string $permalink = '/feed-home'): ArrayObject
 {
     $seen = new ArrayObject;
+    // The value is untyped here (WordPress data or a mixed array), and the code handles it as before.
+    // @phpstan-ignore argument.type
     $feed = new class($items, $permalink, $seen)
     {
         /**
@@ -109,6 +117,8 @@ function stubFeed(array $items, string $permalink = '/feed-home'): ArrayObject
         return $feed;
     });
 
+    // The value is untyped here (WordPress data or a mixed array), and the code handles it as before.
+    // @phpstan-ignore return.type
     return $seen;
 }
 

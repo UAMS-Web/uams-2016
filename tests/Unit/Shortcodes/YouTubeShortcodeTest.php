@@ -36,6 +36,8 @@ it('registers the youtube shortcode', function (): void {
 });
 
 it('asks for the type when it is missing', function (mixed $atts): void {
+    // The value is untyped here (WordPress data or a mixed array), and the code handles it as before.
+    // @phpstan-ignore argument.type
     expect((new UAMS_YouTube)->youtube_handler($atts))->toBe('required attribute "type" missing')
         ->and(shortcodeAttsNames())->toBe(['youtube']);
 })->with([

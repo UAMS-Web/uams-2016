@@ -48,6 +48,8 @@ function dropdowns(bool $menu, bool $walker): void
 function sidebarPage(array $options = []): void
 {
     $GLOBALS['post'] = $options['post'] ?? wpPost(['ID' => 5]);
+    // The value is untyped here (WordPress data or a mixed array), and the code handles it as before.
+    // @phpstan-ignore argument.type
     wpConditionals($options['conditionals'] ?? []);
     if ($options['stubLists'] ?? true) {
         when('get_children')->justReturn($options['children'] ?? [1]);

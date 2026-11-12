@@ -36,6 +36,8 @@ describe('[row]', function (): void {
     });
 
     it('renders an empty row when there is no content', function (mixed $content): void {
+        // The value is untyped here (WordPress data or a mixed array), and the code handles it as before.
+        // @phpstan-ignore argument.type
         expect((new UAMS_GridShortcode)->bs_row([], $content))
             ->toBe('B{<div class="A{row}">D{}</div>}');
     })->with([

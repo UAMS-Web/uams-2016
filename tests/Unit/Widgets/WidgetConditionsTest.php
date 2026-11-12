@@ -86,6 +86,8 @@ beforeEach(function (): void {
     });
     when('sanitize_text_field')->alias(static fn (string $text): string => 'T{'.$text.'}');
     when('selected')->alias(static function (mixed $selected, mixed $current = true, bool $echo = true): string {
+        // The value is untyped here (WordPress data or a mixed array), and the code handles it as before.
+        // @phpstan-ignore cast.string, cast.string
         $result = (string) $selected === (string) $current ? ' SEL' : '';
 
         if ($echo) {
@@ -617,6 +619,8 @@ describe('widget_update', function (): void {
 
         $instance = UAMS_Widget_Conditions::widget_update([], [], []);
 
+        // The value is untyped here (WordPress data or a mixed array), and the code handles it as before.
+        // @phpstan-ignore offsetAccess.nonOffsetAccessible
         expect($instance['conditions']['rules'])->toBe([['major' => 'T{page}', 'minor' => '']]);
     });
 

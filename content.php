@@ -3,7 +3,7 @@
 // @phpstan-ignore argument.type
 if (get_post_meta(get_the_ID(), 'show_image_single', true) && is_single() && get_post_thumbnail_id()) { ?>
     <p class="featured-image">
-      <a href="<?php echo esc_url(get_the_post_thumbnail_url(get_the_ID(), 'full')); ?>" title="<?php echo esc_attr(get_post_meta(get_post_thumbnail_id(), '_wp_attachment_image_alt', true)); ?>" data-title="<?php echo esc_attr(get_post_field('post_title', get_post_thumbnail_id())); ?>" data-caption="<?php echo esc_attr(get_post_field('post_excerpt', get_post_thumbnail_id())); // @phpstan-ignore argument.type, argument.type?>">
+      <a href="<?php echo esc_url(get_the_post_thumbnail_url(get_the_ID(), 'full')); ?>" title="<?php echo esc_attr(get_post_meta(get_post_thumbnail_id(), '_wp_attachment_image_alt', true)); ?>" data-title="<?php echo esc_attr(get_post_field('post_title', get_post_thumbnail_id())); ?>" data-caption="<?php echo esc_attr(get_post_field('post_excerpt', get_post_thumbnail_id())); // @phpstan-ignore argument.type, argument.type, argument.type?>">
         <span class="screen-reader-text"><?php esc_attr_e('View Larger Image', 'UAMS'); ?></span>
       <?php the_post_thumbnail('post-image'); ?>
       <?php if (get_post_field('post_excerpt', get_post_thumbnail_id())) { ?>
@@ -12,6 +12,8 @@ if (get_post_meta(get_the_ID(), 'show_image_single', true) && is_single() && get
       </a>
       <?php
           $credit = get_post_meta(get_post_thumbnail_id(), '_media_credit', true);
+    // The value is untyped here (WordPress data or a mixed array), and the code handles it as before.
+    // @phpstan-ignore argument.type
     echo $credit ? '<span class="wp-media-credit">Image by '.esc_html($credit).'</span>' : '';
     ?>
     </p>

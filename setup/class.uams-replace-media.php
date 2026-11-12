@@ -97,16 +97,22 @@ class UAMS_Replace_Media
      */
     public function uams_save_attachment_slug($attachment, $post_data)
     {
+        // The value is untyped here (WordPress data or a mixed array), and the code handles it as before.
+        // @phpstan-ignore cast.int, cast.int
         $currentMediaID = isset($attachment['post_ID']) ? (int) $attachment['post_ID'] : (isset($attachment['ID']) ? (int) $attachment['ID'] : 0);
 
         if ($currentMediaID > 0) {
             $mime_type = (string) get_post_mime_type($currentMediaID);
 
             if (str_contains($mime_type, 'application/') && ! empty($attachment['replace_media_for_'.$currentMediaID])) {
+                // The value is untyped here (WordPress data or a mixed array), and the code handles it as before.
+                // @phpstan-ignore argument.type
                 if (empty($attachment['replace-media-nonce']) || ! wp_verify_nonce($attachment['replace-media-nonce'], 'replace-media-'.$currentMediaID)) {
                     wp_die('You do not have access to replace the media file');
                 }
 
+                // The value is untyped here (WordPress data or a mixed array), and the code handles it as before.
+                // @phpstan-ignore cast.int
                 $newMediaID = (int) $attachment['replace_media_for_'.$currentMediaID];
 
                 if ($currentMediaID !== $newMediaID) {

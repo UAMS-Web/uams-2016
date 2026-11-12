@@ -20,8 +20,12 @@ beforeEach(function (): void {
     when('_e')->alias(static function (string $text): void {
         echo $text;
     });
+    // The value is untyped here (WordPress data or a mixed array), and the code handles it as before.
+    // @phpstan-ignore cast.int
     when('absint')->alias(static fn (mixed $value): int => abs((int) $value));
     when('checked')->alias(static function (mixed $checked, mixed $current): void {
+        // The value is untyped here (WordPress data or a mixed array), and the code handles it as before.
+        // @phpstan-ignore cast.string, cast.string
         echo (string) preg_replace('/^A\{(.*)\}$/', '$1', (string) $checked) === (string) $current ? ' CHK' : '';
     });
     when('get_permalink')->alias(static fn (int $id): string => '/post-'.$id.'/');
@@ -69,6 +73,8 @@ function stubBlogPosts(array $posts): ArrayObject
         return $posts;
     });
 
+    // The value is untyped here (WordPress data or a mixed array), and the code handles it as before.
+    // @phpstan-ignore return.type
     return $received;
 }
 
@@ -202,7 +208,11 @@ describe('shortcode', function (): void {
 
         (new UAMS_Blogroll)->shortcode(['number' => '3', 'category' => '7']);
 
+        // The value is untyped here (WordPress data or a mixed array), and the code handles it as before.
+        // @phpstan-ignore offsetAccess.nonOffsetAccessible
         expect($received[0]['numberposts'])->toBe('3')
+            // The value is untyped here (WordPress data or a mixed array), and the code handles it as before.
+            // @phpstan-ignore offsetAccess.nonOffsetAccessible
             ->and($received[0]['category'])->toBe('7');
     });
 

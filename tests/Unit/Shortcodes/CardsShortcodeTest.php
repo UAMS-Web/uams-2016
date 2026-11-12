@@ -44,6 +44,8 @@ describe('the content filter', function (): void {
 
 describe('[cards]', function (): void {
     it('asks for content when it has none', function (mixed $content): void {
+        // The value is untyped here (WordPress data or a mixed array), and the code handles it as before.
+        // @phpstan-ignore argument.type
         expect((new UAMS_CardsShortcode)->cards_handler(['name' => 'N'], $content))
             ->toBe('No content inside the cards element. Make sure you close your cards element.')
             ->and(shortcodeAttsNames())->toBe(['cards']);
@@ -71,6 +73,8 @@ describe('[card]', function (): void {
     });
 
     it('asks for content when it has none', function (mixed $content): void {
+        // The value is untyped here (WordPress data or a mixed array), and the code handles it as before.
+        // @phpstan-ignore argument.type
         expect((new UAMS_CardsShortcode)->card_handler(['title' => 'T'], $content))
             ->toBe('<article class="cardA{}A{}A{}"><div class="card-stack"><div class="card-content"><h3>H{T}</h3>F{D{No content for this section. Make sure you wrap your content like this: [card]Content here[/card]}}</div></div></article>');
     })->with([

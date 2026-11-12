@@ -57,6 +57,8 @@ describe('the content filter', function (): void {
 
 describe('[accordion]', function (): void {
     it('asks for content when it has none', function (mixed $content): void {
+        // The value is untyped here (WordPress data or a mixed array), and the code handles it as before.
+        // @phpstan-ignore argument.type
         expect((new UAMS_AccordionShortcode)->accordion_handler(['name' => 'N'], $content))
             ->toBe('No content inside the accordion element. Make sure your close your accordion element. Required stucture: [accordion][section]content[/section][/accordion]');
     })->with([

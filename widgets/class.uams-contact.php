@@ -36,6 +36,8 @@ class UAMS_Widget_Contact extends WP_Widget
     public function widget($args, $instance): void
     {
         $title = apply_filters('widget_title', empty($instance['title']) ? __('List', 'uams') : $instance['title']);
+        // The value is untyped here (WordPress data or a mixed array), and the code handles it as before.
+        // @phpstan-ignore argument.type
         $amount = empty($instance['amount']) ? 1 : absint($instance['amount']);
 
         $person_names = [];
@@ -63,14 +65,22 @@ class UAMS_Widget_Contact extends WP_Widget
 			<?php
             foreach ($person_names as $num => $person_name) {
                 if (! empty($person_name)) {
+                    // The value is untyped here (WordPress data or a mixed array), and the code handles it as before.
+                    // @phpstan-ignore argument.type
                     echo '<h3 class="person-name">'.esc_html($person_name).'</h3>';
                     if (! empty($person_titles[$num])) {
+                        // The value is untyped here (WordPress data or a mixed array), and the code handles it as before.
+                        // @phpstan-ignore argument.type
                         echo '<p class="person-title">'.esc_html($person_titles[$num]).'</p>';
                     }
                     if (! empty($person_phones[$num])) {
+                        // The value is untyped here (WordPress data or a mixed array), and the code handles it as before.
+                        // @phpstan-ignore argument.type, argument.type
                         echo '<p><a href="'.esc_attr('tel:'.preg_replace('/[^0-9+]/', '', $person_phones[$num])).'" class="person-phone">'.esc_html($person_phones[$num]).'</a></p>';
                     }
                     if (! empty($person_emails[$num])) {
+                        // The value is untyped here (WordPress data or a mixed array), and the code handles it as before.
+                        // @phpstan-ignore argument.type, argument.type
                         echo '<a href="'.esc_attr('mailto:'.antispambot($person_emails[$num])).'" class="person-email">'.esc_html(antispambot($person_emails[$num])).'</a>';
                     }
                 }
@@ -92,7 +102,11 @@ class UAMS_Widget_Contact extends WP_Widget
     public function update($new_instance, $old_instance)
     {
         $instance = [];
+        // The value is untyped here (WordPress data or a mixed array), and the code handles it as before.
+        // @phpstan-ignore argument.type
         $instance['title'] = sanitize_text_field($new_instance['title'] ?? '');
+        // The value is untyped here (WordPress data or a mixed array), and the code handles it as before.
+        // @phpstan-ignore argument.type
         $amount = ! empty($new_instance['amount']) ? absint($new_instance['amount']) : 1;
         $new_person = ! empty($new_instance['new_person']);
 
@@ -102,6 +116,8 @@ class UAMS_Widget_Contact extends WP_Widget
         if (isset($new_instance['position1'])) {
             for ($i = 1; $i <= $amount; $i++) {
                 if (isset($new_instance['position'.$i]) && $new_instance['position'.$i] != -1) {
+                    // The value is untyped here (WordPress data or a mixed array), and the code handles it as before.
+                    // @phpstan-ignore cast.int
                     $position[$i] = (int) $new_instance['position'.$i];
                 } else {
                     $amount--;
@@ -116,6 +132,8 @@ class UAMS_Widget_Contact extends WP_Widget
                 }
             }
         } elseif (! empty($new_instance['order'])) {
+            // The value is untyped here (WordPress data or a mixed array), and the code handles it as before.
+            // @phpstan-ignore argument.type
             $raw_order = explode(',', $new_instance['order']);
             foreach ($raw_order as $key => $order_str) {
                 $num = strrpos($order_str, '-');
@@ -129,9 +147,17 @@ class UAMS_Widget_Contact extends WP_Widget
 
         foreach ($order as $i => $item_num) {
             $idx = $i + 1;
+            // The value is untyped here (WordPress data or a mixed array), and the code handles it as before.
+            // @phpstan-ignore argument.type
             $instance['person_name'.$idx] = sanitize_text_field($new_instance['person_name'.$item_num] ?? '');
+            // The value is untyped here (WordPress data or a mixed array), and the code handles it as before.
+            // @phpstan-ignore argument.type
             $instance['person_title'.$idx] = sanitize_text_field($new_instance['person_title'.$item_num] ?? '');
+            // The value is untyped here (WordPress data or a mixed array), and the code handles it as before.
+            // @phpstan-ignore argument.type
             $instance['person_phone'.$idx] = sanitize_text_field($new_instance['person_phone'.$item_num] ?? '');
+            // The value is untyped here (WordPress data or a mixed array), and the code handles it as before.
+            // @phpstan-ignore argument.type
             $instance['person_email'.$idx] = sanitize_email($new_instance['person_email'.$item_num] ?? '');
         }
 

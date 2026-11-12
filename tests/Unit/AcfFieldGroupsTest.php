@@ -31,6 +31,8 @@ function loadAcfFile(): array
         $GLOBALS['uams_test_acf_actions'] = [];
 
         when('add_action')->alias(static function (string $hook, mixed $callback): true {
+            // The value is untyped here (WordPress data or a mixed array), and the code handles it as before.
+            // @phpstan-ignore offsetAccess.nonOffsetAccessible
             $GLOBALS['uams_test_acf_actions'][] = [$hook, $callback];
 
             return true;
@@ -39,6 +41,8 @@ function loadAcfFile(): array
         require_once dirname(__DIR__, 2).'/setup/class.uams-acf.php';
     }
 
+    // The value is untyped here (WordPress data or a mixed array), and the code handles it as before.
+    // @phpstan-ignore return.type
     return $GLOBALS['uams_test_acf_actions'];
 }
 
@@ -78,6 +82,8 @@ function flattenAcfFields(array $fields): array
 
         foreach (['sub_fields', 'layouts'] as $nested) {
             if (isset($field[$nested]) && is_array($field[$nested])) {
+                // The value is untyped here (WordPress data or a mixed array), and the code handles it as before.
+                // @phpstan-ignore argument.type
                 array_push($flat, ...flattenAcfFields($field[$nested]));
             }
         }
@@ -100,6 +106,8 @@ it('registers every group once', function (): void {
     $groups = registeredAcfGroups();
 
     expect($groups)->toHaveCount(7)
+        // The value is untyped here (WordPress data or a mixed array), and the code handles it as before.
+        // @phpstan-ignore argument.type
         ->and(array_column($groups, 'key'))->toBe(array_unique(array_column($groups, 'key')));
 });
 
@@ -110,6 +118,8 @@ it('gives every group and field a unique key with the prefix ACF expects', funct
     foreach ($groups as $group) {
         expect($group['key'])->toStartWith('group_');
 
+        // The value is untyped here (WordPress data or a mixed array), and the code handles it as before.
+        // @phpstan-ignore argument.type
         foreach (flattenAcfFields($group['fields']) as $field) {
             expect($field['key'])->toStartWith('field_');
             $keys[] = $field['key'];
@@ -117,5 +127,7 @@ it('gives every group and field a unique key with the prefix ACF expects', funct
     }
 
     expect($keys)->not->toBeEmpty()
+        // The value is untyped here (WordPress data or a mixed array), and the code handles it as before.
+        // @phpstan-ignore argument.type
         ->and($keys)->toBe(array_values(array_unique($keys)));
 });

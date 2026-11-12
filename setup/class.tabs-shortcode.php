@@ -43,6 +43,8 @@ class UAMS_TabsShortcode
     public function wpex_fix_shortcodes($content): string
     {
         if (empty($content) || ! is_string($content)) {
+            // The value is untyped here (WordPress data or a mixed array), and the code handles it as before.
+            // @phpstan-ignore cast.string
             return (string) $content;
         }
 

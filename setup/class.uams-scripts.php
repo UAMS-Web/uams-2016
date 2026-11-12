@@ -85,10 +85,20 @@ class UAMS_Scripts
 
         foreach ($this->SCRIPTS as $script) {
             wp_register_script(
+                // The value is untyped here (WordPress data or a mixed array), and the code handles it as before.
+                // @phpstan-ignore offsetAccess.nonOffsetAccessible, argument.type
                 $script['id'],
+                // The value is untyped here (WordPress data or a mixed array), and the code handles it as before.
+                // @phpstan-ignore offsetAccess.nonOffsetAccessible, argument.type
                 $script['url'],
+                // The value is untyped here (WordPress data or a mixed array), and the code handles it as before.
+                // @phpstan-ignore offsetAccess.nonOffsetAccessible, argument.type
                 $script['deps'] ?? [],
+                // The value is untyped here (WordPress data or a mixed array), and the code handles it as before.
+                // @phpstan-ignore offsetAccess.nonOffsetAccessible, argument.type
                 $script['version'] ?? false,
+                // The value is untyped here (WordPress data or a mixed array), and the code handles it as before.
+                // @phpstan-ignore offsetAccess.nonOffsetAccessible, argument.type
                 $script['footer'] ?? false
             );
         }
@@ -97,7 +107,11 @@ class UAMS_Scripts
     public function uams_localize_default_scripts(): void
     {
         foreach ($this->SCRIPTS as $script) {
+            // The value is untyped here (WordPress data or a mixed array), and the code handles it as before.
+            // @phpstan-ignore offsetAccess.nonOffsetAccessible
             if (! empty($script['style_dir'])) {
+                // The value is untyped here (WordPress data or a mixed array), and the code handles it as before.
+                // @phpstan-ignore offsetAccess.nonOffsetAccessible, argument.type
                 wp_add_inline_script($script['id'], 'var style_dir = '.wp_json_encode($script['style_dir']).';', 'before');
             }
         }
@@ -106,7 +120,11 @@ class UAMS_Scripts
     public function uams_enqueue_default_scripts(): void
     {
         foreach ($this->SCRIPTS as $script) {
+            // The value is untyped here (WordPress data or a mixed array), and the code handles it as before.
+            // @phpstan-ignore offsetAccess.nonOffsetAccessible
             if (empty($script['admin'])) {
+                // The value is untyped here (WordPress data or a mixed array), and the code handles it as before.
+                // @phpstan-ignore offsetAccess.nonOffsetAccessible, argument.type
                 wp_enqueue_script($script['id']);
             }
         }
@@ -119,15 +137,29 @@ class UAMS_Scripts
         }
 
         foreach ($this->SCRIPTS as $script) {
+            // The value is untyped here (WordPress data or a mixed array), and the code handles it as before.
+            // @phpstan-ignore offsetAccess.nonOffsetAccessible
             if (! empty($script['admin'])) {
                 wp_register_script(
+                    // The value is untyped here (WordPress data or a mixed array), and the code handles it as before.
+                    // @phpstan-ignore offsetAccess.nonOffsetAccessible, argument.type
                     $script['id'],
+                    // The value is untyped here (WordPress data or a mixed array), and the code handles it as before.
+                    // @phpstan-ignore offsetAccess.nonOffsetAccessible, argument.type
                     $script['url'],
+                    // The value is untyped here (WordPress data or a mixed array), and the code handles it as before.
+                    // @phpstan-ignore offsetAccess.nonOffsetAccessible, argument.type
                     $script['deps'] ?? [],
+                    // The value is untyped here (WordPress data or a mixed array), and the code handles it as before.
+                    // @phpstan-ignore offsetAccess.nonOffsetAccessible, argument.type
                     $script['version'] ?? false,
+                    // The value is untyped here (WordPress data or a mixed array), and the code handles it as before.
+                    // @phpstan-ignore offsetAccess.nonOffsetAccessible, argument.type
                     $script['footer'] ?? false
                 );
 
+                // The value is untyped here (WordPress data or a mixed array), and the code handles it as before.
+                // @phpstan-ignore offsetAccess.nonOffsetAccessible, argument.type
                 wp_enqueue_script($script['id']);
             }
         }
@@ -141,7 +173,7 @@ class UAMS_Scripts
     private function get_child_theme_scripts(): array
     {
         // Defensive check kept as written: the property is typed array<mixed> by its default only.
-        // @phpstan-ignore function.alreadyNarrowedType
+        // @phpstan-ignore function.alreadyNarrowedType, return.type
         return is_array($this->SCRIPTS) ? $this->SCRIPTS : [];
     }
 

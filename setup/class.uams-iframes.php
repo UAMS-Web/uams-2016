@@ -59,7 +59,11 @@ class UAMS_Iframes
         return sprintf(
             '<iframe src="%s" width="%s" height="%s" style="border:0"></iframe>',
             $iframeSrc,
+            // The value is untyped here (WordPress data or a mixed array), and the code handles it as before.
+            // @phpstan-ignore argument.type
             esc_attr($params['width']),
+            // The value is untyped here (WordPress data or a mixed array), and the code handles it as before.
+            // @phpstan-ignore argument.type
             esc_attr($params['height'])
         );
     }

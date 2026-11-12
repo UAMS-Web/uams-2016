@@ -43,6 +43,8 @@ function renderBox(TileBox $box, mixed $atts, int $tiles): string
         return $output;
     });
 
+    // The value is untyped here (WordPress data or a mixed array), and the code handles it as before.
+    // @phpstan-ignore argument.type
     return $box->box_handler($atts, 'TILES');
 }
 
@@ -79,6 +81,8 @@ describe('the content filter', function (): void {
 
 describe('[box]', function (): void {
     it('asks for content when it has none', function (mixed $content): void {
+        // The value is untyped here (WordPress data or a mixed array), and the code handles it as before.
+        // @phpstan-ignore argument.type
         expect((new TileBox)->box_handler(['color' => 'red'], $content))
             ->toBe('No content inside the box element. Make sure you close your box element. Required structure: [box][tile]content[/tile][/box]')
             ->and(shortcodeAttsNames())->toBe(['box']);
@@ -132,6 +136,8 @@ describe('[tile]', function (): void {
     });
 
     it('asks for content when it has none', function (mixed $content): void {
+        // The value is untyped here (WordPress data or a mixed array), and the code handles it as before.
+        // @phpstan-ignore argument.type
         expect((new TileBox)->tile_handler([], $content))
             ->toBe('<div class="A{tile}">F{No content for this tile. Make sure you wrap your content like this: [tile]Content here[/tile]}</div>');
     })->with([
@@ -140,6 +146,8 @@ describe('[tile]', function (): void {
     ]);
 
     it('renders an empty tile, keeping any content it has', function (string $empty, mixed $content, string $expected): void {
+        // The value is untyped here (WordPress data or a mixed array), and the code handles it as before.
+        // @phpstan-ignore argument.type
         expect((new TileBox)->tile_handler(['empty' => $empty], $content))->toBe('<div class="A{tile empty}">F{'.$expected.'}</div>');
     })->with([
         'true, no content' => ['true', null, ''],

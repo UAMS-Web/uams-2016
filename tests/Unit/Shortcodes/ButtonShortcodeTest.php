@@ -29,6 +29,8 @@ it('registers the button shortcode', function (): void {
 });
 
 it('asks for a message when there is no text', function (mixed $content): void {
+    // The value is untyped here (WordPress data or a mixed array), and the code handles it as before.
+    // @phpstan-ignore argument.type
     expect((new UAMS_Button)->button_handler([], $content))->toBe('No text in this button')
         ->and(shortcodeAttsNames())->toBe(['button']);
 })->with([

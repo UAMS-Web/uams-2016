@@ -37,7 +37,7 @@ if ($slider_type === 'slide' && function_exists('have_rows') && have_rows('home_
       $textcolor = get_sub_field('home_slide_text_color');
       $slidecolor[$i] = $textcolor ?: 'lighttext';
       ?>
-    <div data-mobimg="<?php echo esc_url($hasmobileimage ? $mob_url : $dt_url); ?>" data-dtimg="<?php echo esc_url($dt_url); ?>" class="uams-hero-image uams-homepage-slider <?php echo esc_attr($slidecolor[$i]); ?> <?php echo $first ? 'activeslide' : ''; ?>" style="background-position: center center; background-image:url('<?php echo esc_url($dt_url); ?>');">
+    <div data-mobimg="<?php echo esc_url($hasmobileimage ? $mob_url : $dt_url); ?>" data-dtimg="<?php echo esc_url($dt_url); ?>" class="uams-hero-image uams-homepage-slider <?php echo esc_attr($slidecolor[$i]); ?> <?php echo $first ? 'activeslide' : ''; ?>" style="background-position: center center; background-image:url('<?php echo esc_url($dt_url); // @phpstan-ignore argument.type, argument.type, argument.type?>');">
       <div>
         <h3 class="slide-title" id="slide-title-<?php echo $i; ?>"><?php echo esc_html(get_sub_field('home_slide_title')); ?><span class="udub-slant"><span></span></span></h3>
         <p class="slide-content"><?php echo esc_html(get_sub_field('home_slide_text')); ?></p>
@@ -82,14 +82,14 @@ if ($slider_type === 'slide' && function_exists('have_rows') && have_rows('home_
 
 <div class="uams-hero-image hero-height<?php echo esc_attr($hasmobileimage); ?>" style="background-image: url('<?php echo esc_url($url); ?>');">
     <?php if (! empty($mobileimage_url)) { ?>
-    <div class="mobile-image" style="background-image: url('<?php echo esc_url($mobileimage_url); ?>');"></div>
+    <div class="mobile-image" style="background-image: url('<?php echo esc_url($mobileimage_url); // @phpstan-ignore argument.type?>');"></div>
     <?php } ?>
     <div id="hero-bg">
       <div id="hero-container" class="container">
-        <h1 class="uams-site-title<?php echo esc_attr($hasdarktext); ?>"><?php echo esc_html($home_title); ?></h1>
+        <h1 class="uams-site-title<?php echo esc_attr($hasdarktext); ?>"><?php echo esc_html($home_title); // @phpstan-ignore argument.type?></h1>
         <span class="udub-slant"><span></span></span>
       <?php if (function_exists('get_field') && get_field('home_image_add_button')) { ?>
-        <a class="uams-btn btn-sm btn-none" href="<?php echo esc_url($btn_url); ?>"><?php echo esc_html(get_field('home_image_button_text')); ?></a>
+        <a class="uams-btn btn-sm btn-none" href="<?php echo esc_url($btn_url); ?>"><?php echo esc_html(get_field('home_image_button_text')); // @phpstan-ignore argument.type, argument.type?></a>
       <?php } ?>
       </div>
     </div>

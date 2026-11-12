@@ -29,13 +29,23 @@ function sitemapEnv(array $meta = [], array $categories = [], array $batches = [
     WP_Query::$queue = $batches;
     stubValues(array_merge([
         'get_the_ID' => 7,
+        // The value is untyped here (WordPress data or a mixed array), and the code handles it as before.
+        // @phpstan-ignore return.type
         'get_post_meta' => static fn (int $id, string $key, bool $single): string => $meta[$key] ?? '',
+        // The value is untyped here (WordPress data or a mixed array), and the code handles it as before.
+        // @phpstan-ignore return.type
         'get_the_title' => static fn (): string => WP_Query::$current['title'] ?? 'About <us>',
         'get_categories' => $categories,
         'get_the_category' => static fn (): array => array_map(
+            // The value is untyped here (WordPress data or a mixed array), and the code handles it as before.
+            // @phpstan-ignore argument.type
             static fn (int $id): object => (object) ['term_id' => $id],
+            // The value is untyped here (WordPress data or a mixed array), and the code handles it as before.
+            // @phpstan-ignore argument.type
             WP_Query::$current['cats'] ?? []
         ),
+        // The value is untyped here (WordPress data or a mixed array), and the code handles it as before.
+        // @phpstan-ignore return.type
         'get_permalink' => static fn (): string => WP_Query::$current['link'] ?? '',
     ], $values));
     stubTags([

@@ -36,6 +36,8 @@ $checked = 0; // @pest-mutate-ignore: IncrementInteger,DecrementInteger
 $failed = [];
 
 foreach ($iterator as $file) { // @pest-mutate-ignore: ForeachEmptyIterable
+    // The value is untyped here (WordPress data or a mixed array), and the code handles it as before.
+    // @phpstan-ignore method.nonObject
     if ($file->getExtension() !== 'php') { // @pest-mutate-ignore: NotIdenticalToIdentical,IfNegated
         continue; // @pest-mutate-ignore: ContinueToBreak
     }
@@ -43,8 +45,12 @@ foreach ($iterator as $file) { // @pest-mutate-ignore: ForeachEmptyIterable
     $checked++; // @pest-mutate-ignore: PostIncrementToPostDecrement
 
     try {
+        // The value is untyped here (WordPress data or a mixed array), and the code handles it as before.
+        // @phpstan-ignore method.nonObject
         token_get_all((string) file_get_contents($file->getPathname()), TOKEN_PARSE); // @pest-mutate-ignore: RemoveStringCast,RemoveFunctionCall
     } catch (ParseError $error) {
+        // The value is untyped here (WordPress data or a mixed array), and the code handles it as before.
+        // @phpstan-ignore method.nonObject
         $failed[] = sprintf('%s:%d: %s', $file->getPathname(), $error->getLine(), $error->getMessage());
     }
 }

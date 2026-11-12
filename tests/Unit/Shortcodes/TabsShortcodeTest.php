@@ -38,6 +38,8 @@ function renderTabs(UAMS_TabsShortcode $shortcode, mixed $atts, array $tabs): st
         return implode('', array_map(static fn (array $tab): string => $shortcode->tab_handler($tab, 'body'), $tabs));
     });
 
+    // The value is untyped here (WordPress data or a mixed array), and the code handles it as before.
+    // @phpstan-ignore argument.type
     return $shortcode->tabs_handler($atts, 'TABS');
 }
 
@@ -86,6 +88,8 @@ describe('[tabs]', function (): void {
     it('asks for content when it has none, and loads no script', function (mixed $content): void {
         Functions\expect('wp_enqueue_script')->never();
 
+        // The value is untyped here (WordPress data or a mixed array), and the code handles it as before.
+        // @phpstan-ignore argument.type
         expect((new UAMS_TabsShortcode)->tabs_handler(['name' => 'N'], $content))
             ->toBe('No content inside the tabs element. Make sure you close your tabs element. Required structure: [tabs][tab title=""]content[/tab][/tabs]')
             ->and(shortcodeAttsNames())->toBe(['tabs']);
@@ -141,6 +145,8 @@ describe('[tabs]', function (): void {
 
 describe('[tab]', function (): void {
     it('asks for content when it has none', function (mixed $content): void {
+        // The value is untyped here (WordPress data or a mixed array), and the code handles it as before.
+        // @phpstan-ignore argument.type
         expect((new UAMS_TabsShortcode)->tab_handler(['link' => 'x'], $content))
             ->toBe('<div id="A{x}" class="js-tabcontent tabs__uams__tabcontent">D{No content for this tab. Make sure you wrap your content like this: [tab]Content here[/tab]}</div>')
             ->and(shortcodeAttsNames())->toBe(['tab']);
