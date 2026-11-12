@@ -13,7 +13,7 @@ class UAMS_Page_Attributes_Meta_Box
     const PRIORITY = 'core';
 
     /**
-     * @var array{'No Sidebar'}
+     * @var list<string>
      */
     public $HIDDEN = [];
 

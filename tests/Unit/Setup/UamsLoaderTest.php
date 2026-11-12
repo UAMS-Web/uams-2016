@@ -124,7 +124,11 @@ it('includes a widget file once however often the loader runs', function (): voi
     new UAMS;
     new UAMS;
 
-    expect(array_count_values($GLOBALS['uams_test_loaded'])['widgets/a.php'])->toBe(1);
+    /** @var list<string> $loaded */
+    $loaded = $GLOBALS['uams_test_loaded'];
+    $loads = array_count_values($loaded);
+
+    expect($loads['widgets/a.php'])->toBe(1);
 });
 
 it('leaves a property empty for every class that does not exist', function (): void {

@@ -151,6 +151,7 @@ describe('custom_admin_menu', function (): void {
      */
     function recordSubmenuRemovals(): ArrayObject
     {
+        /** @var ArrayObject<int, array{string, string}> $removed */
         $removed = new ArrayObject;
         when('remove_submenu_page')->alias(static function (string $menu, string $sub) use ($removed): void {
             $removed[] = [$menu, $sub];

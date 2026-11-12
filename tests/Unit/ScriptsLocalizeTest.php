@@ -18,7 +18,9 @@ use function Brain\Monkey\Functions\when;
  */
 function recordScriptCalls(): array
 {
+    /** @var ArrayObject<int, array{string, string, string}> $inline */
     $inline = new ArrayObject;
+    /** @var ArrayObject<int, string> $localized */
     $localized = new ArrayObject;
 
     when('wp_add_inline_script')->alias(static function (string $handle, string $data, string $position) use ($inline): bool {
