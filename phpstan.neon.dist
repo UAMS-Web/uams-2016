@@ -46,7 +46,7 @@ parameters:
     # The highest level the code passes today (the code-quality skill's "Finding
     # the starting static-analysis level"), raised one level per change as
     # findings are fixed, until `max`.
-    level: 1
+    level: 2
 
     # Patchwork's relay(), which tests/Support/wordpress.php calls to fall through to the real
     # class_exists(). Patchwork is a development dependency loaded by tests/bootstrap.php, not
@@ -159,6 +159,8 @@ parameters:
     # same reason; TestCall is the one it leaves out.
     universalObjectCratesClasses:
         - Pest\PendingCalls\TestCall
+        # Pest 5's expectation class; the extension above names the older Pest\Expectation.
+        - Pest\Mixins\Expectation
 
     # Checkout-scoped cache. PHPStan's default tmpDir is
     # `sys_get_temp_dir()/phpstan`: machine-global, shared by every checkout and
@@ -213,15 +215,6 @@ parameters:
             identifier: function.notFound
             message: '#^Function woocommerce_content not found\.$#'
             path: woocommerce.php
-
-        # The UAMS class creates one property per back-end class in initialize().
-        # It is declared #[\AllowDynamicProperties] on purpose, so PHP 8.2's
-        # dynamic-property deprecation does not apply, but PHPStan cannot see
-        # properties created that way.
-        -
-            identifier: property.notFound
-            message: '#^Access to an undefined property UAMS::\$[A-Za-z]+\.$#'
-            path: setup/class.uams.php
 
         # wordpress-stubs types wp_list_pages() as returning a string only when
         # the arguments are literally `echo: false`; the theme passes `'echo' => 0`,
@@ -283,5 +276,30 @@ parameters:
         -
             identifier: method.internalClass
             message: '#of internal class Pest\\#'
+            path: tests
+            reportUnmatched: false
+
+        # The fixtures a test file keeps on `$this` (see universalObjectCratesClasses above): Pest's
+        # PHPDoc types the closure's `$this` as TestCall, which it tags @internal and which has no
+        # expectOutputString(), no arithmetic and no string conversion. At runtime `$this` is the
+        # running test case, which has all of those. One entry per message, each pinned to `tests`.
+        -
+            identifier: property.internalClass
+            message: '#^Access to property \$\w+ of internal class Pest\\PendingCalls\\TestCall #'
+            path: tests
+            reportUnmatched: false
+        -
+            identifier: method.notFound
+            message: '#^Call to an undefined method Pest\\PendingCalls\\TestCall::expectOutputString\(\)\.$#'
+            path: tests
+            reportUnmatched: false
+        -
+            identifier: binaryOp.invalid
+            message: '#^Binary operation "\." between Pest\\PendingCalls\\TestCall and #'
+            path: tests
+            reportUnmatched: false
+        -
+            identifier: postInc.type
+            message: '#^Cannot use \+\+ on Pest\\PendingCalls\\TestCall\.$#'
             path: tests
             reportUnmatched: false

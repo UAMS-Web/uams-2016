@@ -142,9 +142,6 @@ describe('the bundled ACF paths', function (): void {
 });
 
 describe('uams_custom_field_body_class', function (): void {
-    /**
-     * @param  array<string, mixed>  $meta
-     */
     function bodyClass(array $classes, bool $page, mixed $actionMenu, mixed $primary): array
     {
         $GLOBALS['post'] = (object) ['ID' => 7];

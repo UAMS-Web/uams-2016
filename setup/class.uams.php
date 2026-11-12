@@ -5,6 +5,30 @@
  *  All classes should be accessible by UAMS::ClassName
  */
 
+/**
+ * @property UAMS_Install_Theme|null $Install
+ * @property UAMS_Scripts|null $Scripts
+ * @property UAMS_Styles|null $Styles
+ * @property UAMS_Images|null $Images
+ * @property UAMS_SquishBugs|null $SquishBugs
+ * @property UAMS_Filters|null $Filters
+ * @property UAMS_OEmbeds|null $OEmbeds
+ * @property UAMS_Mimes|null $Mimes
+ * @property UAMS_Users|null $Users
+ * @property UAMS_Sidebar_Menu_Walker|null $SidebarMenuWalker
+ * @property UAMS_Dropdowns|null $Dropdowns
+ * @property UAMS_QuickLinks|null $Quicklinks
+ * @property UAMS_Shortcodes|null $Shortcodes
+ * @property UAMS_Media_Credit|null $MediaCredit
+ * @property UAMS_Media_Caption|null $MediaCaption
+ * @property UAMS_Replace_Media|null $ReplaceMedia
+ * @property UAMS_TinyMCE|null $TinyMCE
+ * @property UAMS_Iframes|null $IFrames
+ * @property UAMS_GoogleApps|null $GoogleApps
+ * @property UAMS_Enclosure|null $Enclosure
+ * @property UAMS_Carousel|null $Carousel
+ * @property UAMS_Settings|null $Settings
+ */
 #[AllowDynamicProperties]
 class UAMS
 {

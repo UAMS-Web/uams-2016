@@ -164,6 +164,8 @@ class UAMS_RSS extends WP_Widget
         $rss = fetch_feed(wp_specialchars_decode($params['url']));
 
         if (! is_wp_error($rss)) {
+            // SimplePie tags its public get_permalink() @internal; core's fetch_feed() hands back this object for themes to read.
+            // @phpstan-ignore method.internal
             $url = empty($params['more']) ? $rss->get_permalink() : $params['more'];
             $maxitems = (int) $params['number'];
             $rss_items = $rss->get_items(0, $maxitems);

@@ -9,6 +9,7 @@
  */
 
 declare(strict_types=1);
+use Mockery\MockInterface;
 
 use function Brain\Monkey\Functions\when;
 
@@ -28,6 +29,7 @@ describe('UAMS_Settings', function (): void {
     });
 
     it('sets up the pages and sections, then the options', function (): void {
+        /** @var UAMS_Settings&MockInterface $settings */
         $settings = Mockery::mock(UAMS_Settings::class)->makePartial();
         $settings->shouldReceive('make_setting_pages')->once()->ordered();
         $settings->shouldReceive('add_setting_sections')->once()->ordered();
