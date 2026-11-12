@@ -39,6 +39,8 @@ class UAMS_Recent_Posts extends WP_Widget
     {
         $title = ! empty($instance['title']) ? $instance['title'] : self::TITLE;
         $items = ! empty($instance['items']) ? absint($instance['items']) : self::ITEMS;
+        // Redundant after the emptiness check; kept as written.
+        // @phpstan-ignore booleanAnd.rightAlwaysTrue
         $more = ! empty($instance['more']) && (bool) $instance['more'];
 
         $recent = wp_get_recent_posts(

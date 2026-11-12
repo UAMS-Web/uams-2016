@@ -27,7 +27,13 @@ class UAMS_Campus_Map extends WP_Widget
         $content = '';
 
         if (! empty($title)) {
+            // WordPress passes every sidebar argument in a sidebar, but widget() also runs outside one (shortcode, tests) with a partial array,
+            // so the fallbacks are kept; the tests pin them.
+            // @phpstan-ignore nullCoalesce.offset
             $before_title = $args['before_title'] ?? '<h3 class="widget-title">';
+            // WordPress passes every sidebar argument in a sidebar, but widget() also runs outside one (shortcode, tests) with a partial array,
+            // so the fallbacks are kept; the tests pin them.
+            // @phpstan-ignore nullCoalesce.offset
             $after_title = $args['after_title'] ?? '</h3>';
             $content .= $before_title.esc_html($title).$after_title;
         }

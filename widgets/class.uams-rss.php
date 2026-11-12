@@ -135,7 +135,13 @@ class UAMS_RSS extends WP_Widget
         $content = '<span></span>';
 
         if (! empty($title)) {
+            // WordPress passes every sidebar argument in a sidebar, but widget() also runs outside one (shortcode, tests) with a partial array,
+            // so the fallbacks are kept; the tests pin them.
+            // @phpstan-ignore nullCoalesce.offset
             $before_title = $args['before_title'] ?? '<h3>';
+            // WordPress passes every sidebar argument in a sidebar, but widget() also runs outside one (shortcode, tests) with a partial array,
+            // so the fallbacks are kept; the tests pin them.
+            // @phpstan-ignore nullCoalesce.offset
             $after_title = $args['after_title'] ?? '</h3>';
             $content .= $before_title.esc_html($title).$after_title;
         }
@@ -147,6 +153,9 @@ class UAMS_RSS extends WP_Widget
 
         $content .= do_shortcode("[rss url=\"{$url}\" number=\"{$items}\" show_date=\"{$date_string}\" has_blurb=\"{$has_blurb}\"]");
 
+        // WordPress passes every sidebar argument in a sidebar, but widget() also runs outside one (shortcode, tests) with a partial array,
+        // so the fallbacks are kept; the tests pin them.
+        // @phpstan-ignore nullCoalesce.offset, nullCoalesce.offset
         echo ($args['before_widget'] ?? '').$content.($args['after_widget'] ?? '');
     }
 
@@ -178,6 +187,8 @@ class UAMS_RSS extends WP_Widget
                 $attr = esc_attr(strip_tags($item_title));
 
                 $enclosure = $item->get_enclosure();
+                // Defensive check kept as written: wordpress-stubs type this value as always present.
+                // @phpstan-ignore isset.property
                 $src = ($enclosure && isset($enclosure->link)) ? $enclosure->link : '';
 
                 $image = '';

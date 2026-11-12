@@ -23,6 +23,8 @@ class UAMS_QuickLinks
     {
         $this->MULTISITE = is_multisite();
 
+        // Redundant by construction (the left operand already decided it); kept as written.
+        // @phpstan-ignore booleanAnd.leftAlwaysTrue
         if (! $this->MULTISITE || ($this->MULTISITE && get_current_blog_id() === self::ALLOWED_BLOG)) {
             add_action('after_setup_theme', [$this, 'register_quick_links_menu']);
         }

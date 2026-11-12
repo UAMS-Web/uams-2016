@@ -65,8 +65,14 @@ class UAMS_TabsShortcode
         $output = sprintf('<div id="uams-tabs" class="uams-tabs-shortcode %s">', esc_attr($tab_name));
         $output .= '<div class="js-tabs tabs__uams"><ul class="js-tablist tabs__uams_ul" data-hx="h2">';
 
+        // The tab titles and links are filled by the [tab] shortcode callbacks while do_shortcode() expands the content, so
+        // PHPStan sees only the empty default.
+        // @phpstan-ignore foreach.emptyArray
         foreach ($this->tab_titles as $key => $title) {
             $id = $key + 1;
+            // The tab titles and links are filled by the [tab] shortcode callbacks while do_shortcode() expands the content, so
+            // PHPStan sees only the empty default.
+            // @phpstan-ignore empty.offset
             $link_val = ! empty($this->tab_links[$key]) ? sanitize_html_class(str_replace(' ', '', $this->tab_links[$key])) : 'tab-'.$id;
 
             $output .= sprintf(

@@ -111,6 +111,8 @@ class UAMS_Dropdowns
     public function save_white_bar($menu_id): void
     {
         $menu_object = wp_get_nav_menu_object($menu_id);
+        // Defensive check kept as written: wordpress-stubs type this value as always present.
+        // @phpstan-ignore isset.property
         if ($menu_object && isset($menu_object->slug) && $menu_object->slug === 'dropdowns') {
             if (! current_user_can('manage_network') && ! current_user_can('administrator')) {
                 wp_die('Insufficient permission: cannot edit the default dropdowns menu.');

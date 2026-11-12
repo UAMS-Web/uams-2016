@@ -135,6 +135,8 @@ class UAMS_Scripts
 
     private function get_child_theme_scripts(): array
     {
+        // Defensive check kept as written: the property is typed array<mixed> by its default only.
+        // @phpstan-ignore function.alreadyNarrowedType
         return is_array($this->SCRIPTS) ? $this->SCRIPTS : [];
     }
 

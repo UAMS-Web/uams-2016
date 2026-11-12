@@ -37,6 +37,8 @@ class UAMS_Dropdowns_Walker_Menu extends Walker_Nav_Menu
 
     public function display_element($element, &$children_elements, $max_depth, $depth, $args, &$output)
     {
+        // A non-object element is handed on untouched, which the walker test pins; walker callers normally pass an object.
+        // @phpstan-ignore function.alreadyNarrowedType
         if (is_object($element)) {
             $element->has_children = ! empty($children_elements[$element->ID]);
         }
