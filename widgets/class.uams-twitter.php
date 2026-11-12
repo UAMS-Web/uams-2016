@@ -305,17 +305,11 @@ if (defined('TWITTER_OAUTH_TOKEN')) {
                 $text
             );
 
-            $text = preg_replace_callback(
-                '/[#]+[A-Za-z0-9-_]+/',
-                [$this, 'encodeHashTag'],
-                (string) $text
-            );
+            // Patchwork drops a line break from a multi-line preg_replace_callback() call, which shifts the line numbers
+            // coverage attributes to everything below it. Keep these two calls on one line each.
+            $text = preg_replace_callback('/[#]+[A-Za-z0-9-_]+/', [$this, 'encodeHashTag'], (string) $text);
 
-            return preg_replace_callback(
-                '/[@]+[A-Za-z0-9-_]+/',
-                [$this, 'normalizeScreenName'],
-                (string) $text
-            );
+            return preg_replace_callback('/[@]+[A-Za-z0-9-_]+/', [$this, 'normalizeScreenName'], (string) $text);
         }
 
         /**
