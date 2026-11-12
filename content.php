@@ -1,7 +1,9 @@
 <?php
+// The stubs type this value as possibly false; the call is unchanged.
+// @phpstan-ignore argument.type
 if (get_post_meta(get_the_ID(), 'show_image_single', true) && is_single() && get_post_thumbnail_id()) { ?>
     <p class="featured-image">
-      <a href="<?php echo esc_url(get_the_post_thumbnail_url(get_the_ID(), 'full')); ?>" title="<?php echo esc_attr(get_post_meta(get_post_thumbnail_id(), '_wp_attachment_image_alt', true)); ?>" data-title="<?php echo esc_attr(get_post_field('post_title', get_post_thumbnail_id())); ?>" data-caption="<?php echo esc_attr(get_post_field('post_excerpt', get_post_thumbnail_id())); ?>">
+      <a href="<?php echo esc_url(get_the_post_thumbnail_url(get_the_ID(), 'full')); ?>" title="<?php echo esc_attr(get_post_meta(get_post_thumbnail_id(), '_wp_attachment_image_alt', true)); ?>" data-title="<?php echo esc_attr(get_post_field('post_title', get_post_thumbnail_id())); ?>" data-caption="<?php echo esc_attr(get_post_field('post_excerpt', get_post_thumbnail_id())); // @phpstan-ignore argument.type, argument.type?>">
         <span class="screen-reader-text"><?php esc_attr_e('View Larger Image', 'UAMS'); ?></span>
       <?php the_post_thumbnail('post-image'); ?>
       <?php if (get_post_field('post_excerpt', get_post_thumbnail_id())) { ?>

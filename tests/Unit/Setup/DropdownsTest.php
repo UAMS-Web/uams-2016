@@ -116,6 +116,8 @@ it('lists the default dropdowns', function (): void {
     foreach (defaultDropdowns() as [$title, $url, $children]) {
         $expected[$title] = dropdownItem($title, $url);
         foreach ($children as [$childTitle, $childUrl]) {
+            // The item array is extended with a children map after dropdownItem() builds it.
+            // @phpstan-ignore offsetAssign.dimType
             $expected[$title]['children'][$childTitle] = dropdownItem($childTitle, $childUrl);
         }
     }

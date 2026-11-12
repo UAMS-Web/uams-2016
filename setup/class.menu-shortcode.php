@@ -38,11 +38,15 @@ class UAMS_MenuShortcode
                 'walker' => '', // @pest-mutate-ignore: EmptyStringToNotEmpty
                 'theme_location' => '',
             ],
+            // WordPress passes an empty string for a shortcode with no attributes, and shortcode_atts() casts it to an array.
+            // @phpstan-ignore argument.type
             $atts,
             'custommenu'
         );
 
         return wp_nav_menu(
+            // The stubs describe wp_nav_menu() arguments as a closed shape; the keys passed are the ones core documents.
+            // @phpstan-ignore argument.type
             [
                 'menu' => $params['menu'],
                 'container' => $params['container'],

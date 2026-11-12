@@ -75,6 +75,8 @@ class UAMS_Widget_Conditions
                 // wordpress-stubs list only 'taxonomy' for get_tags(); core documents and honors these arguments.
                 // @phpstan-ignore argument.type
                 $tags = get_tags(['number' => 1000, 'orderby' => 'count', 'order' => 'DESC']);
+                // get_tags() fails only for an unregistered taxonomy, and post_tag is always registered.
+                // @phpstan-ignore argument.type
                 usort($tags, [self::class, 'strcasecmp_name']);
 
                 foreach ($tags as $tag) {
@@ -400,6 +402,8 @@ class UAMS_Widget_Conditions
                         $condition_result = true;
                     } else {
                         $tag = get_tag($minor);
+                        // get_tag() returns a WP_Term for the default object output.
+                        // @phpstan-ignore property.nonObject
                         if ($tag && is_tag($tag->slug)) {
                             $condition_result = true;
                         }

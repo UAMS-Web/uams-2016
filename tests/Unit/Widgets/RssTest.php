@@ -287,6 +287,8 @@ describe('shortcode', function (): void {
     it('starts with the blurb marker when the widget has a blurb', function (mixed $value, string $expected): void {
         stubFeed([]);
 
+        // The dataset supplies the expected prefix as a string.
+        // @phpstan-ignore argument.type
         expect((new UAMS_RSS)->uams_rss_shortcode(['url' => '/feed', 'has_blurb' => $value]))->toStartWith($expected);
     })->with([
         'true' => ['true', '<span></span><ul'],

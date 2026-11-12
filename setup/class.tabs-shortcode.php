@@ -68,6 +68,8 @@ class UAMS_TabsShortcode
 
         $tabs_atts = shortcode_atts([
             'name' => '',
+            // WordPress passes an empty string for a shortcode with no attributes, and shortcode_atts() casts it to an array.
+            // @phpstan-ignore argument.type
         ], $atts, 'tabs');
 
         if (empty($content)) {
@@ -118,6 +120,8 @@ class UAMS_TabsShortcode
         $tab_atts = shortcode_atts([
             'title' => '',
             'link' => '',
+            // WordPress passes an empty string for a shortcode with no attributes, and shortcode_atts() casts it to an array.
+            // @phpstan-ignore argument.type
         ], $atts, 'tab');
 
         if (empty($content)) {

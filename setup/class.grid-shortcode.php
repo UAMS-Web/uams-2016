@@ -29,6 +29,8 @@ class UAMS_GridShortcode
     {
         $atts = shortcode_atts([
             'class' => 'row',
+            // WordPress passes an empty string for a shortcode with no attributes, and shortcode_atts() casts it to an array.
+            // @phpstan-ignore argument.type
         ], $params, 'row');
 
         $content = ! empty($content) ? preg_replace('/<br class="nc".\/>/', '', (string) $content) : '';
@@ -50,6 +52,8 @@ class UAMS_GridShortcode
     {
         $atts = shortcode_atts([
             'class' => 'col-sm-1',
+            // WordPress passes an empty string for a shortcode with no attributes, and shortcode_atts() casts it to an array.
+            // @phpstan-ignore argument.type
         ], $params, 'col');
 
         $result = '<div class="'.esc_attr($atts['class']).'">';

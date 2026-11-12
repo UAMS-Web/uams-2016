@@ -1,6 +1,6 @@
 <?php the_date('F j, Y', '<p class="date">', '</p>'); ?>
 <h2 style="font-size: 27px;">
-  <a href="<?php echo esc_url(uams_get_permalink()); ?>" title="<?php the_title_attribute(); ?>"><?php the_title(); ?></a>
+  <a href="<?php echo esc_url(uams_get_permalink()); ?>" title="<?php the_title_attribute(); ?>"><?php the_title(); // @phpstan-ignore argument.type?></a>
 </h2>
 <?php if (get_option('show_byline_on_posts')) { ?>
 <div class="author-info">

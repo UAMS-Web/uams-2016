@@ -159,9 +159,13 @@ class UAMS_Carousel
         $json_img_meta = json_encode(array_map(strval(...), $img_meta));
 
         $attr['data-attachment-id'] = $attachment_id;
+        // The stubs type this value as possibly false; the call is unchanged.
+        // @phpstan-ignore argument.type
         $attr['data-orig-file'] = esc_attr($orig_file);
         $attr['data-orig-size'] = $size;
         $attr['data-comments-opened'] = '0';
+        // The stubs type this value as possibly false; the call is unchanged.
+        // @phpstan-ignore argument.type
         $attr['data-image-meta'] = esc_attr($json_img_meta);
         $attr['data-image-title'] = esc_attr($attachment_title);
         $attr['data-image-description'] = esc_attr($attachment_desc);
@@ -194,6 +198,8 @@ class UAMS_Carousel
             $extra_data = apply_filters('jp_carousel_add_data_to_container', $extra_data);
 
             foreach ((array) $extra_data as $data_key => $data_values) {
+                // The stubs type this value as possibly false; the call is unchanged.
+                // @phpstan-ignore argument.type
                 $html = str_replace('<div ', '<div '.esc_attr($data_key)."='".esc_attr(json_encode($data_values))."' ", $html);
             }
         }

@@ -78,6 +78,8 @@ class UAMS_CardsShortcode
     {
         $cards_atts = shortcode_atts([
             'name' => '',
+            // WordPress passes an empty string for a shortcode with no attributes, and shortcode_atts() casts it to an array.
+            // @phpstan-ignore argument.type
         ], $atts, 'cards');
 
         if (empty($content)) {
@@ -109,6 +111,8 @@ class UAMS_CardsShortcode
             'alt' => '',
             'action' => '',
             'footer' => '',
+            // WordPress passes an empty string for a shortcode with no attributes, and shortcode_atts() casts it to an array.
+            // @phpstan-ignore argument.type
         ], $atts, 'card');
 
         $size = ! empty($card_atts['size']) ? ' '.sanitize_html_class($card_atts['size']) : '';

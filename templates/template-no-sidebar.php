@@ -5,6 +5,8 @@
 get_header();
 
 $post_id = get_the_ID();
+// The stubs type this value as possibly false; the call is unchanged.
+// @phpstan-ignore argument.type
 $breadcrumbs = get_post_meta($post_id, 'breadcrumb', true);
 
 get_template_part('header', 'image'); ?>

@@ -144,6 +144,8 @@ it('creates the class for a property when it exists', function (string $property
 
     $uams = new UAMS;
 
+    // The loader class names are plain strings keyed by property.
+    // @phpstan-ignore argument.type
     expect($uams->{$property})->toBeInstanceOf($class);
     foreach (array_keys(UAMS_LOADER_CLASSES) as $other) {
         if ($other !== $property) {

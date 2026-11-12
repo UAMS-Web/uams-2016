@@ -195,6 +195,8 @@ describe('content-pdf.php', function (): void {
             '<h1 class="entry-title">[title]</h1> <div style="margin-top: 30px">'
             .' <a class="uams-btn btn-sm btn-plus" href="/files/7.pdf" title="[title]" target="_blank">Download</a> </div> [excerpt]'
         )->and(preg_match('#<iframe class="uams-pdf-view" style="width:100%;height:900px;" src="/files/7\.pdf\?(\d+)"></iframe>$#', $html, $match))->toBe(1)
+            // The preg_match() assertion above guarantees the capture group.
+            // @phpstan-ignore offsetAccess.notFound
             ->and((int) $match[1])->toBeGreaterThanOrEqual($before)->toBeLessThanOrEqual($after);
     });
 

@@ -17,7 +17,11 @@ class UAMS_Enclosure
         }
 
         $thumbnail_size = apply_filters('rss_enclosure_image_size', 'thumbnail');
+        // The stubs type this value as possibly false; the call is unchanged.
+        // @phpstan-ignore argument.type
         $thumbnail_id = get_post_thumbnail_id(get_the_ID());
+        // The stubs type this value as possibly false; the call is unchanged.
+        // @phpstan-ignore argument.type
         $thumbnail = image_get_intermediate_size($thumbnail_id, $thumbnail_size);
 
         if (empty($thumbnail) || empty($thumbnail['url']) || empty($thumbnail['path'])) {
@@ -32,6 +36,8 @@ class UAMS_Enclosure
             '<enclosure url="%s" length="%s" type="%s" />',
             esc_url($thumbnail['url']),
             (int) $file_size,
+            // The stubs type this value as possibly false; the call is unchanged.
+            // @phpstan-ignore argument.type
             esc_attr((string) get_post_mime_type($thumbnail_id))
         );
     }

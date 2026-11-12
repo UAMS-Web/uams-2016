@@ -59,6 +59,8 @@ class TileBox
             'padding' => '',
             'shadow' => '',
             'custom' => '',
+            // WordPress passes an empty string for a shortcode with no attributes, and shortcode_atts() casts it to an array.
+            // @phpstan-ignore argument.type
         ], $atts, 'box');
 
         $color = ! empty($boxCenter['color']) ? ' box-'.sanitize_html_class($boxCenter['color']) : '';
@@ -100,6 +102,8 @@ class TileBox
         $this->count++;
         $tile_atts = shortcode_atts([
             'empty' => 'false',
+            // WordPress passes an empty string for a shortcode with no attributes, and shortcode_atts() casts it to an array.
+            // @phpstan-ignore argument.type
         ], $atts, 'tile');
 
         $classes = 'tile';

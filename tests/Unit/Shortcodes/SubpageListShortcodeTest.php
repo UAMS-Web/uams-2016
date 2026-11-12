@@ -30,12 +30,12 @@ beforeEach(function (): void {
  */
 function subpages(int ...$ids): array
 {
-    return array_map(static fn (int $id): WP_Post => wpPost([
+    return array_values(array_map(static fn (int $id): WP_Post => wpPost([
         'ID' => $id,
         'post_title' => 'Page '.$id,
         'post_excerpt' => 'Excerpt '.$id,
         'post_author' => 100 + $id,
-    ]), $ids);
+    ]), $ids));
 }
 
 it('registers the subpage-list shortcode', function (): void {

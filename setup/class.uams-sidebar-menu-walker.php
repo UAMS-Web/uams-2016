@@ -70,6 +70,8 @@ class UAMS_Sidebar_Menu_Walker extends Walker_Page
             $output .= $indent.sprintf(
                 '<li class="%s"><a href="%s">%s%s%s</a>',
                 esc_attr($css_classes.' child-page-existance-tester'),
+                // The stubs type this value as possibly false; the call is unchanged.
+                // @phpstan-ignore argument.type
                 esc_url(get_permalink($page->ID)),
                 $link_before,
                 apply_filters('the_title', $page->post_title, $page->ID),

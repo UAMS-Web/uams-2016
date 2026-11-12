@@ -377,6 +377,8 @@ describe('shortcode with a live feed', function (): void {
 
         $html = (twitterWidget())->shortcode([]);
 
+        // Both markers are in the markup, so strpos() returns positions.
+        // @phpstan-ignore argument.type
         expect(strpos($html, 'first'))->toBeLessThan(strpos($html, 'second'))
             ->and(substr_count($html, 'class="tweet"'))->toBe(2);
     });

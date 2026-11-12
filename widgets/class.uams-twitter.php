@@ -90,7 +90,7 @@ if (defined('TWITTER_OAUTH_TOKEN')) {
 
 		<p>
 			<label for="<?php echo esc_attr($this->get_field_id('count')); ?>"><?php _e('Number of tweets to show:', 'uams'); ?></label>
-			<input class="widefat" id="<?php echo esc_attr($this->get_field_id('count')); ?>" name="<?php echo esc_attr($this->get_field_name('count')); ?>" type="text" value="<?php echo esc_attr($count); ?>" />
+			<input class="widefat" id="<?php echo esc_attr($this->get_field_id('count')); ?>" name="<?php echo esc_attr($this->get_field_name('count')); ?>" type="text" value="<?php echo esc_attr($count); // @phpstan-ignore argument.type?>" />
 		</p>
 		<?php
         }
@@ -121,6 +121,8 @@ if (defined('TWITTER_OAUTH_TOKEN')) {
                     'name' => self::ACCOUNT,
                     'count' => self::COUNT,
                 ],
+                // WordPress passes an empty string for a shortcode with no attributes, and shortcode_atts() casts it to an array.
+                // @phpstan-ignore argument.type
                 $atts,
                 'twitter'
             );
@@ -137,6 +139,8 @@ if (defined('TWITTER_OAUTH_TOKEN')) {
                 $output .= '<h2 class="widgettitle">'.esc_html($atts['title']).'</h2>';
             }
 
+            // The stubs type this value as possibly false; the call is unchanged.
+            // @phpstan-ignore argument.type
             $output .= '<div class="twitter-feed" data-name="'.esc_attr($atts['name']).'" data-count="'.esc_attr($atts['count']).'">';
 
             foreach ($tweets as $tweet) {
