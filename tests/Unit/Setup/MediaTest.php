@@ -157,6 +157,8 @@ describe('UAMS_Media_Credit', function (): void {
             });
             when('esc_html')->alias(static fn (string $text): string => 'H{'.$text.'}');
 
+            // The id arrives from a shortcode attribute as a string.
+            // @phpstan-ignore argument.type
             $html = (new UAMS_Media_Credit)->mediacredit_tinymce_html('<img>', '5', '', 'T', 'left', 'u', 'medium');
 
             expect($html)->toBe("<dl class='mediacredit alignA{left}' data-credit='A{Jane}' data-align='alignA{left}' data-size='A{medium}' style='width:300px'>\n                <dt class='mediacredit-dt'><img></dt>\n                <dd class='wp-caption-dd'>H{Jane}</dd>\n            </dl>")

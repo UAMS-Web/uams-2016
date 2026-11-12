@@ -6,6 +6,9 @@
 
 class UAMS_Filters
 {
+    /**
+     * @var array<int, string>
+     */
     // Coverage attributes no line to a property default, so its mutants are reported uncovered, not
     // surviving. 'strips the template prefix and suffix from page template body classes' fails if either item is removed.
     // @pest-mutate-ignore: RemoveArrayItem
@@ -59,11 +62,23 @@ class UAMS_Filters
         return 'class="uams-btn btn-sm btn-left"';
     }
 
+    /**
+     * Replace the excerpt more string.
+     *
+     * @param  string  $more  The default more string.
+     * @return string The replacement string.
+     */
     public function custom_excerpt_more($more): string
     {
         return '...';
     }
 
+    /**
+     * Add PDFs to the media library mime type filters.
+     *
+     * @param  array<string, array<int|string, mixed>>  $post_mime_types  The mime type filters.
+     * @return array<string, array<int|string, mixed>> The filters with PDFs added.
+     */
     public function modify_post_mime_types($post_mime_types)
     {
         $post_mime_types['application/pdf'] = [
@@ -76,6 +91,7 @@ class UAMS_Filters
     }
 
     /**
+     * @param  mixed  $classes  The body classes.
      * @return mixed[]
      */
     public function add_site_title_body_class($classes): array
@@ -96,6 +112,7 @@ class UAMS_Filters
     }
 
     /**
+     * @param  mixed  $classes  The body classes.
      * @return mixed[]
      */
     public function better_template_name_body_class($classes): array
@@ -110,6 +127,12 @@ class UAMS_Filters
         return $classes;
     }
 
+    /**
+     * Add classes to the category dropdown widget.
+     *
+     * @param  array<string, mixed>  $args  The dropdown arguments.
+     * @return array<string, mixed> The arguments with the class added.
+     */
     public function custom_widget_classes($args)
     {
         $args['class'] = 'uams-select uams-select-wp';
@@ -117,6 +140,12 @@ class UAMS_Filters
         return $args;
     }
 
+    /**
+     * Italicize the configured words in the content.
+     *
+     * @param  mixed  $content  The content to filter.
+     * @return string|array<int, string>|null The filtered content.
+     */
     public function italicize($content): string|array|null
     {
         if (empty($content) || ! is_string($content)) {
@@ -144,6 +173,12 @@ class UAMS_Filters
         return $new_content;
     }
 
+    /**
+     * Get the configured abbreviation, falling back to the title.
+     *
+     * @param  string  $title  The full title.
+     * @return string The abbreviation or the title.
+     */
     public function abbreviate($title)
     {
         $abbr = get_option('abbreviation');
@@ -151,11 +186,23 @@ class UAMS_Filters
         return ! empty($abbr) ? $abbr : $title;
     }
 
+    /**
+     * Append a read more link to the excerpt.
+     *
+     * @param  string  $excerpt  The excerpt.
+     * @return string The excerpt with the link.
+     */
     public function excerpt_more_override($excerpt): string
     {
         return $excerpt.'<div><a class="more" href="'.esc_url(uams_get_permalink()).'">Read more</a></div>';
     }
 
+    /**
+     * Allow short user names on signup.
+     *
+     * @param  array<string, mixed>  $result  The signup validation result.
+     * @return array<string, mixed> The result without the short user name error.
+     */
     public function short_user_names($result)
     {
         if (! isset($result['errors']) || ! is_wp_error($result['errors'])) {

@@ -8,6 +8,9 @@
 
 class UAMS_Map
 {
+    /**
+     * @var array<int, string>
+     */
     private static array $buildingcode = [
         '127', '116', '117', '118', '119', '120', '121', '122', '123', '124', // @pest-mutate-ignore: RemoveArrayItem
         '125', '128', '129', '126', '131', '130', '132', '133', '134', '135', // @pest-mutate-ignore: RemoveArrayItem
@@ -23,6 +26,13 @@ class UAMS_Map
         add_shortcode('map', [$this, 'map_handler']);
     }
 
+    /**
+     * Render the map shortcode.
+     *
+     * @param  array<string, mixed>|string  $atts  The shortcode attributes.
+     * @param  string|null  $content  The enclosed content.
+     * @return string The map markup.
+     */
     public function map_handler($atts, $content = null): string
     {
         $params = shortcode_atts(

@@ -15,8 +15,14 @@ class UAMS_QuickLinks
     // @pest-mutate-ignore: IncrementInteger,DecrementInteger
     const ALLOWED_BLOG = 1;
 
+    /**
+     * @var bool
+     */
     public $MULTISITE;
 
+    /**
+     * @var array<int, object>|false
+     */
     public $items = [];
 
     public function __construct()
@@ -59,12 +65,16 @@ class UAMS_QuickLinks
     }
 
     /**
-     * @return non-empty-array[]
+     * Build the quick links feed from the menu items.
+     *
+     * @return list<array<string, mixed>>
      */
     public function parse_menu(): array
     {
         $menu = [];
 
+        // The feed can be filtered into a non-array, which the quick links test pins.
+        // @phpstan-ignore booleanAnd.rightAlwaysTrue
         if (! empty($this->items) && is_array($this->items)) {
             foreach ($this->items as $item) {
                 $item_array = array_intersect_key(

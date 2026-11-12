@@ -5,6 +5,11 @@
 //
 
 if (! function_exists('uams_content_class')) {
+    /**
+     * Echo the class attribute for the content area.
+     *
+     * @param  string  $class  Extra class passed to the filter.
+     */
     function uams_content_class($class = ''): void // @pest-mutate-ignore: EmptyStringToNotEmpty
     {
         echo 'class="'.esc_attr(implode(' ', get_uams_content_class($class))).'"';
@@ -12,6 +17,12 @@ if (! function_exists('uams_content_class')) {
 }
 
 if (! function_exists('get_uams_content_class')) {
+    /**
+     * Get the classes for the content area.
+     *
+     * @param  string  $class  Extra class passed to the filter.
+     * @return array<int, string> The content classes.
+     */
     function get_uams_content_class($class = '') // @pest-mutate-ignore: EmptyStringToNotEmpty
     {
         $classes = ['uams-content'];
@@ -92,6 +103,11 @@ if (! function_exists('uams_mobile_menu')) {
 }
 
 if (! function_exists('uams_mobile_front_page_menu')) {
+    /**
+     * Echo the mobile front page menu.
+     *
+     * @param  string  $class  Optional class to add to the nav element.
+     */
     function uams_mobile_front_page_menu($class = ''): void // @pest-mutate-ignore: EmptyStringToNotEmpty
     {
         $spacer = '';
@@ -105,6 +121,12 @@ if (! function_exists('uams_mobile_front_page_menu')) {
 }
 
 if (! function_exists('uams_list_pages')) {
+    /**
+     * Build the page list for the current page.
+     *
+     * @param  bool  $mobile  Whether the list is for the mobile menu.
+     * @return string The list markup.
+     */
     function uams_list_pages($mobile = false): string // @pest-mutate-ignore: FalseToTrue
     {
         global $UAMS, $post;
@@ -372,6 +394,11 @@ if (! function_exists('uams_breadcrumbs')) {
 }
 
 if (! function_exists('uams_thumbnail_url')) {
+    /**
+     * Echo the URL of the current post's thumbnail.
+     *
+     * @param  string|array<int, int>  $size  The image size name or a width and height pair.
+     */
     function uams_thumbnail_url($size = 'original'): void
     {
         echo esc_url(uams_get_thumbnail_url($size));
@@ -379,6 +406,12 @@ if (! function_exists('uams_thumbnail_url')) {
 }
 
 if (! function_exists('uams_get_thumbnail_url')) {
+    /**
+     * Get the URL of the current post's thumbnail.
+     *
+     * @param  string|array<int, int>  $size  The image size name or a width and height pair.
+     * @return string The thumbnail URL, or an empty string.
+     */
     function uams_get_thumbnail_url($size = 'original')
     {
         $thumbnail = wp_get_attachment_image_src(get_post_thumbnail_id(), $size, true);
@@ -395,6 +428,12 @@ if (! function_exists('is_pdf')) {
 }
 
 if (! function_exists('uams_get_sticky_posts')) {
+    /**
+     * Get the sticky posts.
+     *
+     * @param  array<string, mixed>|string  $args  Arguments merged over the sticky post defaults.
+     * @return array<int, WP_Post|int> The matching posts.
+     */
     function uams_get_sticky_posts($args = [])
     {
         $stickyposts = get_option('sticky_posts');
@@ -443,6 +482,12 @@ if (! function_exists('uams_page_title')) {
 }
 
 if (! function_exists('uams_get_permalink')) {
+    /**
+     * Get the permalink for a post, preferring a custom link on link-format posts.
+     *
+     * @param  int|WP_Post|null  $post  The post or post ID. Defaults to the current post.
+     * @return string|false The permalink, or an empty string when there is no post.
+     */
     function uams_get_permalink($post = null)
     {
         if (empty($post)) {
@@ -468,6 +513,14 @@ if (! function_exists('uams_get_permalink')) {
 }
 
 if (! function_exists('text_cut')) {
+    /**
+     * Trim text to a length at a word boundary.
+     *
+     * @param  string  $text  The text to trim.
+     * @param  int  $length  The target length.
+     * @param  bool  $dots  Whether to append an ellipsis when the text is cut.
+     * @return string The trimmed text.
+     */
     function text_cut($text, $length = 27, $dots = true): string // @pest-mutate-ignore: TrueToFalse,DecrementInteger,IncrementInteger
     {
         $text = trim(preg_replace('#[\s\n\r\t]{2,}#', ' ', (string) $text));

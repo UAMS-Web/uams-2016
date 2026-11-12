@@ -5,9 +5,16 @@ class UAMS_Home_Slider_Meta_Box
     public function __construct()
     {
         add_action('add_meta_boxes', [$this, 'hs_add_meta_box']);
+        // save() hands back the post ID on the paths that bail out early; the action ignores it.
+        // @phpstan-ignore return.void
         add_action('save_post', [$this, 'save']);
     }
 
+    /**
+     * Add the home slider meta box to the home slider post type.
+     *
+     * @param  string  $post_type  The post type being edited.
+     */
     public function hs_add_meta_box($post_type): void
     {
         $post_types = ['home_slider'];
@@ -24,6 +31,11 @@ class UAMS_Home_Slider_Meta_Box
         }
     }
 
+    /**
+     * Output the home slider meta box fields.
+     *
+     * @param  WP_Post  $post  The post being edited.
+     */
     public function hs_meta_box_function($post): void
     {
         wp_nonce_field('mobileimage_nonce', 'mobileimage_name');
@@ -65,6 +77,12 @@ class UAMS_Home_Slider_Meta_Box
         <?php
     }
 
+    /**
+     * Save the home slider meta box fields.
+     *
+     * @param  int  $post_id  The ID of the post being saved.
+     * @return int|void
+     */
     public function save($post_id)
     {
         if (! isset($_POST['mobileimage_name'])) {

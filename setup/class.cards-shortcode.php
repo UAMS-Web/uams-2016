@@ -46,6 +46,12 @@ class UAMS_CardsShortcode
         add_shortcode('card', [$this, 'card_handler']);
     }
 
+    /**
+     * Remove the paragraph and line break markup WordPress wraps around shortcodes.
+     *
+     * @param  mixed  $content  The post content.
+     * @return mixed The content with the markup removed, or the input when it is empty or not a string.
+     */
     public function wpex_fix_shortcodes($content)
     {
         if (empty($content) || ! is_string($content)) {
@@ -61,6 +67,13 @@ class UAMS_CardsShortcode
         return strtr($content, $array);
     }
 
+    /**
+     * Render the cards shortcode.
+     *
+     * @param  array<string, mixed>|string  $atts  The shortcode attributes.
+     * @param  string|null  $content  The enclosed cards.
+     * @return string The cards markup.
+     */
     public function cards_handler($atts, $content = null): string
     {
         $cards_atts = shortcode_atts([
@@ -77,6 +90,13 @@ class UAMS_CardsShortcode
         return sprintf('%s<section class="cards">%s</section>', $title, $output);
     }
 
+    /**
+     * Render a single card.
+     *
+     * @param  array<string, mixed>|string  $atts  The shortcode attributes.
+     * @param  string|null  $content  The card body.
+     * @return string The card markup.
+     */
     public function card_handler($atts, $content = null): string
     {
         $card_atts = shortcode_atts([

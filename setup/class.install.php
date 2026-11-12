@@ -14,6 +14,9 @@ class UAMS_Install_Theme
     // @pest-mutate-ignore: IncrementInteger,DecrementInteger
     const WIDTH = 750;
 
+    /**
+     * @var array<string, array<string, string>>
+     */
     // Coverage attributes no line to a property default, so its mutants are reported uncovered, not
     // surviving. 'declares theme support and the default header' asserts the registered headers.
     // @pest-mutate-ignore: RemoveArrayItem
@@ -52,6 +55,7 @@ class UAMS_Install_Theme
     }
 
     /**
+     * @param  mixed  $dimensions  The default embed dimensions.
      * @return mixed[]
      */
     public function uams_setup_embed_defaults($dimensions): array

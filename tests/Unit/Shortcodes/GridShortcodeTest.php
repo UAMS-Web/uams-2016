@@ -44,6 +44,8 @@ describe('[row]', function (): void {
     ]);
 
     it('casts content that is not a string before it removes the line breaks', function (): void {
+        // Non-string content is the case under test.
+        // @phpstan-ignore argument.type
         [$result, $warnings] = collectWarnings(static fn (): string => (new UAMS_GridShortcode)->bs_row([], ['x']));
 
         expect($result)->toBe('B{<div class="A{row}">D{Array}</div>}')

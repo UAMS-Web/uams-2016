@@ -14,7 +14,11 @@ class UAMS_Widget_Conditions
             add_action('in_widget_form', [self::class, 'widget_conditions_admin'], 10, 3);
             add_action('wp_ajax_widget_conditions_options', [self::class, 'widget_conditions_options']);
         } else {
+            // Registered as an action but run as a filter, so the callback returns the filtered value.
+            // @phpstan-ignore return.void
             add_action('widget_display_callback', [self::class, 'filter_widget']);
+            // Registered as an action but run as a filter, so the callback returns the filtered value.
+            // @phpstan-ignore return.void
             add_action('sidebars_widgets', [self::class, 'sidebars_widgets']);
         }
     }
@@ -26,6 +30,12 @@ class UAMS_Widget_Conditions
         wp_enqueue_style('widget-cards', get_template_directory_uri().'/assets/admin/css/uams.widgets-misc.css');
     }
 
+    /**
+     * Echo the minor condition options for a major condition.
+     *
+     * @param  string  $major  The major condition key.
+     * @param  string  $minor  The selected minor condition value.
+     */
     public static function widget_conditions_options_echo($major = '', $minor = ''): void
     {
         switch ($major) {
@@ -151,6 +161,13 @@ class UAMS_Widget_Conditions
         wp_die();
     }
 
+    /**
+     * Echo the visibility rules fields on a widget form.
+     *
+     * @param  WP_Widget<array<string, mixed>>  $widget  The widget being edited.
+     * @param  string|null  $return  The form return value from the `in_widget_form` action.
+     * @param  array<string, mixed>  $instance  The saved settings of the widget.
+     */
     public static function widget_conditions_admin($widget, $return, $instance): void
     {
         $conditions = (isset($instance['conditions']) && is_array($instance['conditions'])) ? $instance['conditions'] : [];
@@ -212,6 +229,14 @@ class UAMS_Widget_Conditions
 		<?php
     }
 
+    /**
+     * Save the visibility rules submitted with a widget form.
+     *
+     * @param  array<string, mixed>  $instance  The settings being saved.
+     * @param  array<string, mixed>  $new_instance  The submitted settings.
+     * @param  array<string, mixed>  $old_instance  The previously saved settings.
+     * @return array<string, mixed>
+     */
     public static function widget_update($instance, $new_instance, $old_instance)
     {
         if (! isset($_POST['conditions']['action'], $_POST['conditions']['rules_major']) || ! is_array($_POST['conditions']['rules_major'])) {
@@ -251,6 +276,12 @@ class UAMS_Widget_Conditions
         return $instance;
     }
 
+    /**
+     * Remove from each widget area the widgets whose visibility rules hide them.
+     *
+     * @param  array<string, array<int, string>>  $widget_areas  The widget IDs by widget area.
+     * @return array<string, array<int, string>>
+     */
     public static function sidebars_widgets($widget_areas)
     {
         $settings = [];
@@ -284,6 +315,12 @@ class UAMS_Widget_Conditions
         return $widget_areas;
     }
 
+    /**
+     * Decide whether a widget shows, from its visibility rules.
+     *
+     * @param  array<string, mixed>  $instance  The settings of the widget.
+     * @return array<string, mixed>|false The settings, or false when the rules hide the widget.
+     */
     public static function filter_widget($instance)
     {
         global $post, $wp_query;
@@ -421,6 +458,12 @@ class UAMS_Widget_Conditions
         return $instance;
     }
 
+    /**
+     * Compare two objects by name, ignoring case.
+     *
+     * @param  object{name: string}  $a
+     * @param  object{name: string}  $b
+     */
     public static function strcasecmp_name($a, $b): int
     {
         return strcasecmp($a->name, $b->name);

@@ -6,6 +6,9 @@
 
 class UAMS_TinyShortcode
 {
+    /**
+     * @var list<string>
+     */
     public $shortcodes = [
         'grid', // @pest-mutate-ignore: RemoveArrayItem
         'button', // @pest-mutate-ignore: RemoveArrayItem
@@ -36,6 +39,9 @@ class UAMS_TinyShortcode
     }
 
     /**
+     * Add the shortcode buttons to the third TinyMCE toolbar row.
+     *
+     * @param  mixed  $buttons  The toolbar buttons; a non-array value is replaced with an empty list.
      * @return mixed[]
      */
     public function regbtns($buttons): array
@@ -49,6 +55,9 @@ class UAMS_TinyShortcode
     }
 
     /**
+     * Register the shortcode button plugins with TinyMCE.
+     *
+     * @param  mixed  $plgs  The external plugins; a non-array value is replaced with an empty array.
      * @return mixed[]
      */
     public function regplugins($plgs): array

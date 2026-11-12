@@ -7,6 +7,9 @@
 #[AllowDynamicProperties]
 class UAMS_Dropdowns_Walker_Menu extends Walker_Nav_Menu
 {
+    /**
+     * @var string
+     */
     // Coverage attributes no line to a property default, so its mutant is reported uncovered, not
     // surviving. 'opens an empty current id before any item' asserts the value.
     // @pest-mutate-ignore: EmptyStringToNotEmpty
@@ -35,6 +38,16 @@ class UAMS_Dropdowns_Walker_Menu extends Walker_Nav_Menu
         $output .= "{$indent}</ul>\n";
     }
 
+    /**
+     * Mark whether the element has children, then display it.
+     *
+     * @param  object  $element  The data object.
+     * @param  array<int, array<int, object>>  $children_elements  The children keyed by parent ID.
+     * @param  int  $max_depth  The maximum hierarchical depth.
+     * @param  int  $depth  The current depth.
+     * @param  array<int|string, mixed>  $args  The arguments passed to the walker.
+     * @param  string  $output  The markup built so far.
+     */
     public function display_element($element, &$children_elements, $max_depth, $depth, $args, &$output)
     {
         // A non-object element is handed on untouched, which the walker test pins; walker callers normally pass an object.
@@ -45,7 +58,7 @@ class UAMS_Dropdowns_Walker_Menu extends Walker_Nav_Menu
 
         // Walker::display_element() returns nothing in core, so this result is always null; the override
         // hands it on as it always has, and the walker test pins that hand-over.
-        // @phpstan-ignore staticMethod.void, return.void
+        // @phpstan-ignore staticMethod.void, return.void, parameterByRef.type
         return parent::display_element($element, $children_elements, $max_depth, $depth, $args, $output);
     }
 

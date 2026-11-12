@@ -6,6 +6,9 @@
 
 class UAMS_Images
 {
+    /**
+     * @var array<string, array<string, bool|int|string>>
+     */
     // Coverage attributes no line to a property default, so its mutants are reported uncovered, not
     // surviving. 'defines the sizes the theme ships' asserts the whole value, so any change to it fails.
     // @pest-mutate-ignore: RemoveArrayItem,DecrementInteger,IncrementInteger,TrueToFalse,FalseToTrue
@@ -87,6 +90,12 @@ class UAMS_Images
         }
     }
 
+    /**
+     * Add the theme image sizes to the image size dropdown.
+     *
+     * @param  mixed  $defaultSizes  The default sizes keyed by slug.
+     * @return array<string, string> The size names keyed by slug.
+     */
     public function show_image_sizes($defaultSizes): array
     {
         $defaultSizes = is_array($defaultSizes) ? $defaultSizes : [];

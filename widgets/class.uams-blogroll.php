@@ -1,5 +1,8 @@
 <?php
 
+/**
+ * @extends WP_Widget<array<string, mixed>>
+ */
 class UAMS_Blogroll extends WP_Widget
 {
     const NAME = 'UAMS Blogroll';
@@ -66,6 +69,13 @@ class UAMS_Blogroll extends WP_Widget
 		<?php
     }
 
+    /**
+     * Sanitize the widget settings on save.
+     *
+     * @param  array<string, mixed>  $new_instance  The submitted settings.
+     * @param  array<string, mixed>  $instance  The previously saved settings.
+     * @return array<string, mixed>
+     */
     public function update($new_instance, $instance)
     {
         $instance['title'] = sanitize_text_field($new_instance['title']);
@@ -96,6 +106,12 @@ class UAMS_Blogroll extends WP_Widget
         echo $args['after_widget'];
     }
 
+    /**
+     * Render the blogroll shortcode.
+     *
+     * @param  array<string, mixed>|string  $atts  The shortcode attributes.
+     * @return string
+     */
     public function shortcode($atts)
     {
         $params = shortcode_atts(
@@ -226,6 +242,11 @@ class UAMS_Blogroll extends WP_Widget
         return "<ul class=\"shortcode-blogroll{$miniclass} {$cardsclass}\">{$html}</ul>";
     }
 
+    /**
+     * Whether a shortcode attribute value turns a feature on.
+     *
+     * @param  mixed  $attribute  The attribute value.
+     */
     private function is_true($attribute): bool
     {
         return in_array($attribute, ['show', 'true'], true);

@@ -261,6 +261,8 @@ describe('content-page.php', function (): void {
         });
 
         it('casts a non-string to a string', function (): void {
+            // A non-string is the case under test.
+            // @phpstan-ignore argument.type
             expect(text_cut(12345))->toBe('12345');
         });
     });

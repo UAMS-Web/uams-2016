@@ -18,26 +18,43 @@ use function Patchwork\relay;
 if (! class_exists('WP_Post')) {
     class WP_Post
     {
+        /** @var int */
         public $ID = 0;
 
+        /** @var int */
         public $post_parent = 0;
 
+        /** @var string */
         public $post_title = '';
 
+        /** @var string */
         public $post_name = '';
 
+        /** @var string */
+        public $post_date = '';
+
+        /** @var string */
+        public $post_modified = '';
+
+        /** @var string */
         public $post_content = '';
 
+        /** @var string */
         public $post_excerpt = '';
 
+        /** @var int|string */
         public $post_author = 0;
 
+        /** @var string */
         public $post_type = 'post';
 
+        /** @var int */
         public $menu_order = 0;
 
+        /** @var string */
         public $page_template = '';
 
+        /** @var list<int> */
         public $ancestors = [];
     }
 }
@@ -45,6 +62,7 @@ if (! class_exists('WP_Post')) {
 if (! class_exists('WP_Error')) {
     class WP_Error
     {
+        /** @var array<string, list<string>> */
         public array $errors = [];
 
         public function get_error_message(string $code = ''): string
@@ -61,6 +79,12 @@ if (! class_exists('WP_Query')) {
      */
     class WP_Query
     {
+        /** @var bool */
+        public $is_search = false;
+
+        /** @var bool */
+        public $is_home = false;
+
         /** @var list<list<array<string, mixed>>> */
         public static $queue = [];
 
@@ -70,12 +94,21 @@ if (! class_exists('WP_Query')) {
         /** @var array<string, mixed> */
         public static $current = [];
 
+        /** @var list<array<string, mixed>> */
         public $posts = [];
 
+        /**
+         * @param  array<string, mixed>  $args
+         */
         public function __construct($args = [])
         {
             self::$made[] = $args;
             $this->posts = array_shift(self::$queue) ?? [];
+        }
+
+        public function is_main_query(): bool
+        {
+            return true;
         }
 
         public function have_posts(): bool

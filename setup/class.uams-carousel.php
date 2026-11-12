@@ -17,11 +17,17 @@ class UAMS_Carousel
 
     const LINK = 'none';
 
+    /**
+     * @var list<int>
+     */
     // Coverage attributes no line to a property or constant default, so its mutants are reported
     // uncovered, not surviving. 'initializes on init' asserts the value.
     // @pest-mutate-ignore: IncrementInteger,DecrementInteger,RemoveArrayItem
     public $prebuilt_widths = [370, 700, 1000, 1200, 1400, 2000];
 
+    /**
+     * @var bool
+     */
     // Coverage attributes no line to a property or constant default, so its mutants are reported
     // uncovered, not surviving. 'initializes on init' asserts the value.
     // @pest-mutate-ignore: TrueToFalse
@@ -39,21 +45,40 @@ class UAMS_Carousel
         }
 
         $this->prebuilt_widths = apply_filters('jp_carousel_widths', $this->prebuilt_widths);
+        // The callback is also run as a filter over the enqueue output, so it returns a string.
+        // @phpstan-ignore return.void
         add_action('wp_enqueue_scripts', [$this, 'enqueue_assets']);
         add_filter('gallery_style', [$this, 'add_data_to_container']);
         add_filter('wp_get_attachment_image_attributes', [$this, 'add_data_to_images'], 10, 2);
     }
 
+    /**
+     * Whether the carousel is disabled, as filtered by `uams_carousel_disable`.
+     *
+     * @return bool
+     */
     public function disable()
     {
         return apply_filters('uams_carousel_disable', false);
     }
 
+    /**
+     * Filter the carousel asset version.
+     *
+     * @param  string  $version  The asset version.
+     * @return string
+     */
     public function asset_version($version)
     {
         return apply_filters('jp_carousel_asset_version', $version);
     }
 
+    /**
+     * Enqueue the carousel assets, or pass the output through when the carousel is not forced on.
+     *
+     * @param  string  $output  The gallery output.
+     * @return string
+     */
     public function enqueue_assets($output = '')
     {
         if (! empty($output) && ! apply_filters('jp_carousel_force_enable', false)) {
@@ -96,6 +121,13 @@ class UAMS_Carousel
         return $output;
     }
 
+    /**
+     * Add the carousel data attributes to a gallery image.
+     *
+     * @param  array<string, int|string>  $attr  The image attributes.
+     * @param  WP_Post|null  $attachment  The attachment post.
+     * @return array<string, int|string>
+     */
     public function add_data_to_images($attr, $attachment = null)
     {
         if ($this->first_run || empty($attachment)) {
@@ -139,6 +171,12 @@ class UAMS_Carousel
         return $attr;
     }
 
+    /**
+     * Add the carousel data attribute to the gallery container markup.
+     *
+     * @param  string  $html  The gallery container markup.
+     * @return string
+     */
     public function add_data_to_container($html)
     {
         global $post;

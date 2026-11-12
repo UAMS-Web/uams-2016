@@ -14,6 +14,12 @@ class UAMS_SubpageList
         add_shortcode('subpage-list', [$this, 'list_subpages']);
     }
 
+    /**
+     * Render the list of subpages.
+     *
+     * @param  array<string, mixed>|string  $atts  The shortcode attributes.
+     * @return string The list markup.
+     */
     public function list_subpages($atts): string
     {
         $attributes = (object) shortcode_atts([

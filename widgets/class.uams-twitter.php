@@ -10,6 +10,9 @@
 
 if (defined('TWITTER_OAUTH_TOKEN')) {
 
+    /**
+     * @extends WP_Widget<array<string, mixed>>
+     */
     class UAMS_Widget_Twitter extends WP_Widget
     {
         const ID = 'uams-twitter-feed';
@@ -44,6 +47,7 @@ if (defined('TWITTER_OAUTH_TOKEN')) {
         // @pest-mutate-ignore: IncrementInteger,DecrementInteger
         const EXPIRES = 60;
 
+        /** @var array<string, string> */
         // Coverage attributes no line to a property default, so its mutants are reported uncovered, not
         // surviving. The test that checks the settings handed to the API wrapper asserts all four.
         // @pest-mutate-ignore: RemoveArrayItem
@@ -91,11 +95,24 @@ if (defined('TWITTER_OAUTH_TOKEN')) {
 		<?php
         }
 
+        /**
+         * Sanitize the widget settings on save.
+         *
+         * @param  array<string, mixed>  $new_instance  The submitted settings.
+         * @param  array<string, mixed>  $old_instance  The previously saved settings.
+         * @return array<string, mixed>
+         */
         public function update($new_instance, $old_instance)
         {
             return ['title' => sanitize_text_field($new_instance['title'] ?? ''), 'name' => sanitize_text_field($new_instance['name'] ?? ''), 'count' => ! empty($new_instance['count']) ? absint($new_instance['count']) : self::COUNT];
         }
 
+        /**
+         * Render the latest tweets shortcode.
+         *
+         * @param  array<string, mixed>|string  $atts  The shortcode attributes.
+         * @return string
+         */
         public function shortcode($atts)
         {
             $atts = shortcode_atts(
@@ -156,6 +173,13 @@ if (defined('TWITTER_OAUTH_TOKEN')) {
             echo $args['after_widget'] ?? '';
         }
 
+        /**
+         * Fetch the latest tweets for an account, from the cache when it holds them.
+         *
+         * @param  string  $name  The account screen name.
+         * @param  int|string  $count  How many tweets to fetch.
+         * @return array<int|string, array<string, string|null>>
+         */
         private function getLatestTweets($name = 'uams', $count = 5): array
         {
             $count = absint($count);
@@ -210,6 +234,11 @@ if (defined('TWITTER_OAUTH_TOKEN')) {
             return is_array($decoded) ? $decoded : [];
         }
 
+        /**
+         * Link the URLs, mentions and hashtags in a tweet.
+         *
+         * @param  mixed  $text  The tweet text; anything but a non-empty string gives an empty string.
+         */
         private function formatText($text): ?string
         {
             if (empty($text) || ! is_string($text)) {
@@ -235,6 +264,11 @@ if (defined('TWITTER_OAUTH_TOKEN')) {
             );
         }
 
+        /**
+         * Link a hashtag to its Twitter search.
+         *
+         * @param  array<int, string>  $hashTag  The regular expression match.
+         */
         private function encodeHashTag($hashTag): string
         {
             $tag = $hashTag[0] ?? '';
@@ -242,6 +276,11 @@ if (defined('TWITTER_OAUTH_TOKEN')) {
             return '<a href="//twitter.com/search?q='.urlencode($tag).'"> '.esc_html($tag).' </a>';
         }
 
+        /**
+         * Link an at-mention to the account page.
+         *
+         * @param  array<int, string>  $screenname  The regular expression match.
+         */
         private function normalizeScreenName($screenname): string
         {
             $name = isset($screenname[0]) ? str_replace('@', '', $screenname[0]) : '';

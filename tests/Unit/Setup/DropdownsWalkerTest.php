@@ -103,6 +103,7 @@ describe('end_lvl', function (): void {
 
 describe('display_element', function (): void {
     it('flags an element that has children and hands over to the parent', function (array $children, bool $has): void {
+        /** @var object{has_children: bool} $element */
         $element = menuItem();
         $output = '';
         $depth = 1;

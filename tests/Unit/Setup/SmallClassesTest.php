@@ -115,6 +115,8 @@ describe('UAMS_SquishBugs', function (): void {
             }
         };
 
+        // A minimal query stand-in.
+        // @phpstan-ignore argument.type
         $result = (new UAMS_SquishBugs)->uams_search_query_filter($query);
 
         expect($result)->toBe($query)
@@ -141,6 +143,8 @@ describe('UAMS_SquishBugs', function (): void {
             }
         };
 
+        // A minimal query stand-in.
+        // @phpstan-ignore argument.type
         (new UAMS_SquishBugs)->uams_search_query_filter($query);
 
         expect($query->is_search)->toBeFalse()

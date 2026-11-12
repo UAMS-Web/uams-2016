@@ -31,6 +31,11 @@ class UAMS_Page_Attributes_Meta_Box
         add_meta_box('uamspageparentdiv', 'Page Attributes', [$this, 'page_attributes_meta_box'], 'page', 'side', 'core');
     }
 
+    /**
+     * Output the page attributes meta box.
+     *
+     * @param  WP_Post  $post  The page being edited.
+     */
     public function page_attributes_meta_box($post): void
     {
         $post_type_object = get_post_type_object($post->post_type);
@@ -88,7 +93,7 @@ class UAMS_Page_Attributes_Meta_Box
         <p><input type="checkbox" id="breadcrumb_id" name="breadcrumbcheck" value="on" <?php checked(! empty($breadcrumb)); ?> /><?php _e('Hide Breadcrumbs'); ?></p>
 
         <p><strong><?php _e('Order'); ?></strong></p>
-        <p><label class="screen-reader-text" for="menu_order"><?php _e('Order'); ?></label><input name="menu_order" type="text" size="4" id="menu_order" value="<?php echo esc_attr($post->menu_order); ?>" /></p>
+        <p><label class="screen-reader-text" for="menu_order"><?php _e('Order'); ?></label><input name="menu_order" type="text" size="4" id="menu_order" value="<?php echo esc_attr($post->menu_order); // @phpstan-ignore argument.type?>" /></p>
 
         <p><?php if ($post->post_type === 'page') {
             _e('Need help? Use the Help tab in the upper right of your screen.');
@@ -96,6 +101,12 @@ class UAMS_Page_Attributes_Meta_Box
         <?php
     }
 
+    /**
+     * Output the page template radio buttons with preview images.
+     *
+     * @param  string  $default  The selected page template.
+     * @param  WP_Post|null  $post  The page being edited.
+     */
     public function page_template_dropdown($default = '', $post = null): void
     {
         $previews = [
@@ -132,6 +143,11 @@ class UAMS_Page_Attributes_Meta_Box
         wp_enqueue_style('uams-admin-template', get_template_directory_uri().'/assets/admin/css/uams.admin.template.css');
     }
 
+    /**
+     * Save the page attribute checkboxes.
+     *
+     * @param  int|string  $post_ID  The ID of the post being saved.
+     */
     public function save_postdata($post_ID = 0): int
     {
         $post_ID = (int) $post_ID;

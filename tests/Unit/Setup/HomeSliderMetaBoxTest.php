@@ -92,6 +92,8 @@ it('prints the fields with their stored values', function (): void {
         return $key === 'slidelink' ? 'https://x.test/?a=1&b=2' : 'https://x.test/mobile.jpg';
     });
 
+    // A bare object stands in for the post.
+    // @phpstan-ignore argument.type
     $html = render(fn () => (new UAMS_Home_Slider_Meta_Box)->hs_meta_box_function((object) ['ID' => 12]));
 
     expect($nonce)->toBe([['mobileimage_nonce', 'mobileimage_name']])

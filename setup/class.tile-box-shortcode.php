@@ -13,6 +13,9 @@ class TileBox
 
     private int $count = 0; // @pest-mutate-ignore: IncrementInteger,DecrementInteger
 
+    /**
+     * @var list<string>
+     */
     private array $NumbersArray = ['zero', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine', 'ten', 'eleven', 'twelve']; // @pest-mutate-ignore: RemoveArrayItem
 
     public function __construct()
@@ -22,6 +25,11 @@ class TileBox
         add_shortcode('tile', [$this, 'tile_handler']);
     }
 
+    /**
+     * Remove the stray paragraph and line break markup that wraps shortcodes in content.
+     *
+     * @param  mixed  $content  The post content, or any value a filter passes.
+     */
     public function wpex_fix_shortcodes($content): string
     {
         if (empty($content) || ! is_string($content)) {
@@ -37,6 +45,12 @@ class TileBox
         return strtr($content, $array);
     }
 
+    /**
+     * Render the [box] shortcode, which wraps between 1 and 12 [tile] shortcodes.
+     *
+     * @param  array<string, mixed>|string  $atts
+     * @param  string|null  $content
+     */
     public function box_handler($atts, $content = null): string
     {
         $boxCenter = shortcode_atts([
@@ -75,6 +89,12 @@ class TileBox
         );
     }
 
+    /**
+     * Render one [tile] shortcode inside a [box].
+     *
+     * @param  array<string, mixed>|string  $atts
+     * @param  string|null  $content
+     */
     public function tile_handler($atts, $content = null): string
     {
         $this->count++;

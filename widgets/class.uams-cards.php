@@ -4,6 +4,8 @@
  * Image Cards widget
  *
  * Text paragraph and a single image are displayed
+ *
+ * @extends WP_Widget<array<string, mixed>>
  */
 class UAMS_Widget_Cards extends WP_Widget
 {
@@ -84,6 +86,13 @@ class UAMS_Widget_Cards extends WP_Widget
 		<?php
     }
 
+    /**
+     * Sanitize the widget settings on save.
+     *
+     * @param  array<string, mixed>  $new_instance  The submitted settings.
+     * @param  array<string, mixed>  $old_instance  The previously saved settings.
+     * @return array<string, mixed>
+     */
     public function update($new_instance, $old_instance)
     {
         return ['title' => sanitize_text_field($new_instance['title'] ?? ''), 'text' => wp_kses_post($new_instance['text'] ?? ''), 'image' => absint($new_instance['image'] ?? 0), 'src' => esc_url_raw($new_instance['src'] ?? ''), 'link' => esc_url_raw($new_instance['link'] ?? ''), 'link-text' => sanitize_text_field($new_instance['link-text'] ?? ''), 'radio_card' => sanitize_text_field($new_instance['radio_card'] ?? 'default-card')];

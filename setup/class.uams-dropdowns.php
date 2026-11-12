@@ -14,8 +14,14 @@ class UAMS_Dropdowns
 
     const DEFAULT_STATUS = 'publish';
 
+    /**
+     * @var array<string, array<string, mixed>>
+     */
     public $menu_items = [];
 
+    /**
+     * @var int|WP_Error
+     */
     public $MENU_ID;
 
     public function __construct()
@@ -93,6 +99,13 @@ class UAMS_Dropdowns
         $this->add_menu_item('Research', 'http://research.uams.edu');
     }
 
+    /**
+     * Queue a menu item, nested under a parent item when one is given.
+     *
+     * @param  string  $name  The item title.
+     * @param  string  $url  The item URL.
+     * @param  string|null  $parent  The title of the parent item.
+     */
     public function add_menu_item($name, $url, $parent = null): void
     {
         $item = [
@@ -108,6 +121,11 @@ class UAMS_Dropdowns
         }
     }
 
+    /**
+     * Block users without the required capability from editing the default dropdowns menu.
+     *
+     * @param  int  $menu_id  The ID of the menu being updated.
+     */
     public function save_white_bar($menu_id): void
     {
         $menu_object = wp_get_nav_menu_object($menu_id);

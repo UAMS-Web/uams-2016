@@ -83,7 +83,10 @@ function stubFeed(array $items, string $permalink = '/feed-home'): ArrayObject
     $seen = new ArrayObject;
     $feed = new class($items, $permalink, $seen)
     {
-        /** @param list<object> $items */
+        /**
+         * @param  list<object>  $items
+         * @param  ArrayObject<string, mixed>  $seen
+         */
         public function __construct(private array $items, private string $permalink, private ArrayObject $seen) {}
 
         public function get_permalink(): string
