@@ -226,7 +226,7 @@ describe('uams_list_pages', function (): void {
                 'child_of' => 0,
                 'exclude_tree' => [7, 8],
                 'depth' => 3,
-                'echo' => 0,
+                'echo' => false,
                 'walker' => '',
             ])
             ->andReturn('');
@@ -512,7 +512,7 @@ describe('uams_list_mobile_pages', function (): void {
                 'include' => '31,33',
                 'sort_order' => 'menu_order',
                 'depth' => 1,
-                'echo' => 0,
+                'echo' => false,
                 'walker' => '',
             ])
             ->andReturn('<li>Pages</li>');

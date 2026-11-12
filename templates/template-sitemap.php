@@ -59,6 +59,8 @@ echo esc_html(text_cut(get_the_title(), 27, true));
         <h2 id="posts">Posts</h2>
         <ul>
           <?php
+// wordpress-stubs list only 'taxonomy' for get_categories(); core documents and honors 'hide_empty'.
+// @phpstan-ignore argument.type
 $cats = get_categories(['hide_empty' => true]);
 foreach ($cats as $cat) {
     echo '<li><h3>'.esc_html($cat->name).'</h3>';

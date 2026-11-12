@@ -33,12 +33,14 @@ class UAMS_Widget_Conditions
                 ?>
 				<option value=""><?php _e('All category pages', 'jetpack'); ?></option>
 				<?php
+                // wordpress-stubs list only 'taxonomy' for get_categories(); core documents and honors these arguments.
+                // @phpstan-ignore argument.type
                 $categories = get_categories(['number' => 1000, 'orderby' => 'count', 'order' => 'DESC']);
                 usort($categories, [self::class, 'strcasecmp_name']);
 
                 foreach ($categories as $category) {
                     ?>
-					<option value="<?php echo esc_attr($category->term_id); ?>" <?php selected($category->term_id, $minor); ?>><?php echo esc_html($category->name); ?></option>
+					<option value="<?php echo esc_attr($category->term_id); // @phpstan-ignore argument.type (esc_attr() accepts the integer id)?>" <?php selected($category->term_id, $minor); ?>><?php echo esc_html($category->name); ?></option>
 					<?php
                 }
                 break;
@@ -47,6 +49,8 @@ class UAMS_Widget_Conditions
                 ?>
 				<option value=""><?php _e('All author pages', 'jetpack'); ?></option>
 				<?php
+                // 'exclude_admin' is not in the wordpress-stubs get_users() shape; it is carried over from the Jetpack widget visibility code this file is based on.
+                // @phpstan-ignore argument.type
                 foreach (get_users(['orderby' => 'name', 'exclude_admin' => true]) as $author) {
                     ?>
 					<option value="<?php echo esc_attr($author->ID); ?>" <?php selected($author->ID, $minor); ?>><?php echo esc_html($author->display_name); ?></option>
@@ -58,6 +62,8 @@ class UAMS_Widget_Conditions
                 ?>
 				<option value=""><?php _e('All tag pages', 'jetpack'); ?></option>
 				<?php
+                // wordpress-stubs list only 'taxonomy' for get_tags(); core documents and honors these arguments.
+                // @phpstan-ignore argument.type
                 $tags = get_tags(['number' => 1000, 'orderby' => 'count', 'order' => 'DESC']);
                 usort($tags, [self::class, 'strcasecmp_name']);
 

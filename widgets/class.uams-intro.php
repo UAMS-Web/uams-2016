@@ -25,6 +25,9 @@ class UAMS_Intro_Text extends WP_Widget
         );
     }
 
+    /**
+     * @param  array<string, string>  $args  The sidebar arguments. A key can be missing when the widget renders outside a sidebar.
+     */
     public function widget($args, $instance): void
     {
         $intro_content = ! empty($instance['introContent']) ? $instance['introContent'] : '';
@@ -33,13 +36,7 @@ class UAMS_Intro_Text extends WP_Widget
             return;
         }
 
-        // WordPress passes every sidebar argument in a sidebar, but widget() also runs outside one (shortcode, tests) with a partial array,
-        // so the fallbacks are kept; the tests pin them.
-        // @phpstan-ignore nullCoalesce.offset
         $before_widget = $args['before_widget'] ?? '';
-        // WordPress passes every sidebar argument in a sidebar, but widget() also runs outside one (shortcode, tests) with a partial array,
-        // so the fallbacks are kept; the tests pin them.
-        // @phpstan-ignore nullCoalesce.offset
         $after_widget = $args['after_widget'] ?? '';
 
         echo $before_widget;

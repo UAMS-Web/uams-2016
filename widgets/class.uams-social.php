@@ -67,6 +67,9 @@ class UAMS_Social_Icons extends WP_Widget
         return ['title' => sanitize_text_field($new_instance['title'] ?? ''), 'facebook' => esc_url_raw($new_instance['facebook'] ?? ''), 'twitter' => esc_url_raw($new_instance['twitter'] ?? ''), 'instagram' => esc_url_raw($new_instance['instagram'] ?? ''), 'youtube' => esc_url_raw($new_instance['youtube'] ?? ''), 'linkedin' => esc_url_raw($new_instance['linkedin'] ?? ''), 'pinterest' => esc_url_raw($new_instance['pinterest'] ?? '')];
     }
 
+    /**
+     * @param  array<string, string>  $args  The sidebar arguments. A key can be missing when the widget renders outside a sidebar.
+     */
     public function widget($args, $instance): void
     {
         $title = ! empty($instance['title']) ? $instance['title'] : '';

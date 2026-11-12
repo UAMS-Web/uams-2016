@@ -126,6 +126,8 @@ describe('display_element', function (): void {
         $children = [];
         $output = '';
 
+        // The test hands the walker a non-object element and no arguments on purpose, to pin the untouched hand-over.
+        // @phpstan-ignore argument.type, argument.type
         (new UAMS_Dropdowns_Walker_Menu)->display_element('x', $children, 0, 0, null, $output);
 
         expect(UamsTestWalkerNavMenu::$displayed)->toBe([['x', [], 0, 0, null]]);

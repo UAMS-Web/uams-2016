@@ -124,6 +124,9 @@ class UAMS_RSS extends WP_Widget
         return $instance;
     }
 
+    /**
+     * @param  array<string, string>  $args  The sidebar arguments. A key can be missing when the widget renders outside a sidebar.
+     */
     public function widget($args, $instance): void
     {
         $title = apply_filters('widget_title', $instance['title'] ?? '');
@@ -135,13 +138,7 @@ class UAMS_RSS extends WP_Widget
         $content = '<span></span>';
 
         if (! empty($title)) {
-            // WordPress passes every sidebar argument in a sidebar, but widget() also runs outside one (shortcode, tests) with a partial array,
-            // so the fallbacks are kept; the tests pin them.
-            // @phpstan-ignore nullCoalesce.offset
             $before_title = $args['before_title'] ?? '<h3>';
-            // WordPress passes every sidebar argument in a sidebar, but widget() also runs outside one (shortcode, tests) with a partial array,
-            // so the fallbacks are kept; the tests pin them.
-            // @phpstan-ignore nullCoalesce.offset
             $after_title = $args['after_title'] ?? '</h3>';
             $content .= $before_title.esc_html($title).$after_title;
         }
@@ -153,9 +150,6 @@ class UAMS_RSS extends WP_Widget
 
         $content .= do_shortcode("[rss url=\"{$url}\" number=\"{$items}\" show_date=\"{$date_string}\" has_blurb=\"{$has_blurb}\"]");
 
-        // WordPress passes every sidebar argument in a sidebar, but widget() also runs outside one (shortcode, tests) with a partial array,
-        // so the fallbacks are kept; the tests pin them.
-        // @phpstan-ignore nullCoalesce.offset, nullCoalesce.offset
         echo ($args['before_widget'] ?? '').$content.($args['after_widget'] ?? '');
     }
 

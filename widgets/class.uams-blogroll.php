@@ -42,7 +42,7 @@ class UAMS_Blogroll extends WP_Widget
 
 		<p>
 			<label for="<?php echo esc_attr($this->get_field_id('number')); ?>"><?php _e('Number of posts to show:', 'uams'); ?></label>
-			<input id="<?php echo esc_attr($this->get_field_id('number')); ?>" name="<?php echo esc_attr($this->get_field_name('number')); ?>" type="text" value="<?php echo esc_attr($number); ?>" size="3">
+			<input id="<?php echo esc_attr($this->get_field_id('number')); ?>" name="<?php echo esc_attr($this->get_field_name('number')); ?>" type="text" value="<?php echo esc_attr($number); // @phpstan-ignore argument.type (core accepts the integer limit)?>" size="3">
 		</p>
 
 		<p>
@@ -75,6 +75,9 @@ class UAMS_Blogroll extends WP_Widget
         return $instance;
     }
 
+    /**
+     * @param  array<string, string>  $args  The sidebar arguments. A key can be missing when the widget renders outside a sidebar.
+     */
     public function widget($args, $instance): void
     {
         $title = ! empty($instance['title']) ? $instance['title'] : self::NAME;
@@ -120,6 +123,8 @@ class UAMS_Blogroll extends WP_Widget
             $params['numberposts'] = $params['number'];
         }
 
+        // The arguments come from shortcode_atts() plus the shortcode's own keys, which PHPStan cannot narrow to the stub's get_posts() shape.
+        // @phpstan-ignore argument.type
         $posts = get_posts($params);
 
         $params = (object) $params;
