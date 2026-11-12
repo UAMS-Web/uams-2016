@@ -12,6 +12,13 @@ class UAMS_MenuShortcode
         add_shortcode('custommenu', [$this, 'vo_custom_menu_shortcode']);
     }
 
+    /**
+     * Render a navigation menu.
+     *
+     * @param  array<string, mixed>|string  $atts  The shortcode attributes.
+     * @param  string|null  $content  The enclosed content.
+     * @return string|false The menu markup, or false when there is no menu.
+     */
     public function vo_custom_menu_shortcode($atts, $content = null)
     {
         $params = shortcode_atts(

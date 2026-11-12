@@ -8,6 +8,9 @@
 
 class UAMS_Button
 {
+    /**
+     * @var array<int, string>
+     */
     private static array $types = ['plus', 'go', 'external', 'play']; // @pest-mutate-ignore: RemoveArrayItem
 
     public function __construct()
@@ -15,6 +18,13 @@ class UAMS_Button
         add_shortcode('button', [$this, 'button_handler']);
     }
 
+    /**
+     * Render the button shortcode.
+     *
+     * @param  array<string, mixed>|string  $atts  The shortcode attributes.
+     * @param  string|null  $content  The button text.
+     * @return string The button markup.
+     */
     public function button_handler($atts, $content = null): string
     {
         $atts = shortcode_atts([

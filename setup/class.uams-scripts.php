@@ -133,6 +133,11 @@ class UAMS_Scripts
         }
     }
 
+    /**
+     * List the scripts a child theme adds to the defaults.
+     *
+     * @return array<string, array<string, mixed>>
+     */
     private function get_child_theme_scripts(): array
     {
         // Defensive check kept as written: the property is typed array<mixed> by its default only.

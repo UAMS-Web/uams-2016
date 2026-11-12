@@ -3,8 +3,14 @@
 // Basic Wrapper for a custom post type. Allows child themes to easily make a custom post type
 class UAMS_Custom_Post
 {
+    /**
+     * @var string
+     */
     public $name;
 
+    /**
+     * @var array<string, mixed>
+     */
     public $args = [];
 
     /**
@@ -12,8 +18,16 @@ class UAMS_Custom_Post
      */
     public $taxonomy = [];
 
+    /**
+     * @var string
+     */
     public $post_label = 'Post';
 
+    /**
+     * Store the post type configuration and hook its registration.
+     *
+     * @param  array<string, mixed>  $args  The `name`, and optionally `args`, `labels`, `post_label` and `taxonomy`.
+     */
     public function __construct($args)
     {
         if (empty($args['name'])) {
@@ -41,6 +55,11 @@ class UAMS_Custom_Post
         }
     }
 
+    /**
+     * Build the post type labels from the post label.
+     *
+     * @return array<string, string>
+     */
     public function label_gen(): array
     {
         return [
@@ -62,6 +81,8 @@ class UAMS_Custom_Post
     public function register_post(): void
     {
         if (! post_type_exists($this->name)) {
+            // $this->args is the open array the child themes fill; register_post_type() documents a closed shape.
+            // @phpstan-ignore argument.type
             register_post_type($this->name, $this->args);
         }
     }

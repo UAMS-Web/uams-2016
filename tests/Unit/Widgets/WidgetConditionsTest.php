@@ -861,6 +861,8 @@ describe('widget_conditions_admin', function (): void {
      */
     function conditionsForm(array $instance): string
     {
+        // The filter runs with no widget on the paths under test.
+        // @phpstan-ignore argument.type
         return squishWidgetHtml(render(fn () => UAMS_Widget_Conditions::widget_conditions_admin(null, null, $instance)));
     }
 

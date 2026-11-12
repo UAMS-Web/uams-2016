@@ -18,6 +18,13 @@ class UAMS_GridShortcode
         add_shortcode('col', [$this, 'bs_span']);
     }
 
+    /**
+     * Render a grid row.
+     *
+     * @param  array<string, mixed>|string  $params  The shortcode attributes.
+     * @param  string|null  $content  The enclosed content.
+     * @return string The row markup.
+     */
     public function bs_row($params, $content = '')
     {
         $atts = shortcode_atts([
@@ -32,6 +39,13 @@ class UAMS_GridShortcode
         return force_balance_tags($result);
     }
 
+    /**
+     * Render a grid column.
+     *
+     * @param  array<string, mixed>|string  $params  The shortcode attributes.
+     * @param  string|null  $content  The enclosed content.
+     * @return string The column markup.
+     */
     public function bs_span($params, $content = '')
     {
         $atts = shortcode_atts([

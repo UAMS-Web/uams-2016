@@ -1,5 +1,8 @@
 <?php
 
+/**
+ * @extends WP_Widget<array<string, mixed>>
+ */
 class UAMS_Recent_Posts extends WP_Widget
 {
     const ID = 'uams-recent';
@@ -103,6 +106,13 @@ class UAMS_Recent_Posts extends WP_Widget
         echo $args['after_widget'];
     }
 
+    /**
+     * Sanitize the widget settings on save.
+     *
+     * @param  array<string, mixed>  $new_instance  The submitted settings.
+     * @param  array<string, mixed>  $old_instance  The previously saved settings.
+     * @return array<string, mixed>
+     */
     public function update($new_instance, $old_instance)
     {
         return ['title' => sanitize_text_field($new_instance['title'] ?? ''), 'items' => ! empty($new_instance['items']) ? absint($new_instance['items']) : self::ITEMS, 'more' => ! empty($new_instance['more'])];
@@ -135,6 +145,12 @@ class UAMS_Recent_Posts extends WP_Widget
 		<?php
     }
 
+    /**
+     * The human-readable time since a post was published.
+     *
+     * @param  int  $post_id  The post ID.
+     * @return string
+     */
     public function humanTime($post_id)
     {
         return human_time_diff(get_the_time('U', $post_id), time());

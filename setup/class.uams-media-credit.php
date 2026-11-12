@@ -15,6 +15,9 @@ class UAMS_Media_Credit
     }
 
     /**
+     * Register the media credit plugin with TinyMCE.
+     *
+     * @param  mixed  $plugins  The external plugins; a non-array value is replaced with an empty array.
      * @return mixed[]
      */
     public function add_media_credit_shortcode_to_tinymce($plugins): array
@@ -25,6 +28,18 @@ class UAMS_Media_Credit
         return $plugins;
     }
 
+    /**
+     * Wrap an image inserted into the editor in a media credit block when it has a credit and no caption.
+     *
+     * @param  string  $html  The image markup.
+     * @param  int  $id  The attachment ID.
+     * @param  string  $caption  The image caption.
+     * @param  string  $title  The image title.
+     * @param  string  $align  The image alignment.
+     * @param  string  $url  The image link URL.
+     * @param  list<int>|string  $size  The image size.
+     * @return string
+     */
     public function mediacredit_tinymce_html($html, $id, $caption, $title, $align, $url, $size)
     {
         if (! empty($caption)) {
@@ -42,6 +57,12 @@ class UAMS_Media_Credit
             </dl>' : $html;
     }
 
+    /**
+     * Render the [mediacredit] shortcode.
+     *
+     * @param  array<string, mixed>|string  $attrs  The shortcode attributes.
+     * @param  string|null  $content  The shortcode content.
+     */
     public function mediacredit_html($attrs, $content = null): string
     {
         $atts = shortcode_atts([
@@ -63,6 +84,13 @@ class UAMS_Media_Credit
             do_shortcode((string) $content).'<p class="wp-media-credit">Image by '.esc_html($atts['credit']).'</p></div>';
     }
 
+    /**
+     * Add the image credit field to the attachment edit form.
+     *
+     * @param  array<string, mixed>  $form_fields  The attachment form fields.
+     * @param  WP_Post|int  $post  The attachment post.
+     * @return array<string, mixed>
+     */
     public function image_attachment_fields_to_edit($form_fields, $post)
     {
         $post_id = ($post instanceof WP_Post) ? $post->ID : (int) $post;
@@ -79,6 +107,13 @@ class UAMS_Media_Credit
         return $form_fields;
     }
 
+    /**
+     * Save the image credit field from the attachment edit form.
+     *
+     * @param  array<string, mixed>  $post  The attachment post data.
+     * @param  array<string, mixed>  $attachment  The submitted attachment fields.
+     * @return array<string, mixed>
+     */
     public function custom_image_attachment_fields_to_save($post, $attachment)
     {
         if (isset($attachment['media_credit'], $post['ID'])) {

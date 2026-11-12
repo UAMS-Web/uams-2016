@@ -31,7 +31,13 @@ if (! class_exists('UamsTestWalkerNavMenu', false)) {
         public static mixed $result = 'parent-result';
 
         /**
+         * @param  mixed  $element
          * @param  array<int, mixed>  $children_elements
+         * @param  mixed  $max_depth
+         * @param  mixed  $depth
+         * @param  mixed  $args
+         * @param  mixed  $output
+         * @return mixed
          */
         public function display_element($element, &$children_elements, $max_depth, $depth, $args, &$output)
         {
@@ -74,11 +80,17 @@ if (! class_exists('UamsTestWidget', false)) {
             public array $widget_options = []
         ) {}
 
+        /**
+         * @param  string  $field_name
+         */
         public function get_field_id($field_name): string
         {
             return 'id-'.$field_name;
         }
 
+        /**
+         * @param  string  $field_name
+         */
         public function get_field_name($field_name): string
         {
             return 'name-'.$field_name;

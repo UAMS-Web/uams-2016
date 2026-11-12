@@ -4,6 +4,8 @@
  * Social Icons widget
  *
  * Social Media Icons are displayed
+ *
+ * @extends WP_Widget<array<string, mixed>>
  */
 class UAMS_Social_Icons extends WP_Widget
 {
@@ -62,6 +64,13 @@ class UAMS_Social_Icons extends WP_Widget
 		<?php
     }
 
+    /**
+     * Sanitize the widget settings on save.
+     *
+     * @param  array<string, mixed>  $new_instance  The submitted settings.
+     * @param  array<string, mixed>  $old_instance  The previously saved settings.
+     * @return array<string, mixed>
+     */
     public function update($new_instance, $old_instance)
     {
         return ['title' => sanitize_text_field($new_instance['title'] ?? ''), 'facebook' => esc_url_raw($new_instance['facebook'] ?? ''), 'twitter' => esc_url_raw($new_instance['twitter'] ?? ''), 'instagram' => esc_url_raw($new_instance['instagram'] ?? ''), 'youtube' => esc_url_raw($new_instance['youtube'] ?? ''), 'linkedin' => esc_url_raw($new_instance['linkedin'] ?? ''), 'pinterest' => esc_url_raw($new_instance['pinterest'] ?? '')];

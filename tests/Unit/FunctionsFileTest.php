@@ -142,6 +142,12 @@ describe('the bundled ACF paths', function (): void {
 });
 
 describe('uams_custom_field_body_class', function (): void {
+    /**
+     * Run the body class filter on a page with the given meta and option values.
+     *
+     * @param  list<string>  $classes
+     * @return list<string>
+     */
     function bodyClass(array $classes, bool $page, mixed $actionMenu, mixed $primary): array
     {
         $GLOBALS['post'] = (object) ['ID' => 7];

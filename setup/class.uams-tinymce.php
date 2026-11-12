@@ -5,6 +5,9 @@
  */
 class UAMS_TinyMCE
 {
+    /**
+     * @var array<string, list<string>>
+     */
     // Coverage attributes no line to a property default, so its mutants are reported uncovered, not
     // surviving. 'removes the justify full button from the second row' fails if the group or the button is removed.
     // @pest-mutate-ignore: RemoveArrayItem
@@ -17,6 +20,12 @@ class UAMS_TinyMCE
         add_filter('tiny_mce_before_init', [$this, 'buttons']);
     }
 
+    /**
+     * Remove the configured buttons from the TinyMCE toolbars.
+     *
+     * @param  mixed  $settings  The TinyMCE settings; a non-array value passes through unchanged.
+     * @return mixed
+     */
     public function buttons($settings)
     {
         if (! is_array($settings)) {

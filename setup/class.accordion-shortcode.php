@@ -21,6 +21,12 @@ class UAMS_AccordionShortcode
         add_shortcode('subsection', [$this, 'subsection_handler']);
     }
 
+    /**
+     * Remove the paragraph and line break markup WordPress wraps around shortcodes.
+     *
+     * @param  mixed  $content  The post content.
+     * @return string The content with the markup removed.
+     */
     public function wpex_fix_shortcodes($content): string
     {
         if (empty($content) || ! is_string($content)) {
@@ -36,6 +42,13 @@ class UAMS_AccordionShortcode
         return strtr($content, $array);
     }
 
+    /**
+     * Render the accordion shortcode.
+     *
+     * @param  array<string, mixed>|string  $atts  The shortcode attributes.
+     * @param  string|null  $content  The enclosed content.
+     * @return string The accordion markup.
+     */
     public function accordion_handler($atts, $content): string
     {
         $accordion_atts = shortcode_atts([
@@ -51,6 +64,13 @@ class UAMS_AccordionShortcode
         return sprintf('<script src="'.get_template_directory_uri().'/js/uams.accordionmodule.js" type="text/javascript"></script><div id="accordion uams-accordion-shortcode"><h3>%s</h3><div class="js-accordion" data-accordion-prefix-classes="uams-accordion-shortcode">%s</div></div>', $accordion_atts['name'], $output);
     }
 
+    /**
+     * Render a section inside the accordion.
+     *
+     * @param  array<string, mixed>|string  $atts  The shortcode attributes.
+     * @param  string|null  $content  The enclosed content.
+     * @return string The section markup.
+     */
     public function section_handler($atts, $content): string
     {
         $section_atts = shortcode_atts([
@@ -72,6 +92,13 @@ class UAMS_AccordionShortcode
         return sprintf('<h2 class="js-accordion__header">%s</h2><div class="js-accordion__panel" %s>%s</div>', $section_atts['title'], $active, apply_filters('the_content', $output));
     }
 
+    /**
+     * Render a subsection inside the accordion.
+     *
+     * @param  array<string, mixed>|string  $atts  The shortcode attributes.
+     * @param  string|null  $content  The enclosed content.
+     * @return string The subsection markup.
+     */
     public function subsection_handler($atts, $content): string
     {
         $section_atts = shortcode_atts([

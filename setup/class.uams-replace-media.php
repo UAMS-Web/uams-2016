@@ -11,6 +11,13 @@ class UAMS_Replace_Media
         add_filter('attachment_fields_to_save', [$this, 'uams_save_attachment_slug'], 10, 2);
     }
 
+    /**
+     * Add the replace media button to the attachment edit form of document files.
+     *
+     * @param  array<string, mixed>  $fields  The attachment form fields.
+     * @param  WP_Post|int  $post  The attachment post.
+     * @return array<string, mixed>
+     */
     public function uams_edit_attachment_slug($fields, $post)
     {
         wp_enqueue_media();
@@ -81,6 +88,13 @@ class UAMS_Replace_Media
         return $fields;
     }
 
+    /**
+     * Replace the attachment file when a replacement was chosen, and save the slug.
+     *
+     * @param  array<string, mixed>  $attachment  The submitted attachment fields.
+     * @param  array<string, mixed>  $post_data  The attachment post data.
+     * @return array<string, mixed>
+     */
     public function uams_save_attachment_slug($attachment, $post_data)
     {
         $currentMediaID = isset($attachment['post_ID']) ? (int) $attachment['post_ID'] : (isset($attachment['ID']) ? (int) $attachment['ID'] : 0);

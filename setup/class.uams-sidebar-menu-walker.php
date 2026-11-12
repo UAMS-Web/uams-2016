@@ -2,6 +2,15 @@
 
 class UAMS_Sidebar_Menu_Walker extends Walker_Page
 {
+    /**
+     * Append the opening list item for a page to the output.
+     *
+     * @param  string  $output  The markup built so far; passed by reference.
+     * @param  WP_Post  $page  The page.
+     * @param  int  $depth  The depth of the page.
+     * @param  array<string, mixed>  $args  The walker arguments.
+     * @param  int  $current_page  The ID of the current page.
+     */
     public function start_el(&$output, $page, $depth = 0, $args = [], $current_page = 0): void
     {
         $indent = $depth ? str_repeat("\t", (int) $depth) : '';
@@ -19,7 +28,9 @@ class UAMS_Sidebar_Menu_Walker extends Walker_Page
             $_current_page = get_post($current_page);
 
             if ($_current_page instanceof WP_Post) {
-                if (! empty($_current_page->ancestors) && is_array($_current_page->ancestors) && in_array($page->ID, $_current_page->ancestors, true)) {
+                // Filters may leave a non-array in the property, which the walker test pins.
+                // @phpstan-ignore booleanAnd.rightAlwaysTrue
+                if ($_current_page->ancestors !== [] && is_array($_current_page->ancestors) && in_array($page->ID, $_current_page->ancestors, true)) {
                     $css_class[] = 'current_page_ancestor';
                 }
 

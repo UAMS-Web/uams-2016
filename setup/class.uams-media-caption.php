@@ -11,6 +11,14 @@ class UAMS_Media_Caption
         add_filter('img_caption_shortcode', [$this, 'add_media_credit_to_caption_shortcode_filter'], 10, 3);
     }
 
+    /**
+     * Build the caption markup with the media credit appended.
+     *
+     * @param  string  $val  The filtered output; unused.
+     * @param  array<string, mixed>  $attr  The caption shortcode attributes.
+     * @param  string|null  $content  The caption shortcode content.
+     * @return string|null
+     */
     public function add_media_credit_to_caption_shortcode_filter($val, $attr, $content = null)
     {
         $atts = shortcode_atts([

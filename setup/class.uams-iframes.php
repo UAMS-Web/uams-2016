@@ -16,6 +16,11 @@ class UAMS_Iframes
         add_shortcode('iframe', [$this, 'add_iframe']);
     }
 
+    /**
+     * Render the [iframe] shortcode when its source is on the allowed domain list.
+     *
+     * @param  array<string, mixed>|string  $atts
+     */
     public function add_iframe($atts): string
     {
         $params = shortcode_atts([
@@ -57,6 +62,11 @@ class UAMS_Iframes
         );
     }
 
+    /**
+     * List the domains an iframe source may use.
+     *
+     * @return list<string>
+     */
     public function get_iframe_domains(): array
     {
         return [

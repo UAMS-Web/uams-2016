@@ -38,6 +38,9 @@ class UAMS_Users
     }
 
     /**
+     * Add the UAMS contact methods and remove the retired ones.
+     *
+     * @param  mixed  $contactmethods  The contact methods; a non-array value is replaced with an empty array.
      * @return mixed[]
      */
     public function additional_contact_fields($contactmethods): array

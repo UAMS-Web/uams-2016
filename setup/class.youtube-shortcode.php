@@ -7,6 +7,9 @@
 
 class UAMS_YouTube
 {
+    /**
+     * @var list<string>
+     */
     public static $types = ['playlist', 'single']; // @pest-mutate-ignore: RemoveArrayItem
 
     /**
@@ -69,6 +72,11 @@ class UAMS_YouTube
         wp_localize_script(self::SCRIPT_HANDLE, self::SCRIPT_OBJECT, ['apiKey' => $key]);
     }
 
+    /**
+     * Render the [youtube] shortcode as a placeholder the site script fills.
+     *
+     * @param  array<string, mixed>|string  $atts
+     */
     public function youtube_handler($atts): string
     {
         $params = shortcode_atts([

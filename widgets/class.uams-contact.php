@@ -4,6 +4,8 @@
  * Contact Card widget
  *
  * List of contacts
+ *
+ * @extends WP_Widget<array<string, mixed>>
  */
 class UAMS_Widget_Contact extends WP_Widget
 {
@@ -80,6 +82,13 @@ class UAMS_Widget_Contact extends WP_Widget
         echo $args['after_widget'];
     }
 
+    /**
+     * Sanitize the widget settings on save.
+     *
+     * @param  array<string, mixed>  $new_instance  The submitted settings.
+     * @param  array<string, mixed>  $old_instance  The previously saved settings.
+     * @return array<string, mixed>
+     */
     public function update($new_instance, $old_instance)
     {
         $instance = [];

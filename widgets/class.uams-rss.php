@@ -2,6 +2,8 @@
 /**
  * UAMS RSS Widget and shortcode
  *  - Only difference between this and WP one is this shows images
+ *
+ * @extends WP_Widget<array<string, mixed>>
  */
 class UAMS_RSS extends WP_Widget
 {
@@ -16,6 +18,7 @@ class UAMS_RSS extends WP_Widget
     // @pest-mutate-ignore: IncrementInteger,DecrementInteger
     const ITEMS = 10;
 
+    /** @var array<string, bool|int|string> */
     // Coverage attributes no line to a property default, so its mutants are reported uncovered, not
     // surviving. The form, widget and shortcode tests assert the value each default gives.
     // @pest-mutate-ignore: RemoveArrayItem,IncrementInteger,DecrementInteger,TrueToFalse,FalseToTrue,EmptyStringToNotEmpty
@@ -30,6 +33,7 @@ class UAMS_RSS extends WP_Widget
         'show_image' => true,
     ];
 
+    /** @var array<string, bool|int|string|null> */
     // Coverage attributes no line to a property default, so its mutants are reported uncovered, not
     // surviving. The form, widget and shortcode tests assert the value each default gives.
     // @pest-mutate-ignore: RemoveArrayItem,IncrementInteger,DecrementInteger,TrueToFalse,FalseToTrue,EmptyStringToNotEmpty
@@ -104,6 +108,13 @@ class UAMS_RSS extends WP_Widget
 		<?php
     }
 
+    /**
+     * Sanitize the widget settings on save.
+     *
+     * @param  array<string, mixed>  $new_instance  The submitted settings.
+     * @param  array<string, mixed>  $old_instance  The previously saved settings.
+     * @return array<string, mixed>
+     */
     public function update($new_instance, $old_instance)
     {
         $instance = [];
@@ -153,6 +164,12 @@ class UAMS_RSS extends WP_Widget
         echo ($args['before_widget'] ?? '').$content.($args['after_widget'] ?? '');
     }
 
+    /**
+     * Render the RSS shortcode.
+     *
+     * @param  array<string, mixed>|string  $atts  The shortcode attributes.
+     * @return string
+     */
     public function uams_rss_shortcode($atts)
     {
         $params = shortcode_atts(self::$SHORTCODE_DEFAULTS, $atts);

@@ -10,6 +10,12 @@ class UAMS_GoogleApps
         add_shortcode('googleapps', [$this, 'uams_google_calendar_shortcode']);
     }
 
+    /**
+     * Render the Google Apps embed shortcode.
+     *
+     * @param  array<string, mixed>|string  $atts  The shortcode attributes.
+     * @return string The embed markup.
+     */
     public function uams_google_calendar_shortcode($atts): string
     {
         $params = shortcode_atts([
@@ -34,6 +40,12 @@ class UAMS_GoogleApps
         return '';
     }
 
+    /**
+     * Convert Google calendar iframes in the content to shortcodes.
+     *
+     * @param  mixed  $content  The content to filter.
+     * @return mixed The filtered content, or the input when it is empty or not a string.
+     */
     public function uams_google_calendar_embed_to_shortcode($content)
     {
         if (empty($content) || ! is_string($content)) {
@@ -49,6 +61,12 @@ class UAMS_GoogleApps
         return preg_replace_callback('!\<iframe\s[^>]*?src="https?://.*?\.google\.(.*?)/(.*?)\?(.+?)"[^>]*?\>\s*\</iframe\>\s*!i', [$this, 'uams_google_calendar_embed_to_shortcode_callback'], $content);
     }
 
+    /**
+     * Build the shortcode for one matched iframe.
+     *
+     * @param  array<int, string>  $match  The regular expression matches.
+     * @return string The shortcode.
+     */
     public function uams_google_calendar_embed_to_shortcode_callback($match): string
     {
         if (preg_match('/\bwidth=[\'"](\d+)/', $match[0], $width)) {

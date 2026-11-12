@@ -32,6 +32,8 @@ beforeEach(function (): void {
 function walkPage(array $page = [], array|object $args = [], int|string $current = 0, int $depth = 0): string
 {
     $output = '';
+    // A bare object stands in for the page.
+    // @phpstan-ignore argument.type
     (new UAMS_Sidebar_Menu_Walker)->start_el($output, (object) ($page + ['ID' => 4, 'post_title' => 'Title', 'post_parent' => 0]), $depth, $args, $current);
 
     return $output;

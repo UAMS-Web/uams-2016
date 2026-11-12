@@ -5,6 +5,9 @@
  */
 class UAMS_Styles
 {
+    /**
+     * @var array<string, array<string, mixed>>
+     */
     public $STYLES;
 
     public function __construct()

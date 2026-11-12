@@ -8,24 +8,54 @@
 #[AllowDynamicProperties]
 class UAMS_Shortcodes
 {
+    /**
+     * @var TileBox|null
+     */
     public $tile_box;
 
+    /**
+     * @var UAMS_Button|null
+     */
     public $button;
 
+    /**
+     * @var UAMS_YouTube|null
+     */
     public $youtube;
 
+    /**
+     * @var UAMS_SubpageList|null
+     */
     public $subpage_list;
 
+    /**
+     * @var UAMS_AccordionShortcode|null
+     */
     public $accordion;
 
+    /**
+     * @var UAMS_Map|null
+     */
     public $maps;
 
+    /**
+     * @var UAMS_TabsShortcode|null
+     */
     public $tabs;
 
+    /**
+     * @var UAMS_GridShortcode|null
+     */
     public $bootstrap;
 
+    /**
+     * @var UAMS_MenuShortcode|null
+     */
     public $custommenu;
 
+    /**
+     * @var UAMS_CardsShortcode|null
+     */
     public $cards;
 
     public function __construct()

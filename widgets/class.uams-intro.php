@@ -3,6 +3,9 @@
 //   #UAMS Horizontal Rule Widget
 //   This widget styles custom intro text.
 
+/**
+ * @extends WP_Widget<array<string, mixed>>
+ */
 class UAMS_Intro_Text extends WP_Widget
 {
     const ID = 'uams-intro-text';
@@ -44,6 +47,13 @@ class UAMS_Intro_Text extends WP_Widget
         echo $after_widget;
     }
 
+    /**
+     * Sanitize the widget settings on save.
+     *
+     * @param  array<string, mixed>  $new_instance  The submitted settings.
+     * @param  array<string, mixed>  $old_instance  The previously saved settings.
+     * @return array<string, mixed>
+     */
     public function update($new_instance, $old_instance)
     {
         return ['introContent' => sanitize_text_field($new_instance['introContent'] ?? '')];
@@ -60,6 +70,13 @@ class UAMS_Intro_Text extends WP_Widget
         <?php
     }
 
+    /**
+     * Render the intro text shortcode.
+     *
+     * @param  array<string, mixed>|string  $atts  The shortcode attributes.
+     * @param  string|null  $content  The enclosed content.
+     * @return string
+     */
     public function intro_shortcode($atts, $content = null)
     {
         $content = trim((string) $content);

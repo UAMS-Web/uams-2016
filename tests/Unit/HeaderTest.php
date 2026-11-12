@@ -22,6 +22,7 @@ beforeEach(function (): void {
 /**
  * @param  array<string, mixed>  $fields  ACF fields by name.
  * @param  array<string, mixed>  $meta  Post meta by key.
+ * @param  array<string, mixed>  $options  Site options by name.
  * @param  array<string, mixed>  $values  Overrides for any stubbed function.
  */
 function headerEnv(array $fields = [], array $meta = [], array $options = [], bool $singular = true, bool $menu = false, array $values = []): void

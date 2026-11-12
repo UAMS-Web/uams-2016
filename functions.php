@@ -54,6 +54,11 @@ function hs_content_character_count( $valid, $value, $field, $input ){
 if (! class_exists('acf')) {
     // 1. customize ACF path
     add_filter('acf/settings/path', 'my_acf_settings_path');
+    /**
+     * Filter the ACF settings path.
+     *
+     * @param  string  $path  The default ACF path.
+     */
     // A filter callback: the filter passes this value and the signature must accept it.
     // @phpstan-ignore function.unusedParameter
     function my_acf_settings_path($path): string
@@ -64,6 +69,11 @@ if (! class_exists('acf')) {
     // 2. customize ACF dir
     add_filter('acf/settings/dir', 'my_acf_settings_dir');
 
+    /**
+     * Filter the ACF settings directory URL.
+     *
+     * @param  string  $dir  The default ACF directory URL.
+     */
     // A filter callback: the filter passes this value and the signature must accept it.
     // @phpstan-ignore function.unusedParameter
     function my_acf_settings_dir($dir): string
@@ -82,6 +92,12 @@ if (! class_exists('acf')) {
 
 // check for 'action_menu_active' meta key on pages and add a body class if meta value equals '1'
 add_filter('body_class', 'uams_custom_field_body_class');
+/**
+ * Add body classes based on page meta and site options.
+ *
+ * @param  array<int, string>  $classes  The body classes.
+ * @return array<int, string> The filtered body classes.
+ */
 function uams_custom_field_body_class($classes)
 {
     global $post;
@@ -141,6 +157,12 @@ function woocommerce_support(): void
 
 add_filter('allowed_http_origins', 'add_allowed_origins');
 
+/**
+ * Add the UAMS origins to the allowed HTTP origins.
+ *
+ * @param  array<int, string>  $origins  The allowed origins.
+ * @return array<int, string> The filtered origins.
+ */
 function add_allowed_origins($origins)
 {
     $origins[] = 'http://www.uams.edu';
@@ -182,6 +204,12 @@ function add_defer_attribute($tag, $handle)
  *  Exposes form submission data to the data layer
  */
 add_action('gform_after_submission', 'access_entry_via_field', 10, 2);
+/**
+ * Print a script that pushes the submitted entry to the data layer.
+ *
+ * @param  array<string, mixed>  $entry  The Gravity Forms entry.
+ * @param  array<string, mixed>  $form  The Gravity Forms form.
+ */
 function access_entry_via_field($entry, $form): void
 {
     echo '<script>var entryField = '.json_encode($entry).';',
@@ -193,6 +221,15 @@ function access_entry_via_field($entry, $form): void
 
 add_filter('embed_oembed_html', 'wrap_oembed_html', 99, 4);
 add_filter('video_embed_html', 'wrap_oembed_html', 10, 4); // Pass all 4 expected args
+/**
+ * Wrap video embeds from known providers in a player container.
+ *
+ * @param  string  $cached_html  The embed HTML.
+ * @param  mixed  $url  The embed URL.
+ * @param  array<string, mixed>|string  $attr  The embed attributes.
+ * @param  int  $post_id  The post ID.
+ * @return string The filtered embed HTML.
+ */
 // An oEmbed filter callback: the filter passes all four arguments and the signature must accept them.
 // @phpstan-ignore function.unusedParameter, function.unusedParameter
 function wrap_oembed_html($cached_html, $url = '', $attr = [], $post_id = 0) // @pest-mutate-ignore: DecrementInteger,IncrementInteger,EmptyStringToNotEmpty

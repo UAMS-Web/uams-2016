@@ -12,8 +12,14 @@
 
 class UAMS_TabsShortcode
 {
+    /**
+     * @var list<string>
+     */
     public $tab_titles = [];
 
+    /**
+     * @var list<string>
+     */
     public $tab_links = [];
 
     public function __construct()
@@ -29,6 +35,11 @@ class UAMS_TabsShortcode
         wp_register_script('uams-tabs', get_template_directory_uri().'/js/uams.tabs.min.js', [], '1.0', true);
     }
 
+    /**
+     * Remove the stray paragraph and line break markup that wraps shortcodes in content.
+     *
+     * @param  mixed  $content  The post content, or any value a filter passes.
+     */
     public function wpex_fix_shortcodes($content): string
     {
         if (empty($content) || ! is_string($content)) {
@@ -44,6 +55,12 @@ class UAMS_TabsShortcode
         return strtr($content, $array);
     }
 
+    /**
+     * Render the [tabs] shortcode, which wraps a set of [tab] shortcodes.
+     *
+     * @param  array<string, mixed>|string  $atts
+     * @param  string|null  $content
+     */
     public function tabs_handler($atts, $content = null): string
     {
         $this->tab_titles = [];
@@ -90,6 +107,12 @@ class UAMS_TabsShortcode
         return $output;
     }
 
+    /**
+     * Render one [tab] shortcode and record its title and link for the enclosing [tabs].
+     *
+     * @param  array<string, mixed>|string  $atts
+     * @param  string|null  $content
+     */
     public function tab_handler($atts, $content = null): string
     {
         $tab_atts = shortcode_atts([

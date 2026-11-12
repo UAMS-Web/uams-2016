@@ -33,6 +33,7 @@ describe('content.php', function (): void {
      * @param  array<string, mixed>  $options  Site options by name.
      * @param  array<string, mixed>  $meta  Post meta by key.
      * @param  array<string, mixed>  $fields  Post fields by name.
+     * @param  array<string, mixed>  $values  Overrides for any stubbed function.
      */
     function contentEnv(array $conditions = [], array $options = [], array $meta = [], array $fields = [], int $thumbnail = 0, array $values = []): void
     {
