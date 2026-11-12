@@ -533,6 +533,8 @@ if (! function_exists('text_cut')) {
      */
     function text_cut($text, $length = 27, $dots = true): string // @pest-mutate-ignore: TrueToFalse,DecrementInteger,IncrementInteger
     {
+        // preg_replace() returns null only on a regex error, and this pattern is a constant.
+        // @phpstan-ignore argument.type
         $text = trim(preg_replace('#[\s\n\r\t]{2,}#', ' ', (string) $text));
         $text_temp = $text;
 

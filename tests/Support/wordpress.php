@@ -118,7 +118,7 @@ if (! class_exists('WP_Query')) {
 
         public function the_post(): void
         {
-            self::$current = array_shift($this->posts);
+            self::$current = array_shift($this->posts) ?? [];
         }
     }
 }

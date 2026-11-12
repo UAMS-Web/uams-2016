@@ -196,9 +196,13 @@ class UAMS_RSS extends WP_Widget
 
             $content .= '<ul class="uams-widget-rss">';
 
+            // get_items() returns null only for a feed that failed to parse, which is_wp_error() above excludes.
+            // @phpstan-ignore foreach.nonIterable
             foreach ($rss_items as $item) {
                 $item_title = $item->get_title();
                 $link = $item->get_link();
+                // SimplePie returns null for an item without a title, which strip_tags() treats as an empty string.
+                // @phpstan-ignore argument.type
                 $attr = esc_attr(strip_tags($item_title));
 
                 $enclosure = $item->get_enclosure();
@@ -208,6 +212,8 @@ class UAMS_RSS extends WP_Widget
 
                 $image = '';
                 if (! empty($src) && (string) $params['show_image'] !== 'false') {
+                    // SimplePie returns null for an item without a link, which esc_url() treats as an empty string.
+                    // @phpstan-ignore argument.type
                     $image = "<a class='widget-thumbnail' href='".esc_url($link)."' title='$attr'><img src='".esc_url($src)."' alt='$attr' /></a>";
                 }
 
@@ -231,6 +237,8 @@ class UAMS_RSS extends WP_Widget
                     }
                 }
 
+                // SimplePie returns null for a feed without a link, which esc_url() treats as an empty string.
+                // @phpstan-ignore argument.type
                 $rendered_title = "<a class='widget-link' href='".esc_url($link)."' title='$attr'>$attr<span>$date$desc</span></a>";
 
                 $content .= "<li>{$image}{$rendered_title}</li>";

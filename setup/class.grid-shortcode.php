@@ -35,6 +35,8 @@ class UAMS_GridShortcode
 
         $content = ! empty($content) ? preg_replace('/<br class="nc".\/>/', '', (string) $content) : '';
         $result = '<div class="'.esc_attr($atts['class']).'">';
+        // preg_replace() returns null only on a regex error, and this pattern is a constant.
+        // @phpstan-ignore argument.type
         $result .= do_shortcode($content);
         $result .= '</div>';
 

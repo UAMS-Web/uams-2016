@@ -264,10 +264,10 @@ describe('shortcode with a live feed', function (): void {
                 ['oauth', 'https://api.twitter.com/1.1/statuses/user_timeline.json', 'GET'],
                 ['perform'],
             ])
-            ->and($log[1][0])->toBe('set')
-            ->and($log[1][1])->toBe('twitter-feed-uams-3')
-            ->and($log[1][3])->toBe(60)
-            ->and(json_decode($log[1][2], true))->toBe([[
+            ->and($log->getArrayCopy()[1][0])->toBe('set')
+            ->and($log->getArrayCopy()[1][1])->toBe('twitter-feed-uams-3')
+            ->and($log->getArrayCopy()[1][3])->toBe(60)
+            ->and(json_decode($log->getArrayCopy()[1][2], true))->toBe([[
                 'author' => 'uams',
                 'img' => 'https://img.test/uams.png',
                 'text' => $expectedText,
@@ -360,7 +360,7 @@ describe('shortcode with a live feed', function (): void {
         $html = (twitterWidget())->shortcode([]);
 
         expect($html)->toContain('<img src="U{}" alt="A{}"/>')
-            ->and($log[1][2])->toBe('[{"author":"","img":"","text":"","retweet":""}]');
+            ->and($log->getArrayCopy()[1][2])->toBe('[{"author":"","img":"","text":"","retweet":""}]');
     });
 
     it('caches an empty list when the response is not a list of tweets', function (mixed $response): void {
@@ -368,7 +368,7 @@ describe('shortcode with a live feed', function (): void {
         scriptTwitterResponses([$response]);
 
         expect((twitterWidget())->shortcode([]))->toBe('')
-            ->and($log[1][2])->toBe('[]');
+            ->and($log->getArrayCopy()[1][2])->toBe('[]');
     })->with(['an object' => [(object) ['errors' => 'x']], 'not json' => ['{broken'], 'a string' => ['"x"']]);
 
     it('keeps the tweets in the order the feed gave them', function (): void {

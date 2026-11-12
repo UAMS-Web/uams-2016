@@ -77,6 +77,8 @@ class UAMS_Button
             esc_attr($class_string),
             esc_attr($color),
             $url,
+            // A shortcode without content passes null, which esc_html() treats as an empty string.
+            // @phpstan-ignore argument.type
             esc_html($content)
         );
     }
