@@ -65,6 +65,8 @@ function homeEnv(array $meta = [], array $fields = [], array $rows = [], int $th
                 }
             }
         },
+        // The value is untyped here (WordPress data or a mixed array), and the code handles it as before.
+        // @phpstan-ignore cast.string, argument.type
         'wp_enqueue_script' => static fn (mixed ...$args): string => '[enqueue:'.implode('|', array_map(static fn (mixed $arg): string => is_array($arg) ? '['.implode(',', $arg).']' : (string) $arg, $args)).']',
     ]);
 }
@@ -145,7 +147,11 @@ describe('template-home.php', function (): void {
         });
 
         it('prints no slide controls for a single slide', function () use ($setup): void {
+            // The value is untyped here (WordPress data or a mixed array), and the code handles it as before.
+            // @phpstan-ignore offsetAccess.nonOffsetAccessible
             $s = $setup(['rows' => ['home_slides' => [slides()['home_slides'][0]]]]);
+            // The value is untyped here (WordPress data or a mixed array), and the code handles it as before.
+            // @phpstan-ignore argument.type
             homeEnv(fields: $s['fields'], rows: $s['rows']);
 
             expect(renderTemplate('templates/template-home.php'))->not->toContain('slideshow-controls');

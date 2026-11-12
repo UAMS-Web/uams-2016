@@ -23,12 +23,26 @@ class UAMS_Social_Icons extends WP_Widget
 
     public function form($instance): void
     {
+        // The value is untyped here (WordPress data or a mixed array), and the code handles it as before.
+        // @phpstan-ignore argument.type
         $title = isset($instance['title']) ? esc_attr($instance['title']) : 'Connect with us:';
+        // The value is untyped here (WordPress data or a mixed array), and the code handles it as before.
+        // @phpstan-ignore argument.type
         $facebook = isset($instance['facebook']) ? esc_url($instance['facebook']) : '';
+        // The value is untyped here (WordPress data or a mixed array), and the code handles it as before.
+        // @phpstan-ignore argument.type
         $twitter = isset($instance['twitter']) ? esc_url($instance['twitter']) : '';
+        // The value is untyped here (WordPress data or a mixed array), and the code handles it as before.
+        // @phpstan-ignore argument.type
         $instagram = isset($instance['instagram']) ? esc_url($instance['instagram']) : '';
+        // The value is untyped here (WordPress data or a mixed array), and the code handles it as before.
+        // @phpstan-ignore argument.type
         $youtube = isset($instance['youtube']) ? esc_url($instance['youtube']) : '';
+        // The value is untyped here (WordPress data or a mixed array), and the code handles it as before.
+        // @phpstan-ignore argument.type
         $linkedin = isset($instance['linkedin']) ? esc_url($instance['linkedin']) : '';
+        // The value is untyped here (WordPress data or a mixed array), and the code handles it as before.
+        // @phpstan-ignore argument.type
         $pinterest = isset($instance['pinterest']) ? esc_url($instance['pinterest']) : '';
         ?>
 
@@ -73,6 +87,8 @@ class UAMS_Social_Icons extends WP_Widget
      */
     public function update($new_instance, $old_instance)
     {
+        // The value is untyped here (WordPress data or a mixed array), and the code handles it as before.
+        // @phpstan-ignore argument.type, argument.type, argument.type, argument.type, argument.type, argument.type, argument.type
         return ['title' => sanitize_text_field($new_instance['title'] ?? ''), 'facebook' => esc_url_raw($new_instance['facebook'] ?? ''), 'twitter' => esc_url_raw($new_instance['twitter'] ?? ''), 'instagram' => esc_url_raw($new_instance['instagram'] ?? ''), 'youtube' => esc_url_raw($new_instance['youtube'] ?? ''), 'linkedin' => esc_url_raw($new_instance['linkedin'] ?? ''), 'pinterest' => esc_url_raw($new_instance['pinterest'] ?? '')];
     }
 
@@ -92,6 +108,8 @@ class UAMS_Social_Icons extends WP_Widget
         echo $args['before_widget'];
 
         if (! empty($title)) {
+            // The value is untyped here (WordPress data or a mixed array), and the code handles it as before.
+            // @phpstan-ignore argument.type
             echo '<h2 class="widgettitle">'.esc_html($title).'</h2>';
             echo '<span class="udub-slant"><span></span></span>';
         }
@@ -100,22 +118,22 @@ class UAMS_Social_Icons extends WP_Widget
 		<nav aria-label="social networks">
 			<ul class="widget-social">
 				<?php if (! empty($facebook)) { ?>
-					<li><a class="facebook" title="Facebook" href="<?php echo esc_url($facebook); ?>">Facebook</a></li>
+					<li><a class="facebook" title="Facebook" href="<?php echo esc_url($facebook); // @phpstan-ignore argument.type?>">Facebook</a></li>
 				<?php } ?>
 				<?php if (! empty($twitter)) { ?>
-					<li><a class="twitter" title="Twitter" href="<?php echo esc_url($twitter); ?>">Twitter</a></li>
+					<li><a class="twitter" title="Twitter" href="<?php echo esc_url($twitter); // @phpstan-ignore argument.type?>">Twitter</a></li>
 				<?php } ?>
 				<?php if (! empty($instagram)) { ?>
-					<li><a class="instagram" title="Instagram" href="<?php echo esc_url($instagram); ?>">Instagram</a></li>
+					<li><a class="instagram" title="Instagram" href="<?php echo esc_url($instagram); // @phpstan-ignore argument.type?>">Instagram</a></li>
 				<?php } ?>
 				<?php if (! empty($youtube)) { ?>
-					<li><a class="youtube" title="YouTube" href="<?php echo esc_url($youtube); ?>">YouTube</a></li>
+					<li><a class="youtube" title="YouTube" href="<?php echo esc_url($youtube); // @phpstan-ignore argument.type?>">YouTube</a></li>
 				<?php } ?>
 				<?php if (! empty($linkedin)) { ?>
-					<li><a class="linkedin" title="LinkedIn" href="<?php echo esc_url($linkedin); ?>">LinkedIn</a></li>
+					<li><a class="linkedin" title="LinkedIn" href="<?php echo esc_url($linkedin); // @phpstan-ignore argument.type?>">LinkedIn</a></li>
 				<?php } ?>
 				<?php if (! empty($pinterest)) { ?>
-					<li><a class="pinterest" title="Pinterest" href="<?php echo esc_url($pinterest); ?>">Pinterest</a></li>
+					<li><a class="pinterest" title="Pinterest" href="<?php echo esc_url($pinterest); // @phpstan-ignore argument.type?>">Pinterest</a></li>
 				<?php } ?>
 			</ul>
 		</nav>

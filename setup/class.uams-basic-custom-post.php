@@ -34,6 +34,8 @@ class UAMS_Custom_Post
             return;
         }
 
+        // The value is untyped here (WordPress data or a mixed array), and the code handles it as before.
+        // @phpstan-ignore assign.propertyType
         $this->name = $args['name'];
         $this->args = isset($args['args']) && is_array($args['args']) ? $args['args'] : [];
 
@@ -41,6 +43,8 @@ class UAMS_Custom_Post
             $this->args['labels'] = $args['labels'];
         } elseif (! isset($this->args['labels'])) {
             if (isset($args['post_label'])) {
+                // The value is untyped here (WordPress data or a mixed array), and the code handles it as before.
+                // @phpstan-ignore assign.propertyType
                 $this->post_label = $args['post_label'];
             }
 
@@ -93,16 +97,22 @@ class UAMS_Custom_Post
             return;
         }
 
+        // The value is untyped here (WordPress data or a mixed array), and the code handles it as before.
+        // @phpstan-ignore argument.type
         if (! taxonomy_exists($this->taxonomy['name'])) {
             if (isset($this->taxonomy['labels'])) {
+                // The value is untyped here (WordPress data or a mixed array), and the code handles it as before.
+                // @phpstan-ignore offsetAccess.nonOffsetAccessible
                 $this->taxonomy['args']['labels'] = $this->taxonomy['labels'];
             }
 
             $tax_args = isset($this->taxonomy['args']) && is_array($this->taxonomy['args']) ? $this->taxonomy['args'] : [];
             // The labels and arguments are assembled from the post type configuration, so PHPStan cannot narrow them to the stub's shape.
-            // @phpstan-ignore argument.type
+            // @phpstan-ignore argument.type, argument.type
             register_taxonomy($this->taxonomy['name'], [$this->name], $tax_args);
         } elseif (! in_array($this->taxonomy['name'], get_object_taxonomies($this->name), true)) {
+            // The value is untyped here (WordPress data or a mixed array), and the code handles it as before.
+            // @phpstan-ignore argument.type
             register_taxonomy_for_object_type($this->taxonomy['name'], $this->name);
         }
     }

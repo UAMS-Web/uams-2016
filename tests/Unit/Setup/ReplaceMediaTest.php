@@ -16,10 +16,14 @@ beforeEach(function (): void {
     loadShortcodeFile('class.uams-replace-media.php');
     $GLOBALS['uams_test_replace'] = [];
     when('wp_enqueue_media')->alias(static function (): void {
+        // The value is untyped here (WordPress data or a mixed array), and the code handles it as before.
+        // @phpstan-ignore offsetAccess.nonOffsetAccessible
         $GLOBALS['uams_test_replace'][] = ['enqueue_media'];
     });
     when('__')->alias(static fn (string $text): string => '__('.$text.')');
     when('wp_nonce_field')->alias(static function (mixed ...$args): string {
+        // The value is untyped here (WordPress data or a mixed array), and the code handles it as before.
+        // @phpstan-ignore offsetAccess.nonOffsetAccessible
         $GLOBALS['uams_test_replace'][] = ['nonce_field', ...$args];
 
         return '[nonce]';
@@ -39,6 +43,8 @@ afterEach(function (): void {
 function stubMimeType(mixed $mime): void
 {
     when('get_post_mime_type')->alias(static function (int $id) use ($mime): mixed {
+        // The value is untyped here (WordPress data or a mixed array), and the code handles it as before.
+        // @phpstan-ignore offsetAccess.nonOffsetAccessible
         $GLOBALS['uams_test_replace'][] = ['mime', $id];
 
         return $mime;
@@ -87,17 +93,27 @@ describe('uams_edit_attachment_slug', function (): void {
     it('adds the replace button to an application file', function (mixed $post): void {
         stubMimeType('application/pdf');
 
+        // The value is untyped here (WordPress data or a mixed array), and the code handles it as before.
+        // @phpstan-ignore argument.type
         $fields = (new UAMS_Replace_Media)->uams_edit_attachment_slug(['kept' => 1], $post);
 
         expect($fields['kept'])->toBe(1)
+            // The value is untyped here (WordPress data or a mixed array), and the code handles it as before.
+            // @phpstan-ignore argument.type
             ->and(array_keys($fields['replace_media']))->toBe(['label', 'input', 'html'])
+            // The value is untyped here (WordPress data or a mixed array), and the code handles it as before.
+            // @phpstan-ignore offsetAccess.nonOffsetAccessible
             ->and($fields['replace_media']['label'])->toBe('__(Replace Media)')
+            // The value is untyped here (WordPress data or a mixed array), and the code handles it as before.
+            // @phpstan-ignore offsetAccess.nonOffsetAccessible
             ->and($fields['replace_media']['input'])->toBe('html')
             ->and($GLOBALS['uams_test_replace'])->toBe([
                 ['enqueue_media'],
                 ['mime', 7],
                 ['nonce_field', 'replace-media-7', 'replace-media-nonce', true, false],
             ]);
+        // The value is untyped here (WordPress data or a mixed array), and the code handles it as before.
+        // @phpstan-ignore offsetAccess.nonOffsetAccessible
         $html = $fields['replace_media']['html'];
         expect($html)->toContain('div.media-sidebar tr.compat-field-replace_media')
             ->and($html)->toContain("<em class=\"help\"></em>\n                  [nonce]\n                  <input id=\"replace-media-input-7\" type=\"hidden\" name=\"replace_media_for_7\" value=\"\"/>")
@@ -132,11 +148,15 @@ describe('uams_save_attachment_slug', function (): void {
             default => false,
         });
         when('wp_verify_nonce')->alias(static function (string $nonce, string $action): bool {
+            // The value is untyped here (WordPress data or a mixed array), and the code handles it as before.
+            // @phpstan-ignore offsetAccess.nonOffsetAccessible
             $GLOBALS['uams_test_replace'][] = ['verify', $nonce, $action];
 
             return $nonce === 'good';
         });
         when('wp_delete_attachment')->alias(static function (int $id): void {
+            // The value is untyped here (WordPress data or a mixed array), and the code handles it as before.
+            // @phpstan-ignore offsetAccess.nonOffsetAccessible
             $GLOBALS['uams_test_replace'][] = ['delete', $id];
         });
         stubMimeType('application/pdf');
@@ -180,7 +200,11 @@ describe('uams_save_attachment_slug', function (): void {
         (new UAMS_Replace_Media)->uams_save_attachment_slug(['post_ID' => 5, 'replace-media-nonce' => 'good'] + $extra, []);
 
         expect(file_get_contents($this->current))->toBe('old')
+            // The value is untyped here (WordPress data or a mixed array), and the code handles it as before.
+            // @phpstan-ignore argument.type
             ->and(array_column($GLOBALS['uams_test_replace'], 0))->not->toContain('delete')
+            // The value is untyped here (WordPress data or a mixed array), and the code handles it as before.
+            // @phpstan-ignore argument.type
             ->and(array_column($GLOBALS['uams_test_replace'], 0))->not->toContain('verify');
     })->with([
         'an image' => ['image/png', ['replace_media_for_5' => '9']],
@@ -205,6 +229,8 @@ describe('uams_save_attachment_slug', function (): void {
         (new UAMS_Replace_Media)->uams_save_attachment_slug(['post_ID' => 5, 'replace_media_for_5' => $replacement, 'replace-media-nonce' => 'good'], []);
 
         expect(file_get_contents($this->current))->toBe('old')
+            // The value is untyped here (WordPress data or a mixed array), and the code handles it as before.
+            // @phpstan-ignore argument.type
             ->and(array_column($GLOBALS['uams_test_replace'], 0))->not->toContain('delete');
     })->with([
         'the same media' => ['5'],
@@ -217,6 +243,8 @@ describe('uams_save_attachment_slug', function (): void {
         (new UAMS_Replace_Media)->uams_save_attachment_slug(['post_ID' => 5, 'replace_media_for_5' => '9', 'replace-media-nonce' => 'good'], []);
 
         expect(file_get_contents($this->current))->toBe('old')
+            // The value is untyped here (WordPress data or a mixed array), and the code handles it as before.
+            // @phpstan-ignore argument.type
             ->and(array_column($GLOBALS['uams_test_replace'], 0))->not->toContain('delete');
     });
 
@@ -226,6 +254,8 @@ describe('uams_save_attachment_slug', function (): void {
         (new UAMS_Replace_Media)->uams_save_attachment_slug(['post_ID' => 5, 'replace_media_for_5' => '9', 'replace-media-nonce' => 'good'], []);
 
         expect(file_get_contents($this->new))->toBe('new')
+            // The value is untyped here (WordPress data or a mixed array), and the code handles it as before.
+            // @phpstan-ignore argument.type
             ->and(array_column($GLOBALS['uams_test_replace'], 0))->not->toContain('delete');
     });
 

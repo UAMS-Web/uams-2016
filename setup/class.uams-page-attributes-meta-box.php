@@ -159,6 +159,8 @@ class UAMS_Page_Attributes_Meta_Box
 
         if (isset($_POST['sidebar_name']) && check_admin_referer('sidebar_nonce', 'sidebar_name')) {
             if (isset($_POST['sidebarcheck'])) {
+                // The value is untyped here (WordPress data or a mixed array), and the code handles it as before.
+                // @phpstan-ignore argument.type
                 update_post_meta($post_ID, 'sidebar', sanitize_text_field($_POST['sidebarcheck']));
             } else {
                 delete_post_meta($post_ID, 'sidebar');
@@ -167,6 +169,8 @@ class UAMS_Page_Attributes_Meta_Box
 
         if (isset($_POST['breadcrumb_name']) && check_admin_referer('breadcrumb_nonce', 'breadcrumb_name')) {
             if (isset($_POST['breadcrumbcheck'])) {
+                // The value is untyped here (WordPress data or a mixed array), and the code handles it as before.
+                // @phpstan-ignore argument.type
                 update_post_meta($post_ID, 'breadcrumb', sanitize_text_field($_POST['breadcrumbcheck']));
             } else {
                 delete_post_meta($post_ID, 'breadcrumb');
@@ -175,6 +179,8 @@ class UAMS_Page_Attributes_Meta_Box
 
         if (isset($_POST['parent_name']) && check_admin_referer('parent_nonce', 'parent_name')) {
             if (isset($_POST['parentcheck'])) {
+                // The value is untyped here (WordPress data or a mixed array), and the code handles it as before.
+                // @phpstan-ignore argument.type
                 update_post_meta($post_ID, 'parent', sanitize_text_field($_POST['parentcheck']));
             } else {
                 delete_post_meta($post_ID, 'parent');

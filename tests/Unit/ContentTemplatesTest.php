@@ -38,12 +38,16 @@ describe('content.php', function (): void {
     function contentEnv(array $conditions = [], array $options = [], array $meta = [], array $fields = [], int $thumbnail = 0, array $values = []): void
     {
         contentTags();
+        // The value is untyped here (WordPress data or a mixed array), and the code handles it as before.
+        // @phpstan-ignore argument.type
         wpConditionals($conditions);
         stubValues(array_merge([
             'get_the_ID' => 7,
             'get_option' => static fn (string $name): mixed => $options[$name] ?? false,
             'get_post_meta' => static fn (int $id, string $key, bool $single): mixed => $meta[$key] ?? '',
             'get_post_thumbnail_id' => $thumbnail,
+            // The value is untyped here (WordPress data or a mixed array), and the code handles it as before.
+            // @phpstan-ignore return.type
             'get_post_field' => static fn (string $field, int $id): string => $fields[$field] ?? '',
             'get_the_post_thumbnail_url' => 'https://x.test/full.jpg',
         ], $values));

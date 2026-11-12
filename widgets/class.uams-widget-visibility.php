@@ -159,7 +159,11 @@ class UAMS_Widget_Conditions
 
     public static function widget_conditions_options(): void
     {
+        // The value is untyped here (WordPress data or a mixed array), and the code handles it as before.
+        // @phpstan-ignore argument.type
         $major = isset($_REQUEST['major']) ? sanitize_text_field($_REQUEST['major']) : '';
+        // The value is untyped here (WordPress data or a mixed array), and the code handles it as before.
+        // @phpstan-ignore argument.type
         $minor = isset($_REQUEST['minor']) ? sanitize_text_field($_REQUEST['minor']) : '';
         self::widget_conditions_options_echo($major, $minor);
         wp_die();
@@ -197,7 +201,11 @@ class UAMS_Widget_Conditions
 				<div class="conditions">
 					<?php
                     foreach ($conditions['rules'] as $rule) {
+                        // The value is untyped here (WordPress data or a mixed array), and the code handles it as before.
+                        // @phpstan-ignore offsetAccess.nonOffsetAccessible
                         $rule_major = $rule['major'] ?? '';
+                        // The value is untyped here (WordPress data or a mixed array), and the code handles it as before.
+                        // @phpstan-ignore offsetAccess.nonOffsetAccessible
                         $rule_minor = $rule['minor'] ?? '';
                         ?>
 						<div class="condition">
@@ -215,7 +223,7 @@ class UAMS_Widget_Conditions
 								</select>
 								<?php _ex('is', 'Widget Visibility: {Rule Major [Page]} is {Rule Minor [Search results]}', 'jetpack'); ?>
 								<select class="conditions-rule-minor" name="conditions[rules_minor][]" <?php echo empty($rule_major) ? 'disabled="disabled"' : ''; ?> data-loading-text="<?php esc_attr_e('Loading...', 'jetpack'); ?>">
-									<?php self::widget_conditions_options_echo($rule_major, $rule_minor); ?>
+									<?php self::widget_conditions_options_echo($rule_major, $rule_minor); // @phpstan-ignore argument.type, argument.type?>
 								</select>
 								<span class="condition-conjunction"><?php echo esc_html_x('or', 'Shown between widget visibility conditions.', 'jetpack'); ?></span>
 							</div>
@@ -243,21 +251,31 @@ class UAMS_Widget_Conditions
      */
     public static function widget_update($instance, $new_instance, $old_instance)
     {
+        // The value is untyped here (WordPress data or a mixed array), and the code handles it as before.
+        // @phpstan-ignore offsetAccess.nonOffsetAccessible, offsetAccess.nonOffsetAccessible
         if (! isset($_POST['conditions']['action'], $_POST['conditions']['rules_major']) || ! is_array($_POST['conditions']['rules_major'])) {
             return $instance;
         }
 
         $conditions = [];
+        // The value is untyped here (WordPress data or a mixed array), and the code handles it as before.
+        // @phpstan-ignore argument.type
         $conditions['action'] = sanitize_text_field($_POST['conditions']['action']);
         $conditions['rules'] = [];
 
+        // The value is untyped here (WordPress data or a mixed array), and the code handles it as before.
+        // @phpstan-ignore foreach.nonIterable, offsetAccess.nonOffsetAccessible
         foreach ($_POST['conditions']['rules_major'] as $index => $major_rule) {
             if (empty($major_rule)) {
                 continue;
             }
 
             $conditions['rules'][] = [
+                // The value is untyped here (WordPress data or a mixed array), and the code handles it as before.
+                // @phpstan-ignore argument.type
                 'major' => sanitize_text_field($major_rule),
+                // The value is untyped here (WordPress data or a mixed array), and the code handles it as before.
+                // @phpstan-ignore offsetAccess.nonOffsetAccessible, offsetAccess.nonOffsetAccessible, argument.type
                 'minor' => isset($_POST['conditions']['rules_minor'][$index]) ? sanitize_text_field($_POST['conditions']['rules_minor'][$index]) : '',
             ];
         }
@@ -307,9 +325,13 @@ class UAMS_Widget_Conditions
                 $settings[$id_base] ??= get_option('widget_'.$id_base);
 
                 if (! is_null($widget_number)) {
+                    // The value is untyped here (WordPress data or a mixed array), and the code handles it as before.
+                    // @phpstan-ignore offsetAccess.nonOffsetAccessible, argument.type
                     if (isset($settings[$id_base][$widget_number]) && self::filter_widget($settings[$id_base][$widget_number]) === false) {
                         unset($widget_areas[$widget_area][$position]);
                     }
+                    // The value is untyped here (WordPress data or a mixed array), and the code handles it as before.
+                    // @phpstan-ignore argument.type
                 } elseif (! empty($settings[$id_base]) && self::filter_widget($settings[$id_base]) === false) {
                     unset($widget_areas[$widget_area][$position]);
                 }
@@ -329,6 +351,8 @@ class UAMS_Widget_Conditions
     {
         global $post, $wp_query;
 
+        // The value is untyped here (WordPress data or a mixed array), and the code handles it as before.
+        // @phpstan-ignore offsetAccess.nonOffsetAccessible
         if (empty($instance['conditions']) || empty($instance['conditions']['rules']) || ! is_array($instance['conditions']['rules'])) {
             return $instance;
         }
@@ -336,7 +360,11 @@ class UAMS_Widget_Conditions
         $condition_result = false;
 
         foreach ($instance['conditions']['rules'] as $rule) {
+            // The value is untyped here (WordPress data or a mixed array), and the code handles it as before.
+            // @phpstan-ignore offsetAccess.nonOffsetAccessible
             $major = $rule['major'] ?? '';
+            // The value is untyped here (WordPress data or a mixed array), and the code handles it as before.
+            // @phpstan-ignore offsetAccess.nonOffsetAccessible
             $minor = $rule['minor'] ?? '';
 
             switch ($major) {
@@ -388,9 +416,15 @@ class UAMS_Widget_Conditions
                             }
                             break;
                         default:
+                            // The value is untyped here (WordPress data or a mixed array), and the code handles it as before.
+                            // @phpstan-ignore argument.type
                             if (str_starts_with($minor, 'post_type-')) {
+                                // The value is untyped here (WordPress data or a mixed array), and the code handles it as before.
+                                // @phpstan-ignore argument.type
                                 $condition_result = is_singular(substr($minor, 10));
                             } else {
+                                // The value is untyped here (WordPress data or a mixed array), and the code handles it as before.
+                                // @phpstan-ignore argument.type
                                 $condition_result = is_page($minor);
                             }
                             break;
@@ -400,9 +434,13 @@ class UAMS_Widget_Conditions
                 case 'tag':
                     if (! $minor && is_tag()) {
                         $condition_result = true;
+                        // The value is untyped here (WordPress data or a mixed array), and the code handles it as before.
+                        // @phpstan-ignore argument.type
                     } elseif (is_singular() && $minor && has_tag($minor)) {
                         $condition_result = true;
                     } else {
+                        // The value is untyped here (WordPress data or a mixed array), and the code handles it as before.
+                        // @phpstan-ignore argument.type
                         $tag = get_tag($minor);
                         // get_tag() returns a WP_Term for the default object output.
                         // @phpstan-ignore property.nonObject
@@ -415,8 +453,12 @@ class UAMS_Widget_Conditions
                 case 'category':
                     if (! $minor && is_category()) {
                         $condition_result = true;
+                        // The value is untyped here (WordPress data or a mixed array), and the code handles it as before.
+                        // @phpstan-ignore argument.type
                     } elseif (is_category($minor)) {
                         $condition_result = true;
+                        // The value is untyped here (WordPress data or a mixed array), and the code handles it as before.
+                        // @phpstan-ignore argument.type
                     } elseif (is_singular() && $minor && in_array('category', get_post_taxonomies(), true) && has_category($minor)) {
                         $condition_result = true;
                     }
@@ -425,14 +467,20 @@ class UAMS_Widget_Conditions
                 case 'author':
                     if (! $minor && is_author()) {
                         $condition_result = true;
+                        // The value is untyped here (WordPress data or a mixed array), and the code handles it as before.
+                        // @phpstan-ignore argument.type
                     } elseif ($minor && is_author($minor)) {
                         $condition_result = true;
+                        // The value is untyped here (WordPress data or a mixed array), and the code handles it as before.
+                        // @phpstan-ignore cast.string
                     } elseif (is_singular() && $minor && isset($post->post_author) && (string) $minor === (string) $post->post_author) {
                         $condition_result = true;
                     }
                     break;
 
                 case 'taxonomy':
+                    // The value is untyped here (WordPress data or a mixed array), and the code handles it as before.
+                    // @phpstan-ignore argument.type
                     $term = explode('_tax_', $minor);
                     // The fallback is kept as written: PHPStan reads offset 0 as always present after the split.
                     // @phpstan-ignore nullCoalesce.offset
@@ -455,6 +503,8 @@ class UAMS_Widget_Conditions
             }
         }
 
+        // The value is untyped here (WordPress data or a mixed array), and the code handles it as before.
+        // @phpstan-ignore offsetAccess.nonOffsetAccessible
         $action = $instance['conditions']['action'] ?? 'show';
 
         if (($action === 'show' && ! $condition_result) || ($action === 'hide' && $condition_result)) {

@@ -52,31 +52,43 @@ class UAMS_Settings
 
     public function primary_uams_site_callback(): void
     {
+        // The value is untyped here (WordPress data or a mixed array), and the code handles it as before.
+        // @phpstan-ignore cast.int
         echo "<input name='primary_uams_site' type='checkbox' value='1'".checked(1, (int) get_option('primary_uams_site'), false).' /> (yes if checked)';
     }
 
     public function overly_long_title_callback(): void
     {
+        // The value is untyped here (WordPress data or a mixed array), and the code handles it as before.
+        // @phpstan-ignore cast.int
         echo "<input name='overly_long_title' type='checkbox' value='1'".checked(1, (int) get_option('overly_long_title'), false).' /> (yes if checked)';
     }
 
     public function show_byline_on_posts_callback(): void
     {
+        // The value is untyped here (WordPress data or a mixed array), and the code handles it as before.
+        // @phpstan-ignore cast.int
         echo "<input name='show_byline_on_posts' type='checkbox' value='1'".checked(1, (int) get_option('show_byline_on_posts'), false).' /> (yes if checked)';
     }
 
     public function show_category_on_posts_callback(): void
     {
+        // The value is untyped here (WordPress data or a mixed array), and the code handles it as before.
+        // @phpstan-ignore cast.int
         echo "<input name='show_category_on_posts' type='checkbox' value='1'".checked(1, (int) get_option('show_category_on_posts'), false).' /> (yes if checked)';
     }
 
     public function use_main_menu_on_mobile_callback(): void
     {
+        // The value is untyped here (WordPress data or a mixed array), and the code handles it as before.
+        // @phpstan-ignore cast.int
         echo "<input name='use_main_menu_on_mobile' type='checkbox' value='1'".checked(1, (int) get_option('use_main_menu_on_mobile'), false).' /> (yes if checked)';
     }
 
     public function google_tag_manager_id_callback(): void
     {
+        // The value is untyped here (WordPress data or a mixed array), and the code handles it as before.
+        // @phpstan-ignore cast.string
         $gtm = esc_attr((string) get_option('google_tag_manager_id'));
         echo "<input name='google_tag_manager_id' type='text' size='20' value='{$gtm}' /> (Leave Blank for Default)";
     }

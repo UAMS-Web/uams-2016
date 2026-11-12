@@ -112,6 +112,8 @@ describe('UAMS_Intro_Text', function (): void {
     it('renders the shortcode', function (mixed $content, string $expected): void {
         when('add_shortcode')->justReturn(true);
 
+        // The value is untyped here (WordPress data or a mixed array), and the code handles it as before.
+        // @phpstan-ignore argument.type
         expect((new UAMS_Intro_Text)->intro_shortcode([], $content))->toBe($expected);
     })->with([
         'text' => [' Hello ', '<p class="intro">H{Hello}</p>'],

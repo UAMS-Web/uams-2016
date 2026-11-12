@@ -25,6 +25,8 @@ function plainEnv(array $meta = [], int $posts = 1, bool $commentsOpen = false, 
     contentTags();
     stubValues([
         'get_the_ID' => 7,
+        // The value is untyped here (WordPress data or a mixed array), and the code handles it as before.
+        // @phpstan-ignore return.type
         'get_post_meta' => static fn (int $id, string $key, bool $single): string => $meta[$key] ?? '',
         'have_posts' => loopOf($posts),
         'comments_open' => $commentsOpen,

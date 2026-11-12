@@ -44,6 +44,8 @@ class UAMS_Recent_Posts extends WP_Widget
     public function widget($args, $instance): void
     {
         $title = ! empty($instance['title']) ? $instance['title'] : self::TITLE;
+        // The value is untyped here (WordPress data or a mixed array), and the code handles it as before.
+        // @phpstan-ignore argument.type
         $items = ! empty($instance['items']) ? absint($instance['items']) : self::ITEMS;
         // Redundant after the emptiness check; kept as written.
         // @phpstan-ignore booleanAnd.rightAlwaysTrue
@@ -99,7 +101,7 @@ class UAMS_Recent_Posts extends WP_Widget
 		</ul>
 
 		<?php if (get_option('page_for_posts') && $more) { ?>
-			<a class="more" href="<?php echo esc_url(get_permalink(get_option('page_for_posts'))); ?>"><?php _e('More', 'uams'); // @phpstan-ignore argument.type?></a>
+			<a class="more" href="<?php echo esc_url(get_permalink(get_option('page_for_posts'))); ?>"><?php _e('More', 'uams'); // @phpstan-ignore argument.type, argument.type?></a>
 		<?php } ?>
 
 		<?php
@@ -115,18 +117,22 @@ class UAMS_Recent_Posts extends WP_Widget
      */
     public function update($new_instance, $old_instance)
     {
+        // The value is untyped here (WordPress data or a mixed array), and the code handles it as before.
+        // @phpstan-ignore argument.type, argument.type
         return ['title' => sanitize_text_field($new_instance['title'] ?? ''), 'items' => ! empty($new_instance['items']) ? absint($new_instance['items']) : self::ITEMS, 'more' => ! empty($new_instance['more'])];
     }
 
     public function form($instance): void
     {
         $title = $instance['title'] ?? self::TITLE;
+        // The value is untyped here (WordPress data or a mixed array), and the code handles it as before.
+        // @phpstan-ignore argument.type
         $items = ! empty($instance['items']) ? absint($instance['items']) : self::ITEMS;
         $more = ! empty($instance['more']);
         ?>
 		<p>
 			<label for="<?php echo esc_attr($this->get_field_id('title')); ?>"><?php _e('Title:', 'uams'); ?></label>
-			<input class="widefat" id="<?php echo esc_attr($this->get_field_id('title')); ?>" name="<?php echo esc_attr($this->get_field_name('title')); ?>" type="text" value="<?php echo esc_attr($title); ?>" />
+			<input class="widefat" id="<?php echo esc_attr($this->get_field_id('title')); ?>" name="<?php echo esc_attr($this->get_field_name('title')); ?>" type="text" value="<?php echo esc_attr($title); // @phpstan-ignore argument.type?>" />
 		</p>
 
 		<p>

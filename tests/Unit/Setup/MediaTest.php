@@ -18,6 +18,8 @@ beforeEach(function (): void {
     loadShortcodeFile('class.uams-media-credit.php');
     stubEscaping();
     when('shortcode_atts')->alias(static function (array $pairs, mixed $atts, string $shortcode = ''): array {
+        // The value is untyped here (WordPress data or a mixed array), and the code handles it as before.
+        // @phpstan-ignore offsetAccess.nonOffsetAccessible
         $GLOBALS['uams_test_media_shortcode'][] = $shortcode;
 
         return array_merge($pairs, (array) $atts);
@@ -223,6 +225,8 @@ describe('UAMS_Media_Credit', function (): void {
             when('wp_attachment_is_image')->justReturn(true);
             when('__')->alias(static fn (string $text): string => '__('.$text.')');
 
+            // The value is untyped here (WordPress data or a mixed array), and the code handles it as before.
+            // @phpstan-ignore argument.type
             $fields = (new UAMS_Media_Credit)->image_attachment_fields_to_edit(['existing' => 1], $post);
 
             expect($fields)->toBe(['existing' => 1, 'media_credit' => ['label' => '__(Image Credit)', 'input' => 'text', 'value' => 'Jane']])

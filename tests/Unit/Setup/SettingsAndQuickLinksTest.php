@@ -164,17 +164,25 @@ describe('UAMS_QuickLinks', function (): void {
         beforeEach(function (): void {
             $GLOBALS['uams_test_links'] = [];
             when('switch_to_blog')->alias(static function (int $blog): void {
+                // The value is untyped here (WordPress data or a mixed array), and the code handles it as before.
+                // @phpstan-ignore offsetAccess.nonOffsetAccessible
                 $GLOBALS['uams_test_links'][] = ['switch', $blog];
             });
             when('restore_current_blog')->alias(static function (): void {
+                // The value is untyped here (WordPress data or a mixed array), and the code handles it as before.
+                // @phpstan-ignore offsetAccess.nonOffsetAccessible
                 $GLOBALS['uams_test_links'][] = ['restore'];
             });
             when('wp_get_nav_menu_items')->alias(static function (mixed $menu): array {
+                // The value is untyped here (WordPress data or a mixed array), and the code handles it as before.
+                // @phpstan-ignore offsetAccess.nonOffsetAccessible
                 $GLOBALS['uams_test_links'][] = ['items', $menu];
 
                 return [(object) ['ID' => 1, 'title' => 'One', 'url' => 'https://x.test/1', 'classes' => ['', 'a'], 'menu_item_parent' => '0', 'extra' => 'dropped']];
             });
             when('wp_send_json')->alias(static function (mixed $response): void {
+                // The value is untyped here (WordPress data or a mixed array), and the code handles it as before.
+                // @phpstan-ignore offsetAccess.nonOffsetAccessible
                 $GLOBALS['uams_test_links'][] = ['json', $response];
             });
         });
@@ -205,6 +213,8 @@ describe('UAMS_QuickLinks', function (): void {
             (new UAMS_QuickLinks)->uams_quicklinks_feed();
 
             expect($asked)->toBe(['quick-links'])
+                // The value is untyped here (WordPress data or a mixed array), and the code handles it as before.
+                // @phpstan-ignore offsetAccess.nonOffsetAccessible
                 ->and($GLOBALS['uams_test_links'][0])->toBe(['items', 44]);
         });
 
@@ -224,7 +234,11 @@ describe('UAMS_QuickLinks', function (): void {
 
             (new UAMS_QuickLinks)->uams_quicklinks_feed();
 
+            // The value is untyped here (WordPress data or a mixed array), and the code handles it as before.
+            // @phpstan-ignore argument.type
             expect(array_column($GLOBALS['uams_test_links'], 0))->toBe(['switch', 'items', 'restore', 'json'])
+                // The value is untyped here (WordPress data or a mixed array), and the code handles it as before.
+                // @phpstan-ignore offsetAccess.nonOffsetAccessible
                 ->and($GLOBALS['uams_test_links'][0])->toBe(['switch', 1]);
         });
     });
@@ -262,6 +276,8 @@ describe('UAMS_QuickLinks', function (): void {
 
         it('returns an empty menu without items', function (mixed $items): void {
             $links = new UAMS_QuickLinks;
+            // The value is untyped here (WordPress data or a mixed array), and the code handles it as before.
+            // @phpstan-ignore assign.propertyType
             $links->items = $items;
 
             expect($links->parse_menu())->toBe([]);

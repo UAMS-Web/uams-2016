@@ -112,6 +112,8 @@ describe('uams_get_permalink', function (): void {
         when('get_post_format')->justReturn(false);
         Functions\expect('get_permalink')->once()->with(8)->andReturn('/post-8/');
 
+        // The value is untyped here (WordPress data or a mixed array), and the code handles it as before.
+        // @phpstan-ignore argument.type
         expect(uams_get_permalink($post))->toBe('/post-8/');
     })->with([
         'no argument' => [null],

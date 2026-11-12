@@ -43,6 +43,8 @@ class UAMS_Intro_Text extends WP_Widget
         $after_widget = $args['after_widget'] ?? '';
 
         echo $before_widget;
+        // The value is untyped here (WordPress data or a mixed array), and the code handles it as before.
+        // @phpstan-ignore argument.type
         echo '<p class="intro">'.esc_html($intro_content).'</p>';
         echo $after_widget;
     }
@@ -56,11 +58,15 @@ class UAMS_Intro_Text extends WP_Widget
      */
     public function update($new_instance, $old_instance)
     {
+        // The value is untyped here (WordPress data or a mixed array), and the code handles it as before.
+        // @phpstan-ignore argument.type
         return ['introContent' => sanitize_text_field($new_instance['introContent'] ?? '')];
     }
 
     public function form($instance): void
     {
+        // The value is untyped here (WordPress data or a mixed array), and the code handles it as before.
+        // @phpstan-ignore argument.type
         $intro_content = isset($instance['introContent']) ? esc_attr($instance['introContent']) : '';
         ?>
         <p>

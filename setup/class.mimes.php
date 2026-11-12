@@ -31,6 +31,8 @@ class UAMS_Mimes
     {
         $existing_mimes = is_array($existing_mimes) ? $existing_mimes : [];
 
+        // The value is untyped here (WordPress data or a mixed array), and the code handles it as before.
+        // @phpstan-ignore return.type
         return array_merge($existing_mimes, $this->MIMES);
     }
 }

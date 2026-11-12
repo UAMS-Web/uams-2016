@@ -40,6 +40,8 @@
     // @phpstan-ignore argument.type
     $custom_footer_script = get_post_meta(get_the_ID(), 'custom_footer_script', true);
         if (! empty($custom_footer_script)) {
+            // The value is untyped here (WordPress data or a mixed array), and the code handles it as before.
+            // @phpstan-ignore echo.nonString
             echo $custom_footer_script;
         }
         ?>

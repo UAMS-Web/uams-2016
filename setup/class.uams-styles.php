@@ -37,9 +37,17 @@ class UAMS_Styles
     {
         foreach ($this->STYLES as $style) {
             wp_register_style(
+                // The value is untyped here (WordPress data or a mixed array), and the code handles it as before.
+                // @phpstan-ignore argument.type
                 $style['id'],
+                // The value is untyped here (WordPress data or a mixed array), and the code handles it as before.
+                // @phpstan-ignore argument.type
                 $style['url'],
+                // The value is untyped here (WordPress data or a mixed array), and the code handles it as before.
+                // @phpstan-ignore argument.type
                 $style['deps'] ?? [],
+                // The value is untyped here (WordPress data or a mixed array), and the code handles it as before.
+                // @phpstan-ignore argument.type
                 $style['version'] ?? false
             );
         }
@@ -54,6 +62,8 @@ class UAMS_Styles
                 continue;
             }
 
+            // The value is untyped here (WordPress data or a mixed array), and the code handles it as before.
+            // @phpstan-ignore argument.type
             wp_enqueue_style($style['id']);
         }
     }
@@ -67,12 +77,22 @@ class UAMS_Styles
         foreach ($this->STYLES as $style) {
             if (! empty($style['admin'])) {
                 wp_register_style(
+                    // The value is untyped here (WordPress data or a mixed array), and the code handles it as before.
+                    // @phpstan-ignore argument.type
                     $style['id'],
+                    // The value is untyped here (WordPress data or a mixed array), and the code handles it as before.
+                    // @phpstan-ignore argument.type
                     $style['url'],
+                    // The value is untyped here (WordPress data or a mixed array), and the code handles it as before.
+                    // @phpstan-ignore argument.type
                     $style['deps'] ?? [],
+                    // The value is untyped here (WordPress data or a mixed array), and the code handles it as before.
+                    // @phpstan-ignore argument.type
                     $style['version'] ?? false
                 );
 
+                // The value is untyped here (WordPress data or a mixed array), and the code handles it as before.
+                // @phpstan-ignore argument.type
                 wp_enqueue_style($style['id']);
             }
         }

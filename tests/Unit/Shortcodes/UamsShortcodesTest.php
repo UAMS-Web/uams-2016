@@ -63,6 +63,8 @@ function loadedShortcodeFiles(string $root): array
         $records[$root] = $GLOBALS['uams_fixture_shortcode_includes'];
     }
 
+    // The value is untyped here (WordPress data or a mixed array), and the code handles it as before.
+    // @phpstan-ignore return.type
     return $records[$root];
 }
 

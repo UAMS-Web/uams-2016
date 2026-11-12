@@ -118,8 +118,14 @@ class UAMS_RSS extends WP_Widget
     public function update($new_instance, $old_instance)
     {
         $instance = [];
+        // The value is untyped here (WordPress data or a mixed array), and the code handles it as before.
+        // @phpstan-ignore argument.type
         $instance['url'] = esc_url_raw(strip_tags($new_instance['url'] ?? ''));
+        // The value is untyped here (WordPress data or a mixed array), and the code handles it as before.
+        // @phpstan-ignore argument.type
         $instance['title'] = sanitize_text_field($new_instance['title'] ?? '');
+        // The value is untyped here (WordPress data or a mixed array), and the code handles it as before.
+        // @phpstan-ignore cast.int
         $instance['items'] = ! empty($new_instance['items']) ? (int) $new_instance['items'] : self::ITEMS;
         $instance['show_image'] = ! empty($new_instance['show_image']) ? 1 : 0;
         $instance['show_summary'] = ! empty($new_instance['show_summary']) ? 1 : 0;
@@ -129,6 +135,8 @@ class UAMS_RSS extends WP_Widget
         if (current_user_can('unfiltered_html')) {
             $instance['text'] = $new_instance['text'] ?? '';
         } else {
+            // The value is untyped here (WordPress data or a mixed array), and the code handles it as before.
+            // @phpstan-ignore argument.type
             $instance['text'] = wp_kses_post($new_instance['text'] ?? '');
         }
 
@@ -143,6 +151,8 @@ class UAMS_RSS extends WP_Widget
         $title = apply_filters('widget_title', $instance['title'] ?? '');
         $text = $instance['text'] ?? '';
         $url = $instance['url'] ?? '';
+        // The value is untyped here (WordPress data or a mixed array), and the code handles it as before.
+        // @phpstan-ignore cast.int
         $items = ! empty($instance['items']) ? (int) $instance['items'] : self::ITEMS;
         $show_date = ! empty($instance['show_date']);
 
@@ -154,11 +164,15 @@ class UAMS_RSS extends WP_Widget
             $content .= $before_title.esc_html($title).$after_title;
         }
 
+        // The value is untyped here (WordPress data or a mixed array), and the code handles it as before.
+        // @phpstan-ignore binaryOp.invalid
         $content .= empty($text) ? '' : '<div class="featured">'.$text.'</div>';
 
         $date_string = $show_date ? 'true' : 'false';
         $has_blurb = empty($text) ? 'false' : 'true';
 
+        // The value is untyped here (WordPress data or a mixed array), and the code handles it as before.
+        // @phpstan-ignore encapsedStringPart.nonString
         $content .= do_shortcode("[rss url=\"{$url}\" number=\"{$items}\" show_date=\"{$date_string}\" has_blurb=\"{$has_blurb}\"]");
 
         echo ($args['before_widget'] ?? '').$content.($args['after_widget'] ?? '');

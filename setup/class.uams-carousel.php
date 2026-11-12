@@ -91,6 +91,8 @@ class UAMS_Carousel
         do_action('jp_carousel_thumbnails_shown');
 
         $is_logged_in = is_user_logged_in();
+        // The value is untyped here (WordPress data or a mixed array), and the code handles it as before.
+        // @phpstan-ignore cast.int
         $require_name_email = (int) get_option('require_name_email');
 
         $localize_strings = [

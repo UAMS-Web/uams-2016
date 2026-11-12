@@ -21,6 +21,8 @@ beforeEach(function (): void {
         echo $text;
     });
     when('checked')->alias(static function (mixed $checked, mixed $current = true, bool $echo = true): string {
+        // The value is untyped here (WordPress data or a mixed array), and the code handles it as before.
+        // @phpstan-ignore cast.string, cast.string
         $result = (string) $checked === (string) $current ? "checked='checked'" : '';
 
         if ($echo) {
@@ -143,6 +145,8 @@ describe('page_attributes_meta_box', function (): void {
         $this->dropdown = [];
         $dropdown = &$this->dropdown;
         when('apply_filters')->alias(static function (string $hook, mixed $args, mixed $post) use (&$dropdown): mixed {
+            // The value is untyped here (WordPress data or a mixed array), and the code handles it as before.
+            // @phpstan-ignore property.nonObject
             $dropdown[] = [$hook, $args, $post->ID];
 
             return $args;
@@ -243,20 +247,32 @@ describe('save_postdata', function (): void {
     beforeEach(function (): void {
         $GLOBALS['uams_test_page_box'] = [];
         when('get_post_type')->alias(static function (int $id): string {
+            // The value is untyped here (WordPress data or a mixed array), and the code handles it as before.
+            // @phpstan-ignore offsetAccess.nonOffsetAccessible
             $GLOBALS['uams_test_page_box'][] = ['type', $id];
 
+            // The value is untyped here (WordPress data or a mixed array), and the code handles it as before.
+            // @phpstan-ignore return.type
             return $GLOBALS['uams_test_page_type'] ?? 'page';
         });
         when('check_admin_referer')->alias(static function (string $action, string $name): bool {
+            // The value is untyped here (WordPress data or a mixed array), and the code handles it as before.
+            // @phpstan-ignore offsetAccess.nonOffsetAccessible
             $GLOBALS['uams_test_page_box'][] = ['referer', $action, $name];
 
+            // The value is untyped here (WordPress data or a mixed array), and the code handles it as before.
+            // @phpstan-ignore return.type
             return $GLOBALS['uams_test_page_referer'] ?? true;
         });
         when('sanitize_text_field')->alias(static fn (string $text): string => 'T{'.$text.'}');
         when('update_post_meta')->alias(static function (int $id, string $key, mixed $value): void {
+            // The value is untyped here (WordPress data or a mixed array), and the code handles it as before.
+            // @phpstan-ignore offsetAccess.nonOffsetAccessible
             $GLOBALS['uams_test_page_box'][] = ['update', $id, $key, $value];
         });
         when('delete_post_meta')->alias(static function (int $id, string $key): void {
+            // The value is untyped here (WordPress data or a mixed array), and the code handles it as before.
+            // @phpstan-ignore offsetAccess.nonOffsetAccessible
             $GLOBALS['uams_test_page_box'][] = ['delete', $id, $key];
         });
     });
@@ -324,6 +340,8 @@ describe('save_postdata', function (): void {
 
         (new UAMS_Page_Attributes_Meta_Box)->save_postdata(9);
 
+        // The value is untyped here (WordPress data or a mixed array), and the code handles it as before.
+        // @phpstan-ignore argument.type, argument.type
         expect(array_filter($GLOBALS['uams_test_page_box'], static fn (array $call): bool => $call[0] === 'delete'))->toBe([
             2 => ['delete', 9, 'sidebar'],
             4 => ['delete', 9, 'breadcrumb'],

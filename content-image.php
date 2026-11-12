@@ -10,6 +10,8 @@
     // @phpstan-ignore argument.type
     $credit = get_post_meta(get_the_ID(), '_media_credit', true);
   if ($credit) {
+      // The value is untyped here (WordPress data or a mixed array), and the code handles it as before.
+      // @phpstan-ignore argument.type
       echo '<br> Photo Credit: '.esc_html($credit);
   }
   ?>

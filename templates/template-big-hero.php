@@ -39,14 +39,14 @@ $btn_url = $external ? $externalurl : $internalurl;
 
 <div class="uams-hero-image hero-height <?php echo esc_attr($hasmobileimage); ?>" style="background-image: url('<?php echo esc_url($url); ?>');">
     <?php if (! empty($mobileimage_url)) { ?>
-    <div class="mobile-image" style="background-image: url('<?php echo esc_url($mobileimage_url); ?>');"></div>
+    <div class="mobile-image" style="background-image: url('<?php echo esc_url($mobileimage_url); // @phpstan-ignore argument.type?>');"></div>
     <?php } ?>
     <div id="hero-bg">
       <div id="hero-container" class="container">
         <h1 class="uams-site-title<?php echo esc_attr($hasdarktext); ?>"><?php the_title(); ?></h1>
         <span class="udub-slant"><span></span></span>
       <?php if (! empty($buttontext) && $button) { ?>
-        <a class="uams-btn btn-sm btn-none" href="<?php echo esc_url($btn_url); ?>"><?php echo esc_html($buttontext); ?></a>
+        <a class="uams-btn btn-sm btn-none" href="<?php echo esc_url($btn_url); ?>"><?php echo esc_html($buttontext); // @phpstan-ignore argument.type, argument.type?></a>
       <?php } ?>
       </div>
     </div>

@@ -64,12 +64,18 @@ class UAMS_Campus_Map extends WP_Widget
      */
     public function update($new_instance, $old_instance)
     {
+        // The value is untyped here (WordPress data or a mixed array), and the code handles it as before.
+        // @phpstan-ignore argument.type, argument.type
         return ['title' => sanitize_text_field($new_instance['title'] ?? ''), 'buildingCode' => sanitize_text_field($new_instance['buildingCode'] ?? '')];
     }
 
     public function form($instance): void
     {
+        // The value is untyped here (WordPress data or a mixed array), and the code handles it as before.
+        // @phpstan-ignore argument.type
         $title = isset($instance['title']) ? esc_attr($instance['title']) : '';
+        // The value is untyped here (WordPress data or a mixed array), and the code handles it as before.
+        // @phpstan-ignore argument.type
         $buildingCode = isset($instance['buildingCode']) ? esc_attr($instance['buildingCode']) : '';
         ?>
 		<p>

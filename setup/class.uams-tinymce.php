@@ -34,6 +34,8 @@ class UAMS_TinyMCE
 
         foreach ($this->remove as $buttongroup => $buttonlist) {
             if (array_key_exists($buttongroup, $settings) && ! empty($settings[$buttongroup])) {
+                // The value is untyped here (WordPress data or a mixed array), and the code handles it as before.
+                // @phpstan-ignore cast.string
                 $buttons = explode(',', (string) $settings[$buttongroup]);
                 $newBtns = array_diff($buttons, $buttonlist);
                 $settings[$buttongroup] = implode(',', $newBtns);

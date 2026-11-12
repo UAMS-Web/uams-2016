@@ -59,6 +59,8 @@ function stubShortcodeApi(): void
     $GLOBALS['uams_test_shortcode_atts'] = [];
 
     when('shortcode_atts')->alias(static function (array $pairs, mixed $atts, string $shortcode = ''): array {
+        // The value is untyped here (WordPress data or a mixed array), and the code handles it as before.
+        // @phpstan-ignore offsetAccess.nonOffsetAccessible
         $GLOBALS['uams_test_shortcode_atts'][] = $shortcode;
         $atts = (array) $atts;
         $out = [];
@@ -73,6 +75,8 @@ function stubShortcodeApi(): void
     when('do_shortcode')->alias(static fn (string $content): string => 'D{'.$content.'}');
     when('force_balance_tags')->alias(static fn (string $text): string => 'B{'.$text.'}');
     when('wp_kses_post')->alias(static fn (string $text): string => 'K{'.$text.'}');
+    // The value is untyped here (WordPress data or a mixed array), and the code handles it as before.
+    // @phpstan-ignore binaryOp.invalid
     when('sanitize_text_field')->alias(static fn (mixed $text): string => 'T{'.$text.'}');
 }
 
@@ -83,6 +87,8 @@ function stubShortcodeApi(): void
  */
 function shortcodeAttsNames(): array
 {
+    // The value is untyped here (WordPress data or a mixed array), and the code handles it as before.
+    // @phpstan-ignore return.type
     return $GLOBALS['uams_test_shortcode_atts'] ?? [];
 }
 

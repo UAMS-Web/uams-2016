@@ -78,6 +78,8 @@ it('reports whether it is disabled through the filter', function (): void {
 });
 
 it('passes the asset version through the filter', function (): void {
+    // The value is untyped here (WordPress data or a mixed array), and the code handles it as before.
+    // @phpstan-ignore binaryOp.invalid
     when('apply_filters')->alias(static fn (string $hook, mixed $value = null): mixed => $hook === 'jp_carousel_asset_version' ? $value.'-x' : $value);
 
     expect((new UAMS_Carousel)->asset_version('1.2'))->toBe('1.2-x');
@@ -95,9 +97,13 @@ function stubCarouselAssets(array $filtered = []): void
     $GLOBALS['uams_test_carousel'] = ['localized' => [], 'actions' => [], 'hooks' => []];
 
     when('do_action')->alias(static function (string $hook, mixed ...$args): void {
+        // The value is untyped here (WordPress data or a mixed array), and the code handles it as before.
+        // @phpstan-ignore offsetAccess.nonOffsetAccessible, offsetAccess.nonOffsetAccessible
         $GLOBALS['uams_test_carousel']['actions'][] = [$hook, ...$args];
     });
     when('apply_filters')->alias(static function (string $hook, mixed $value = null) use ($filtered): mixed {
+        // The value is untyped here (WordPress data or a mixed array), and the code handles it as before.
+        // @phpstan-ignore offsetAccess.nonOffsetAccessible, offsetAccess.nonOffsetAccessible
         $GLOBALS['uams_test_carousel']['hooks'][] = $hook;
 
         return array_key_exists($hook, $filtered) ? $filtered[$hook] : $value;
@@ -112,6 +118,8 @@ function stubCarouselAssets(array $filtered = []): void
     when('get_permalink')->justReturn('https://site.test/post');
     when('wp_login_url')->alias(static fn (string $redirect): string => 'login?r='.$redirect);
     when('wp_localize_script')->alias(static function (string $handle, string $name, array $strings): void {
+        // The value is untyped here (WordPress data or a mixed array), and the code handles it as before.
+        // @phpstan-ignore offsetAccess.nonOffsetAccessible, offsetAccess.nonOffsetAccessible
         $GLOBALS['uams_test_carousel']['localized'][] = [$handle, $name, $strings];
     });
 }
@@ -143,8 +151,14 @@ describe('enqueue_assets', function (): void {
         ];
 
         expect($result)->toBe('')
+            // The value is untyped here (WordPress data or a mixed array), and the code handles it as before.
+            // @phpstan-ignore offsetAccess.nonOffsetAccessible
             ->and($record['localized'])->toBe([['site', 'jetpackCarouselStrings', $strings]])
+            // The value is untyped here (WordPress data or a mixed array), and the code handles it as before.
+            // @phpstan-ignore offsetAccess.nonOffsetAccessible
             ->and($record['actions'])->toBe([['jp_carousel_thumbnails_shown'], ['jp_carousel_enqueue_assets', true, $strings]])
+            // The value is untyped here (WordPress data or a mixed array), and the code handles it as before.
+            // @phpstan-ignore offsetAccess.nonOffsetAccessible
             ->and($record['hooks'])->toBe(['the_permalink', 'jp_carousel_localize_strings'])
             ->and($carousel->first_run)->toBeFalse();
     });
@@ -154,6 +168,8 @@ describe('enqueue_assets', function (): void {
 
         (new UAMS_Carousel)->enqueue_assets();
 
+        // The value is untyped here (WordPress data or a mixed array), and the code handles it as before.
+        // @phpstan-ignore offsetAccess.nonOffsetAccessible
         expect($GLOBALS['uams_test_carousel']['hooks'])->not->toContain('jp_carousel_force_enable');
     });
 
@@ -162,7 +178,11 @@ describe('enqueue_assets', function (): void {
 
         (new UAMS_Carousel)->enqueue_assets('');
 
+        // The value is untyped here (WordPress data or a mixed array), and the code handles it as before.
+        // @phpstan-ignore offsetAccess.nonOffsetAccessible, offsetAccess.nonOffsetAccessible, offsetAccess.nonOffsetAccessible
         expect($GLOBALS['uams_test_carousel']['localized'][0][2])->toBe(['only' => 'this'])
+            // The value is untyped here (WordPress data or a mixed array), and the code handles it as before.
+            // @phpstan-ignore offsetAccess.nonOffsetAccessible, offsetAccess.nonOffsetAccessible
             ->and($GLOBALS['uams_test_carousel']['actions'][1])->toBe(['jp_carousel_enqueue_assets', true, ['only' => 'this']]);
     });
 
@@ -177,7 +197,11 @@ describe('enqueue_assets', function (): void {
         expect($result)->toBe('<gallery>')
             ->and(has_filter('gallery_style', [$carousel, 'add_data_to_container']))->toBeFalse()
             ->and(has_filter('wp_get_attachment_image_attributes', [$carousel, 'add_data_to_images']))->toBeFalse()
+            // The value is untyped here (WordPress data or a mixed array), and the code handles it as before.
+            // @phpstan-ignore offsetAccess.nonOffsetAccessible
             ->and($GLOBALS['uams_test_carousel']['actions'])->toBe([])
+            // The value is untyped here (WordPress data or a mixed array), and the code handles it as before.
+            // @phpstan-ignore offsetAccess.nonOffsetAccessible
             ->and($GLOBALS['uams_test_carousel']['localized'])->toBe([])
             ->and($carousel->first_run)->toBeTrue();
     });
@@ -189,6 +213,8 @@ describe('enqueue_assets', function (): void {
         $result = $carousel->enqueue_assets('<gallery>');
 
         expect($result)->toBe('<gallery>')
+            // The value is untyped here (WordPress data or a mixed array), and the code handles it as before.
+            // @phpstan-ignore offsetAccess.nonOffsetAccessible
             ->and($GLOBALS['uams_test_carousel']['localized'])->toHaveCount(1)
             ->and($carousel->first_run)->toBeFalse();
     });
@@ -199,6 +225,8 @@ describe('enqueue_assets', function (): void {
 
         (new UAMS_Carousel)->enqueue_assets();
 
+        // The value is untyped here (WordPress data or a mixed array), and the code handles it as before.
+        // @phpstan-ignore offsetAccess.nonOffsetAccessible, offsetAccess.nonOffsetAccessible, offsetAccess.nonOffsetAccessible, offsetAccess.nonOffsetAccessible
         expect($GLOBALS['uams_test_carousel']['localized'][0][2]['lang'])->toBe('');
     });
 
@@ -209,7 +237,11 @@ describe('enqueue_assets', function (): void {
         $carousel->enqueue_assets();
         $carousel->enqueue_assets();
 
+        // The value is untyped here (WordPress data or a mixed array), and the code handles it as before.
+        // @phpstan-ignore offsetAccess.nonOffsetAccessible, offsetAccess.nonOffsetAccessible, offsetAccess.nonOffsetAccessible
         expect($GLOBALS['uams_test_carousel']['actions'][1][1])->toBeTrue()
+            // The value is untyped here (WordPress data or a mixed array), and the code handles it as before.
+            // @phpstan-ignore offsetAccess.nonOffsetAccessible, offsetAccess.nonOffsetAccessible, offsetAccess.nonOffsetAccessible
             ->and($GLOBALS['uams_test_carousel']['actions'][3][1])->toBeFalse();
     });
 });

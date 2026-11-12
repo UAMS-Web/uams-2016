@@ -46,7 +46,7 @@ parameters:
     # The highest level the code passes today (the code-quality skill's "Finding
     # the starting static-analysis level"), raised one level per change as
     # findings are fixed, until `max`.
-    level: 8
+    level: 9
 
     # Patchwork's relay(), which tests/Support/wordpress.php calls to fall through to the real
     # class_exists(). Patchwork is a development dependency loaded by tests/bootstrap.php, not

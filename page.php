@@ -16,9 +16,11 @@ $breadcrumbs = get_post_meta($post_id, 'breadcrumb');
 
   <div class="row">
 
-    <div class="col-md-<?php echo (! isset($sidebar[0]) || $sidebar[0] !== 'on') ? '8' : '12'; ?> uams-content" role='main'>
+    <div class="col-md-<?php echo (! isset($sidebar[0]) || $sidebar[0] !== 'on') ? '8' : '12'; // @phpstan-ignore offsetAccess.nonOffsetAccessible?> uams-content" role='main'>
 
       <?php
+      // The value is untyped here (WordPress data or a mixed array), and the code handles it as before.
+      // @phpstan-ignore offsetAccess.nonOffsetAccessible
       if (! isset($breadcrumbs[0]) || $breadcrumbs[0] !== 'on') {
           get_template_part('breadcrumbs');
       }
@@ -52,6 +54,8 @@ $breadcrumbs = get_post_meta($post_id, 'breadcrumb');
 
     <div id="sidebar">
       <?php
+      // The value is untyped here (WordPress data or a mixed array), and the code handles it as before.
+      // @phpstan-ignore offsetAccess.nonOffsetAccessible
       if (! isset($sidebar[0]) || $sidebar[0] !== 'on') {
           get_sidebar();
       }

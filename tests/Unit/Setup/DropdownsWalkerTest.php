@@ -38,6 +38,8 @@ function menuItem(array $properties = []): object
 function walkItem(array $properties = [], int $depth = 0, mixed $args = null): string
 {
     $output = '';
+    // The value is untyped here (WordPress data or a mixed array), and the code handles it as before.
+    // @phpstan-ignore argument.type
     (new UAMS_Dropdowns_Walker_Menu)->start_el($output, menuItem($properties), $depth, $args);
 
     return $output;

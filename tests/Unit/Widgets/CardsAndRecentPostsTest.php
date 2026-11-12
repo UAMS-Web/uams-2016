@@ -22,15 +22,21 @@ beforeEach(function (): void {
         echo $text;
     });
     when('sanitize_text_field')->alias(static fn (string $text): string => 'T{'.$text.'}');
+    // The value is untyped here (WordPress data or a mixed array), and the code handles it as before.
+    // @phpstan-ignore cast.int
     when('absint')->alias(static fn (mixed $value): int => abs((int) $value));
     when('esc_url_raw')->alias(static fn (string $url): string => 'R{'.$url.'}');
     when('wp_kses_post')->alias(static fn (string $text): string => 'K{'.$text.'}');
     when('esc_textarea')->alias(static fn (string $text): string => 'X{'.$text.'}');
     when('wpautop')->alias(static fn (string $text): string => 'P{'.$text.'}');
     when('checked')->alias(static function (mixed $checked, mixed $current = true): void {
+        // The value is untyped here (WordPress data or a mixed array), and the code handles it as before.
+        // @phpstan-ignore cast.string, cast.string
         echo (string) preg_replace('/^A\{(.*)\}$/', '$1', (string) $checked) === (string) $current ? ' CHK' : '';
     });
     when('selected')->alias(static function (mixed $selected, mixed $current): void {
+        // The value is untyped here (WordPress data or a mixed array), and the code handles it as before.
+        // @phpstan-ignore cast.string, cast.string
         echo (string) $selected === (string) $current ? ' SEL' : '';
     });
 });
@@ -50,6 +56,8 @@ function stubRecentPosts(array $ids): ArrayObject
         return array_map(static fn (int $id): object => (object) ['ID' => $id], $ids);
     });
 
+    // The value is untyped here (WordPress data or a mixed array), and the code handles it as before.
+    // @phpstan-ignore return.type
     return $received;
 }
 

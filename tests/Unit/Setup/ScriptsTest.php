@@ -91,6 +91,8 @@ it('uses the development script for a signed-in user', function (): void {
 
     $scripts = new UAMS_Scripts;
 
+    // The value is untyped here (WordPress data or a mixed array), and the code handles it as before.
+    // @phpstan-ignore offsetAccess.nonOffsetAccessible
     expect($scripts->SCRIPTS['site']['url'])->toBe('https://site.test/theme/js/site.dev.js')
         ->and($scripts->dev_script())->toBe('.dev');
 });
@@ -121,6 +123,8 @@ it('enqueues the customizer script in the footer', function (): void {
 
 it('keeps only the scripts already set when collecting the child theme scripts', function (mixed $scripts, array $expected): void {
     $instance = new UAMS_Scripts;
+    // The value is untyped here (WordPress data or a mixed array), and the code handles it as before.
+    // @phpstan-ignore assign.propertyType
     $instance->SCRIPTS = $scripts;
 
     expect((new ReflectionMethod($instance, 'get_child_theme_scripts'))->invoke($instance))->toBe($expected);

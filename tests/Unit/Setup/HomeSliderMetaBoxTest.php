@@ -34,17 +34,23 @@ function stubSliderSave(bool $nonceValid = true, array $caps = []): void
     $GLOBALS['uams_test_slider'] = [];
 
     when('wp_verify_nonce')->alias(static function (mixed $nonce, string $action) use ($nonceValid): bool {
+        // The value is untyped here (WordPress data or a mixed array), and the code handles it as before.
+        // @phpstan-ignore offsetAccess.nonOffsetAccessible
         $GLOBALS['uams_test_slider'][] = ['nonce', $nonce, $action];
 
         return $nonceValid;
     });
     when('current_user_can')->alias(static function (string $cap, int $post) use ($caps): bool {
+        // The value is untyped here (WordPress data or a mixed array), and the code handles it as before.
+        // @phpstan-ignore offsetAccess.nonOffsetAccessible
         $GLOBALS['uams_test_slider'][] = ['can', $cap, $post];
 
         return $caps[$cap] ?? false;
     });
     when('sanitize_text_field')->alias(static fn (string $text): string => 'T{'.$text.'}');
     when('update_post_meta')->alias(static function (int $post, string $key, mixed $value): void {
+        // The value is untyped here (WordPress data or a mixed array), and the code handles it as before.
+        // @phpstan-ignore offsetAccess.nonOffsetAccessible
         $GLOBALS['uams_test_slider'][] = ['update', $post, $key, $value];
     });
 }
@@ -157,6 +163,8 @@ describe('save', function (): void {
 
         (new UAMS_Home_Slider_Meta_Box)->save(5);
 
+        // The value is untyped here (WordPress data or a mixed array), and the code handles it as before.
+        // @phpstan-ignore argument.type
         expect(array_slice($GLOBALS['uams_test_slider'], 2))->toBe($updates);
     })->with([
         'only the image' => [['mobileimagetext' => 'm.jpg'], [['update', 5, 'mobileimage', 'T{m.jpg}']]],

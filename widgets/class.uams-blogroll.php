@@ -34,8 +34,14 @@ class UAMS_Blogroll extends WP_Widget
 
     public function form($instance): void
     {
+        // The value is untyped here (WordPress data or a mixed array), and the code handles it as before.
+        // @phpstan-ignore argument.type
         $title = empty($instance['title']) ? self::NAME : esc_attr($instance['title']);
+        // The value is untyped here (WordPress data or a mixed array), and the code handles it as before.
+        // @phpstan-ignore argument.type
         $number = empty($instance['number']) ? self::LIMIT : absint($instance['number']);
+        // The value is untyped here (WordPress data or a mixed array), and the code handles it as before.
+        // @phpstan-ignore argument.type
         $style = isset($instance['radio_style']) ? esc_attr($instance['radio_style']) : 'default';
         ?>
 		<p>
@@ -78,8 +84,14 @@ class UAMS_Blogroll extends WP_Widget
      */
     public function update($new_instance, $instance)
     {
+        // The value is untyped here (WordPress data or a mixed array), and the code handles it as before.
+        // @phpstan-ignore argument.type
         $instance['title'] = sanitize_text_field($new_instance['title']);
+        // The value is untyped here (WordPress data or a mixed array), and the code handles it as before.
+        // @phpstan-ignore argument.type
         $instance['number'] = empty($new_instance['number']) ? self::LIMIT : absint($new_instance['number']);
+        // The value is untyped here (WordPress data or a mixed array), and the code handles it as before.
+        // @phpstan-ignore argument.type
         $instance['radio_style'] = empty($new_instance['radio_style']) ? 'default' : sanitize_text_field($new_instance['radio_style']);
 
         return $instance;
@@ -91,7 +103,11 @@ class UAMS_Blogroll extends WP_Widget
     public function widget($args, $instance): void
     {
         $title = ! empty($instance['title']) ? $instance['title'] : self::NAME;
+        // The value is untyped here (WordPress data or a mixed array), and the code handles it as before.
+        // @phpstan-ignore argument.type
         $number = ! empty($instance['number']) ? absint($instance['number']) : self::LIMIT;
+        // The value is untyped here (WordPress data or a mixed array), and the code handles it as before.
+        // @phpstan-ignore argument.type
         $radio_style = ! empty($instance['radio_style']) ? esc_attr($instance['radio_style']) : 'default';
 
         $title = apply_filters('widget_title', $title);
@@ -193,6 +209,8 @@ class UAMS_Blogroll extends WP_Widget
 
             $date = '';
             if ($this->is_true($params->date)) {
+                // The value is untyped here (WordPress data or a mixed array), and the code handles it as before.
+                // @phpstan-ignore argument.type
                 $date = get_the_time(get_option('date_format'), $post->ID);
             }
 

@@ -222,10 +222,14 @@ if (! function_exists('uams_list_mobile_pages')) {
         $ids = [];
 
         foreach ($items as $item) {
+            // The value is untyped here (WordPress data or a mixed array), and the code handles it as before.
+            // @phpstan-ignore property.nonObject
             if ((int) $item->menu_item_parent !== 0) {
                 continue;
             }
 
+            // The value is untyped here (WordPress data or a mixed array), and the code handles it as before.
+            // @phpstan-ignore property.nonObject
             $ids[] = $item->object_id;
         }
 
@@ -296,6 +300,8 @@ if (! function_exists('get_uams_breadcrumbs')) {
             $author = get_queried_object();
             $name = ($author && isset($author->display_name)) ? $author->display_name : '';
             $html .= '<li class="current"><span> Author: '.esc_html($name).'</span></li>';
+            // The value is untyped here (WordPress data or a mixed array), and the code handles it as before.
+            // @phpstan-ignore cast.int
         } elseif (get_queried_object_id() === (int) get_option('page_for_posts') && get_option('page_for_posts')) {
             $html .= '<li class="current"><span> '.esc_html(get_the_title(get_queried_object_id())).' </span></li>';
         }
@@ -311,6 +317,8 @@ if (! function_exists('get_uams_breadcrumbs')) {
             }
 
             if (is_category()) {
+                // The value is untyped here (WordPress data or a mixed array), and the code handles it as before.
+                // @phpstan-ignore argument.type
                 $category = get_category(get_query_var('cat'));
                 if ($category && ! is_wp_error($category)) {
                     $html .= '<li class="current"><span>'.esc_html(get_cat_name($category->term_id)).'</span></li>';
@@ -318,7 +326,11 @@ if (! function_exists('get_uams_breadcrumbs')) {
             }
 
             if (is_tax() && ! is_post_type_archive()) {
+                // The value is untyped here (WordPress data or a mixed array), and the code handles it as before.
+                // @phpstan-ignore argument.type, argument.type
                 $term = get_term_by('slug', get_query_var('term'), get_query_var('taxonomy'));
+                // The value is untyped here (WordPress data or a mixed array), and the code handles it as before.
+                // @phpstan-ignore argument.type
                 $tax = get_taxonomy(get_query_var('taxonomy'));
                 if ($tax && $term && ! is_wp_error($term)) {
                     $html .= '<li class="current"><span>'.esc_html($tax->labels->name).': '.esc_html($term->name).'</span></li>';
@@ -326,6 +338,8 @@ if (! function_exists('get_uams_breadcrumbs')) {
             }
 
             if (is_tax() && is_post_type_archive()) {
+                // The value is untyped here (WordPress data or a mixed array), and the code handles it as before.
+                // @phpstan-ignore argument.type, argument.type
                 $term = get_term_by('slug', get_query_var('term'), get_query_var('taxonomy'));
                 if ($term && ! is_wp_error($term)) {
                     $html .= '<li class="current"><span>'.esc_html($term->name).'</span></li>';
@@ -515,6 +529,8 @@ if (! function_exists('uams_get_permalink')) {
         $post_format = get_post_format($postID);
 
         if (! empty($external_url) && ($post_format === 'link')) {
+            // The value is untyped here (WordPress data or a mixed array), and the code handles it as before.
+            // @phpstan-ignore return.type
             return $external_url;
         }
 

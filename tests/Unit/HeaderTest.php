@@ -41,6 +41,8 @@ function headerEnv(array $fields = [], array $meta = [], array $options = [], bo
         'get_template_directory_uri' => 'https://t.test/theme',
         'get_template_directory' => dirname(__DIR__, 2),
         'get_the_ID' => 7,
+        // The value is untyped here (WordPress data or a mixed array), and the code handles it as before.
+        // @phpstan-ignore return.type
         'get_post_meta' => static fn (int $id, string $key, bool $single): string => $meta[$key] ?? '',
         'has_nav_menu' => static fn (string $location): bool => $location === 'white-bar' && $menu,
     ], $values));

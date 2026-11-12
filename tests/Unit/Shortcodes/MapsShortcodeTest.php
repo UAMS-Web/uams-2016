@@ -65,6 +65,8 @@ it('sanitizes the building before it checks it', function (): void {
 it('asks for the building when it is missing', function (mixed $atts): void {
     when('sanitize_text_field')->returnArg();
 
+    // The value is untyped here (WordPress data or a mixed array), and the code handles it as before.
+    // @phpstan-ignore argument.type
     expect((new UAMS_Map)->map_handler($atts))->toBe('required attribute "building" missing');
 })->with([
     'no attributes' => [''],

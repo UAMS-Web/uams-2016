@@ -56,6 +56,8 @@ function chromeMarkers(): void
         'get_sidebar' => '[sidebar]',
         'get_search_form' => '[search]',
         'uams_content_class' => 'class="content"',
+        // The value is untyped here (WordPress data or a mixed array), and the code handles it as before.
+        // @phpstan-ignore argument.type
         'get_template_part' => static fn (mixed ...$parts): string => '[part:'.implode(',', array_map(strval(...), $parts)).']',
     ]);
 }

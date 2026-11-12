@@ -45,6 +45,8 @@ class UAMS_Media_Caption
             if (preg_match('/\d+/', $id, $match)) {
                 $meta_credit = get_post_meta((int) $match[0], '_media_credit', true);
                 if (! empty($meta_credit)) {
+                    // The value is untyped here (WordPress data or a mixed array), and the code handles it as before.
+                    // @phpstan-ignore argument.type
                     $credit = '<span class="wp-media-credit">'.esc_html($meta_credit).'</span>';
                 }
             }

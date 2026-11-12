@@ -104,6 +104,8 @@ beforeEach(function (): void {
     when('_e')->alias(static function (string $text): void {
         echo $text;
     });
+    // The value is untyped here (WordPress data or a mixed array), and the code handles it as before.
+    // @phpstan-ignore cast.int
     when('absint')->alias(static fn (mixed $value): int => abs((int) $value));
     when('sanitize_key')->alias(static fn (string $key): string => strtolower($key));
     when('wp_json_encode')->alias(static fn (mixed $value): string => (string) json_encode($value));
@@ -267,6 +269,8 @@ describe('shortcode with a live feed', function (): void {
             ->and($log->getArrayCopy()[1][0])->toBe('set')
             ->and($log->getArrayCopy()[1][1])->toBe('twitter-feed-uams-3')
             ->and($log->getArrayCopy()[1][3])->toBe(60)
+            // The value is untyped here (WordPress data or a mixed array), and the code handles it as before.
+            // @phpstan-ignore argument.type
             ->and(json_decode($log->getArrayCopy()[1][2], true))->toBe([[
                 'author' => 'uams',
                 'img' => 'https://img.test/uams.png',

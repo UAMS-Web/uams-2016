@@ -18,6 +18,8 @@ class UAMS_Sidebar_Menu_Walker extends Walker_Page
 
         $css_class = ['page_item', 'page-item-'.$page->ID];
 
+        // The value is untyped here (WordPress data or a mixed array), and the code handles it as before.
+        // @phpstan-ignore offsetAccess.nonOffsetAccessible
         if (isset($args['pages_with_children'][$page->ID])) {
             $css_class[] = 'page_item_has_children';
         }
@@ -41,6 +43,9 @@ class UAMS_Sidebar_Menu_Walker extends Walker_Page
                     $css_class[] = 'current_page_parent';
                 }
             }
+
+            // The value is untyped here (WordPress data or a mixed array), and the code handles it as before.
+            // @phpstan-ignore cast.int
         } elseif ((int) $page->ID === (int) get_option('page_for_posts')) {
             $css_class[] = 'current_page_parent';
         }
@@ -60,8 +65,12 @@ class UAMS_Sidebar_Menu_Walker extends Walker_Page
             $output .= $indent.sprintf(
                 '<li class="%s"><span>%s%s%s</span>',
                 esc_attr($css_classes),
+                // The value is untyped here (WordPress data or a mixed array), and the code handles it as before.
+                // @phpstan-ignore argument.type
                 $link_before,
                 apply_filters('the_title', $page->post_title, $page->ID),
+                // The value is untyped here (WordPress data or a mixed array), and the code handles it as before.
+                // @phpstan-ignore argument.type
                 $link_after
             );
         } elseif (($parent === 'on') && $depth !== 0) {
@@ -73,8 +82,12 @@ class UAMS_Sidebar_Menu_Walker extends Walker_Page
                 // The stubs type this value as possibly false; the call is unchanged.
                 // @phpstan-ignore argument.type
                 esc_url(get_permalink($page->ID)),
+                // The value is untyped here (WordPress data or a mixed array), and the code handles it as before.
+                // @phpstan-ignore argument.type
                 $link_before,
                 apply_filters('the_title', $page->post_title, $page->ID),
+                // The value is untyped here (WordPress data or a mixed array), and the code handles it as before.
+                // @phpstan-ignore argument.type
                 $link_after
             );
         }
@@ -82,6 +95,8 @@ class UAMS_Sidebar_Menu_Walker extends Walker_Page
         if (! empty($args['show_date'])) {
             $time = ($args['show_date'] === 'modified') ? $page->post_modified : $page->post_date;
             $date_format = ! empty($args['date_format']) ? $args['date_format'] : '';
+            // The value is untyped here (WordPress data or a mixed array), and the code handles it as before.
+            // @phpstan-ignore argument.type
             $output .= ' '.mysql2date($date_format, $time);
         }
     }

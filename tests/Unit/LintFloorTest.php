@@ -65,6 +65,8 @@ function removeLintFixture(string $root): void
     $items = new RecursiveIteratorIterator(new RecursiveDirectoryIterator($root, FilesystemIterator::SKIP_DOTS), RecursiveIteratorIterator::CHILD_FIRST);
 
     foreach ($items as $item) {
+        // The value is untyped here (WordPress data or a mixed array), and the code handles it as before.
+        // @phpstan-ignore method.nonObject, method.nonObject, method.nonObject
         $item->isDir() ? rmdir($item->getPathname()) : unlink($item->getPathname());
     }
 

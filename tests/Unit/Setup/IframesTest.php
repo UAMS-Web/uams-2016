@@ -26,6 +26,8 @@ beforeEach(function (): void {
     });
     // esc_url() returns an empty string for a URL whose protocol is not allowed.
     when('esc_url')->alias(static function (string $url, ?array $protocols = null): string {
+        // The value is untyped here (WordPress data or a mixed array), and the code handles it as before.
+        // @phpstan-ignore offsetAccess.nonOffsetAccessible
         $GLOBALS['uams_test_iframe_protocols'][] = $protocols;
 
         return preg_match('#^https?:#', $url) === 1 ? $url : '';

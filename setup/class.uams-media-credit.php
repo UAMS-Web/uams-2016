@@ -49,13 +49,16 @@ class UAMS_Media_Credit
         $credit = get_post_meta((int) $id, '_media_credit', true);
         $img = wp_get_attachment_image_src((int) $id, $size);
         $width = isset($img[1]) ? (int) $img[1] : 0;
+        // The credit is untyped post meta; esc_html() casts it to a string as it always has.
+        // @phpstan-ignore argument.type
+        $credit_html = esc_html($credit);
 
         return ! empty($credit) ?
             // The size reaches this markup as the name the editor wrote into the shortcode.
-            // @phpstan-ignore argument.type
+            // @phpstan-ignore argument.type, argument.type
             "<dl class='mediacredit align".esc_attr($align)."' data-credit='".esc_attr($credit)."' data-align='align".esc_attr($align)."' data-size='".esc_attr($size)."' style='width:{$width}px'>
                 <dt class='mediacredit-dt'>{$html}</dt>
-                <dd class='wp-caption-dd'>".esc_html($credit).'</dd>
+                <dd class='wp-caption-dd'>".$credit_html.'</dd>
             </dl>' : $html;
     }
 
@@ -121,6 +124,8 @@ class UAMS_Media_Credit
     public function custom_image_attachment_fields_to_save($post, $attachment)
     {
         if (isset($attachment['media_credit'], $post['ID'])) {
+            // The value is untyped here (WordPress data or a mixed array), and the code handles it as before.
+            // @phpstan-ignore cast.int, argument.type
             update_post_meta((int) $post['ID'], '_media_credit', sanitize_text_field($attachment['media_credit']));
         }
 

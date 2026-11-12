@@ -209,6 +209,8 @@ describe('short_user_names', function (): void {
     it('returns the result when the user name error is absent or another message', function (array $errors): void {
         $result = ['errors' => userSignupErrors($errors)];
 
+        // The value is untyped here (WordPress data or a mixed array), and the code handles it as before.
+        // @phpstan-ignore property.nonObject
         expect((new UAMS_Filters)->short_user_names($result)['errors']->errors)->toBe($errors);
     })->with([
         'no user name error' => [['user_email' => ['Bad email.']]],
@@ -223,6 +225,8 @@ describe('short_user_names', function (): void {
 
         $result = (new UAMS_Filters)->short_user_names(['errors' => $errors]);
 
+        // The value is untyped here (WordPress data or a mixed array), and the code handles it as before.
+        // @phpstan-ignore property.nonObject
         expect($result['errors']->errors)->toBe(['user_email' => ['Bad email.']]);
     });
 });

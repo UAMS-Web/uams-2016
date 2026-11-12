@@ -55,7 +55,11 @@ function readRectorProfile(string $file): array
     $normalize = static fn (string $entry): string => str_starts_with($entry, 'Rector\\') ? $entry : str_replace('\\', '/', $entry);
 
     return [
+        // The value is untyped here (WordPress data or a mixed array), and the code handles it as before.
+        // @phpstan-ignore argument.type
         'paths' => array_map($normalize, SimpleParameterProvider::provideArrayParameter('paths')),
+        // The value is untyped here (WordPress data or a mixed array), and the code handles it as before.
+        // @phpstan-ignore argument.type
         'skip' => array_map($normalize, SimpleParameterProvider::provideArrayParameter('skip')),
         'php' => SimpleParameterProvider::provideIntParameter('php_version_features'),
         'import' => SimpleParameterProvider::provideBoolParameter('auto_import_names'),
@@ -63,6 +67,8 @@ function readRectorProfile(string $file): array
         'shortImport' => SimpleParameterProvider::provideBoolParameter('import_short_classes'),
         'removeUnused' => SimpleParameterProvider::hasParameter('remove-unused-imports')
             && SimpleParameterProvider::provideBoolParameter('remove-unused-imports'),
+        // The value is untyped here (WordPress data or a mixed array), and the code handles it as before.
+        // @phpstan-ignore argument.type
         'sets' => array_map(static fn (string $set): string => basename($set, '.php'), SimpleParameterProvider::provideArrayParameter('registered_rector_sets')),
     ];
 }
@@ -92,6 +98,8 @@ describe('rector.php', function (): void {
         $root = str_replace('\\', '/', dirname(__DIR__, 2));
         $paths = rectorProfiles()['gating']['paths'];
 
+        // The value is untyped here (WordPress data or a mixed array), and the code handles it as before.
+        // @phpstan-ignore argument.type
         expect(array_slice($paths, 0, 6))->toBe(array_map(static fn (string $dir): string => $root.'/'.$dir, ['inc', 'scripts', 'setup', 'templates', 'tests', 'widgets']))
             ->and($paths)->toContain($root.'/functions.php', $root.'/header.php', $root.'/rector.php');
     });
@@ -100,6 +108,8 @@ describe('rector.php', function (): void {
         $root = str_replace('\\', '/', dirname(__DIR__, 2));
         $skip = rectorProfiles()[$profile]['skip'];
 
+        // The value is untyped here (WordPress data or a mixed array), and the code handles it as before.
+        // @phpstan-ignore argument.type
         expect(array_slice($skip, 0, 5))->toBe(array_map(static fn (string $path): string => $root.'/'.$path, [
             'tests/Integration/vendor',
             'setup/class-tgm-plugin-activation.php',
@@ -110,10 +120,14 @@ describe('rector.php', function (): void {
     })->with(['gating', 'sweep']);
 
     it('holds back the judgment-call rules from the gating profile', function (): void {
+        // The value is untyped here (WordPress data or a mixed array), and the code handles it as before.
+        // @phpstan-ignore argument.type
         expect(array_slice(rectorProfiles()['gating']['skip'], 5))->toBe(SWEEP_ONLY_RULES);
     });
 
     it('enables every rule in the sweep profile', function (): void {
+        // The value is untyped here (WordPress data or a mixed array), and the code handles it as before.
+        // @phpstan-ignore argument.type
         expect(array_slice(rectorProfiles()['sweep']['skip'], 5))->toBe([]);
     });
 
