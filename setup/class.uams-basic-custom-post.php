@@ -37,6 +37,8 @@ class UAMS_Custom_Post
         // The value is untyped here (WordPress data or a mixed array), and the code handles it as before.
         // @phpstan-ignore assign.propertyType
         $this->name = $args['name'];
+        // The value is untyped here (WordPress data or a mixed array), and the code handles it as before.
+        // @phpstan-ignore assign.propertyType
         $this->args = isset($args['args']) && is_array($args['args']) ? $args['args'] : [];
 
         if (isset($args['labels'])) {

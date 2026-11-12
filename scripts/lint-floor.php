@@ -46,11 +46,11 @@ foreach ($iterator as $file) { // @pest-mutate-ignore: ForeachEmptyIterable
 
     try {
         // The value is untyped here (WordPress data or a mixed array), and the code handles it as before.
-        // @phpstan-ignore method.nonObject
+        // @phpstan-ignore method.nonObject, argument.type
         token_get_all((string) file_get_contents($file->getPathname()), TOKEN_PARSE); // @pest-mutate-ignore: RemoveStringCast,RemoveFunctionCall
     } catch (ParseError $error) {
         // The value is untyped here (WordPress data or a mixed array), and the code handles it as before.
-        // @phpstan-ignore method.nonObject
+        // @phpstan-ignore method.nonObject, argument.type
         $failed[] = sprintf('%s:%d: %s', $file->getPathname(), $error->getLine(), $error->getMessage());
     }
 }

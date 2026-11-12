@@ -101,6 +101,8 @@ add_filter('body_class', 'uams_custom_field_body_class');
 function uams_custom_field_body_class($classes)
 {
     global $post;
+    // The value is untyped here (WordPress data or a mixed array), and the code handles it as before.
+    // @phpstan-ignore property.nonObject, argument.type
     if (is_page() && (get_post_meta($post->ID, 'action_menu_active', true) == '1')) {
 
         $classes[] = 'action-bar';

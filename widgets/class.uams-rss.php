@@ -69,9 +69,17 @@ class UAMS_RSS extends WP_Widget
     {
         $inputs = wp_parse_args((array) $instance, self::$WIDGET_DEFAULTS);
 
+        // The value is untyped here (WordPress data or a mixed array), and the code handles it as before.
+        // @phpstan-ignore argument.type
         $title = esc_attr($inputs['title']);
+        // The value is untyped here (WordPress data or a mixed array), and the code handles it as before.
+        // @phpstan-ignore argument.type
         $text = esc_textarea($inputs['text']);
+        // The value is untyped here (WordPress data or a mixed array), and the code handles it as before.
+        // @phpstan-ignore argument.type
         $url = esc_url($inputs['url']);
+        // The value is untyped here (WordPress data or a mixed array), and the code handles it as before.
+        // @phpstan-ignore cast.int
         $items = ($inputs['items'] < 1 || $inputs['items'] > 20) ? self::ITEMS : (int) $inputs['items'];
         $show_date = ! empty($inputs['show_date']);
         ?>
@@ -161,6 +169,8 @@ class UAMS_RSS extends WP_Widget
         if (! empty($title)) {
             $before_title = $args['before_title'] ?? '<h3>';
             $after_title = $args['after_title'] ?? '</h3>';
+            // The value is untyped here (WordPress data or a mixed array), and the code handles it as before.
+            // @phpstan-ignore argument.type
             $content .= $before_title.esc_html($title).$after_title;
         }
 

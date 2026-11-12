@@ -200,6 +200,8 @@ describe('short_user_names', function (): void {
     });
 
     it('returns a result that carries no error object untouched', function (array $result): void {
+        // The value is untyped here (WordPress data or a mixed array), and the code handles it as before.
+        // @phpstan-ignore argument.type
         expect((new UAMS_Filters)->short_user_names($result))->toBe($result);
     })->with([
         'no errors key' => [['user_name' => 'ab']],
@@ -207,6 +209,8 @@ describe('short_user_names', function (): void {
     ]);
 
     it('returns the result when the user name error is absent or another message', function (array $errors): void {
+        // The value is untyped here (WordPress data or a mixed array), and the code handles it as before.
+        // @phpstan-ignore argument.type
         $result = ['errors' => userSignupErrors($errors)];
 
         // The value is untyped here (WordPress data or a mixed array), and the code handles it as before.

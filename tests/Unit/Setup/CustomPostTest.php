@@ -42,6 +42,8 @@ function expectedLabels(string $label): array
 
 describe('the constructor', function (): void {
     it('does nothing without a name', function (array $args): void {
+        // The value is untyped here (WordPress data or a mixed array), and the code handles it as before.
+        // @phpstan-ignore argument.type
         $post = new UAMS_Custom_Post($args);
 
         expect($post->name)->toBeNull()

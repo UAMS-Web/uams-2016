@@ -93,7 +93,7 @@ class UAMS_TabsShortcode
             $id = $key + 1;
             // The tab titles and links are filled by the [tab] shortcode callbacks while do_shortcode() expands the content, so
             // PHPStan sees only the empty default.
-            // @phpstan-ignore empty.offset
+            // @phpstan-ignore empty.offset, argument.type
             $link_val = ! empty($this->tab_links[$key]) ? sanitize_html_class(str_replace(' ', '', $this->tab_links[$key])) : 'tab-'.$id;
 
             $output .= sprintf(

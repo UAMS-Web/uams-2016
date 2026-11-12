@@ -32,6 +32,8 @@ beforeEach(function (): void {
     when('has_excerpt')->alias(static fn (int $id): bool => $id === 2);
     when('wp_trim_words')->alias(static fn (string $text): string => 'TR{'.$text.'}');
     when('wpautop')->alias(static fn (string $text): string => 'P{'.$text.'}');
+    // The value is untyped here (WordPress data or a mixed array), and the code handles it as before.
+    // @phpstan-ignore binaryOp.invalid
     when('get_the_post_thumbnail')->alias(static fn (int $id, string $size, array $attr): string => 'IMG{'.$id.','.$size.','.$attr['alt'].'}');
     when('get_post_thumbnail_id')->alias(static fn (int $id): int => 90 + $id);
     when('get_post_meta')->alias(static fn (int $id, string $key, bool $single): string => 'alt'.$id.$key.(int) $single);
@@ -141,6 +143,8 @@ describe('update', function (): void {
     });
 
     it('falls back to the defaults for empty settings', function (array $new): void {
+        // The value is untyped here (WordPress data or a mixed array), and the code handles it as before.
+        // @phpstan-ignore argument.type
         $result = (new UAMS_Blogroll)->update($new + ['title' => ''], []);
 
         expect($result['number'])->toBe(2)
@@ -173,6 +177,8 @@ describe('form', function (): void {
     });
 
     it('prints the defaults without settings', function (array $instance): void {
+        // The value is untyped here (WordPress data or a mixed array), and the code handles it as before.
+        // @phpstan-ignore argument.type
         $html = squishWidgetHtml(render(fn () => (new UAMS_Blogroll)->form($instance)));
 
         expect($html)->toContain('type="text" value="A{UAMS Blogroll}"')

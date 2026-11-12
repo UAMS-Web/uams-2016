@@ -131,6 +131,8 @@ describe('install_default_white_bar_menu', function (): void {
         $calls = &$this->calls;
         when('get_theme_mod')->justReturn(['primary' => 3]);
         when('set_theme_mod')->alias(static function (string $name, mixed $value) use (&$calls): void {
+            // The value is untyped here (WordPress data or a mixed array), and the code handles it as before.
+            // @phpstan-ignore offsetAccess.nonOffsetAccessible
             $calls[] = ['theme_mod', $name, $value];
         });
     });
@@ -158,6 +160,8 @@ describe('install_default_white_bar_menu', function (): void {
             return 7;
         });
         when('wp_update_nav_menu_item')->alias(static function (int $menu, int $item, array $attributes) use (&$calls, &$next): int {
+            // The value is untyped here (WordPress data or a mixed array), and the code handles it as before.
+            // @phpstan-ignore offsetAccess.nonOffsetAccessible
             $calls[] = ['item', $menu, $item, $attributes];
 
             return $next++;
@@ -188,6 +192,8 @@ describe('install_default_white_bar_menu', function (): void {
         $calls = &$this->calls;
         when('wp_create_nav_menu')->justReturn(7);
         when('wp_update_nav_menu_item')->alias(static function (int $menu, int $item, array $attributes) use (&$calls): WP_Error|int {
+            // The value is untyped here (WordPress data or a mixed array), and the code handles it as before.
+            // @phpstan-ignore offsetAccess.nonOffsetAccessible
             $calls[] = $attributes['menu-item-title'];
 
             return $attributes['menu-item-title'] === 'About' ? new WP_Error : 1;

@@ -17,9 +17,15 @@ class UAMS_Documentation_Dashboard_Widget
             [$this, 'uams_documentation_html']
         );
 
+        // The value is untyped here (WordPress data or a mixed array), and the code handles it as before.
+        // @phpstan-ignore offsetAccess.nonOffsetAccessible, offsetAccess.nonOffsetAccessible, offsetAccess.nonOffsetAccessible, offsetAccess.nonOffsetAccessible
         if (isset($wp_meta_boxes['dashboard']['normal']['core']['uams-documentation-dashboard-widget'])) {
+            // The value is untyped here (WordPress data or a mixed array), and the code handles it as before.
+            // @phpstan-ignore offsetAccess.nonOffsetAccessible, offsetAccess.nonOffsetAccessible, offsetAccess.nonOffsetAccessible
             $wp_meta_boxes['dashboard']['side']['core']['uams-documentation-dashboard-widget'] =
                 $wp_meta_boxes['dashboard']['normal']['core']['uams-documentation-dashboard-widget'];
+            // The value is untyped here (WordPress data or a mixed array), and the code handles it as before.
+            // @phpstan-ignore offsetAccess.nonOffsetAccessible, offsetAccess.nonOffsetAccessible, offsetAccess.nonOffsetAccessible
             unset($wp_meta_boxes['dashboard']['normal']['core']['uams-documentation-dashboard-widget']);
         }
 

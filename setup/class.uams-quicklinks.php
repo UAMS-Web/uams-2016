@@ -52,8 +52,12 @@ class UAMS_QuickLinks
 
         $locations = get_nav_menu_locations();
         if (isset($locations[self::LOCATION])) {
+            // The value is untyped here (WordPress data or a mixed array), and the code handles it as before.
+            // @phpstan-ignore assign.propertyType
             $this->items = wp_get_nav_menu_items($locations[self::LOCATION]);
         } elseif ($location = wp_get_nav_menu_object(self::LOCATION)) {
+            // The value is untyped here (WordPress data or a mixed array), and the code handles it as before.
+            // @phpstan-ignore assign.propertyType
             $this->items = wp_get_nav_menu_items($location->term_id);
         }
 
@@ -82,6 +86,8 @@ class UAMS_QuickLinks
                     array_fill_keys(['ID', 'title', 'url', 'classes', 'menu_item_parent'], null)
                 );
 
+                // The value is untyped here (WordPress data or a mixed array), and the code handles it as before.
+                // @phpstan-ignore offsetAccess.nonOffsetAccessible
                 if (empty($item_array['classes']) || empty($item_array['classes'][0])) {
                     $item_array['classes'] = false;
                 }

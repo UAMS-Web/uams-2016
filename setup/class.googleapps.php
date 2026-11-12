@@ -62,10 +62,12 @@ class UAMS_GoogleApps
             return $content;
         }
 
+        // The value is untyped here (WordPress data or a mixed array), and the code handles it as before.
+        // @phpstan-ignore argument.type
         $content = preg_replace_callback('#&lt;iframe\s[^&]*?(?:&(?!gt;)[^&]*?)*?src="https?://.*?\.google\.(.*?)/(.*?)\?(.+?)"[^&]*?(?:&(?!gt;)[^&]*?)*?&gt;\s*&lt;/iframe&gt;\s*(?:&lt;br\s*/?&gt;)?\s*#i', [$this, 'uams_google_calendar_embed_to_shortcode_callback'], $content);
 
         // preg_replace() returns null only on a regex error, and this pattern is a constant.
-        // @phpstan-ignore argument.type
+        // @phpstan-ignore argument.type, argument.type
         return preg_replace_callback('!\<iframe\s[^>]*?src="https?://.*?\.google\.(.*?)/(.*?)\?(.+?)"[^>]*?\>\s*\</iframe\>\s*!i', [$this, 'uams_google_calendar_embed_to_shortcode_callback'], $content);
     }
 

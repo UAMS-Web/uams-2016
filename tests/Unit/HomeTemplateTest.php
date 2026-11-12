@@ -116,6 +116,8 @@ describe('template-home.php', function (): void {
 
         it('prints a slide per row, the first active, with its images, colour, text and link', function () use ($setup): void {
             $s = $setup();
+            // The value is untyped here (WordPress data or a mixed array), and the code handles it as before.
+            // @phpstan-ignore argument.type, argument.type
             homeEnv(fields: $s['fields'], rows: $s['rows']);
             $html = renderTemplate('templates/template-home.php');
 
@@ -131,6 +133,8 @@ describe('template-home.php', function (): void {
 
         it('uses the desktop image on mobile when a slide has no mobile image, and the external link when it is set', function () use ($setup): void {
             $s = $setup();
+            // The value is untyped here (WordPress data or a mixed array), and the code handles it as before.
+            // @phpstan-ignore argument.type, argument.type
             homeEnv(fields: $s['fields'], rows: $s['rows']);
             $html = renderTemplate('templates/template-home.php');
 
@@ -141,6 +145,8 @@ describe('template-home.php', function (): void {
 
         it('prints the slide controls in the first slide colour when there is more than one slide', function () use ($setup): void {
             $s = $setup();
+            // The value is untyped here (WordPress data or a mixed array), and the code handles it as before.
+            // @phpstan-ignore argument.type, argument.type
             homeEnv(fields: $s['fields'], rows: $s['rows']);
 
             expect(renderTemplate('templates/template-home.php'))->toContain('<div class="slideshow-controls A{darktext}"> <button class="next-headline">');
@@ -159,12 +165,16 @@ describe('template-home.php', function (): void {
 
         it('enqueues the slider script with its dependencies before the footer', function () use ($setup): void {
             $s = $setup();
+            // The value is untyped here (WordPress data or a mixed array), and the code handles it as before.
+            // @phpstan-ignore argument.type, argument.type
             homeEnv(fields: $s['fields'], rows: $s['rows']);
 
             expect(renderTemplate('templates/template-home.php'))->toEndWith('[enqueue:home-slider-script|https://t.test/theme/js/home-slider.js|[jquery]|1.1|1][footer]');
         });
 
         it('prints the hero banner instead when the slider is off, empty or the field plugin is missing', function (string $slider, array $rows, bool $acf): void {
+            // The value is untyped here (WordPress data or a mixed array), and the code handles it as before.
+            // @phpstan-ignore argument.type
             homeEnv(fields: ['home_page_slider' => $slider], rows: $rows);
             $acf ?: stubFunctionExists(['get_field' => false, 'have_rows' => false]);
             $html = renderTemplate('templates/template-home.php');

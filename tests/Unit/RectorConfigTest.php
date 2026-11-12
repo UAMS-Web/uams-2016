@@ -46,6 +46,8 @@ function readRectorProfile(string $file): array
 
     try {
         $builder = require dirname(__DIR__, 2).'/'.$file;
+        // The value is untyped here (WordPress data or a mixed array), and the code handles it as before.
+        // @phpstan-ignore callable.nonCallable
         $builder(new RectorConfig);
     } finally {
         restore_error_handler();

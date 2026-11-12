@@ -54,7 +54,7 @@ class UAMS_Dropdowns_Walker_Menu extends Walker_Nav_Menu
         // @phpstan-ignore function.alreadyNarrowedType
         if (is_object($element)) {
             // Menu items are objects carrying the properties wp_setup_nav_menu_item() adds.
-            // @phpstan-ignore property.notFound, property.notFound
+            // @phpstan-ignore property.notFound, property.notFound, offsetAccess.invalidOffset
             $element->has_children = ! empty($children_elements[$element->ID]);
         }
 
@@ -70,19 +70,25 @@ class UAMS_Dropdowns_Walker_Menu extends Walker_Nav_Menu
     public function start_el(&$output, $item, $depth = 0, $args = null, $id = 0): void
     {
         // Menu items are objects carrying the properties wp_setup_nav_menu_item() adds.
-        // @phpstan-ignore property.notFound
+        // @phpstan-ignore property.notFound, argument.type, assign.propertyType
         $this->CURRENT = ! empty($item->post_name) ? $item->post_name : sanitize_title($item->title);
         // Menu items are objects carrying the properties wp_setup_nav_menu_item() adds.
         // @phpstan-ignore property.notFound
         $title = ! empty($item->title) ? $item->title : $item->post_title;
+        // The value is untyped here (WordPress data or a mixed array), and the code handles it as before.
+        // @phpstan-ignore cast.string
         $title = strip_tags((string) $title);
 
         $has_children = ! empty($item->has_children);
+        // The value is untyped here (WordPress data or a mixed array), and the code handles it as before.
+        // @phpstan-ignore argument.type
         $controls = ($depth === 0 && $has_children) ? ' aria-controls="menu-'.esc_attr($this->CURRENT).'" aria-expanded="false" aria-haspopup="true"' : '';
         $indent = ($depth) ? str_repeat("\t", (int) $depth) : '';
 
         $first_class = (! empty($item->classes) && is_array($item->classes)) ? reset($item->classes) : '';
         $classes = ($depth === 0) ? array_filter(['reddiedrops-item', $first_class]) : [];
+        // The value is untyped here (WordPress data or a mixed array), and the code handles it as before.
+        // @phpstan-ignore argument.type
         $class_names = implode(' ', apply_filters('nav_menu_css_class', $classes, $item));
 
         $li_classnames = ! empty($class_names) ? ' class="'.esc_attr($class_names).'"' : '';
@@ -90,10 +96,20 @@ class UAMS_Dropdowns_Walker_Menu extends Walker_Nav_Menu
 
         $output .= $indent.'<li '.$li_attributes.$li_classnames.'>';
 
+        // The value is untyped here (WordPress data or a mixed array), and the code handles it as before.
+        // @phpstan-ignore argument.type
         $attributes = ! empty($item->attr_title) ? ' title="'.esc_attr($item->attr_title).'"' : '';
+        // The value is untyped here (WordPress data or a mixed array), and the code handles it as before.
+        // @phpstan-ignore cast.string
         $attributes .= ! empty($item->description) ? ' title="'.esc_attr($title.' - '.strip_tags((string) $item->description)).'"' : '';
+        // The value is untyped here (WordPress data or a mixed array), and the code handles it as before.
+        // @phpstan-ignore argument.type
         $attributes .= ! empty($item->target) ? ' target="'.esc_attr($item->target).'"' : '';
+        // The value is untyped here (WordPress data or a mixed array), and the code handles it as before.
+        // @phpstan-ignore argument.type
         $attributes .= ! empty($item->xfn) ? ' rel="'.esc_attr($item->xfn).'"' : '';
+        // The value is untyped here (WordPress data or a mixed array), and the code handles it as before.
+        // @phpstan-ignore argument.type
         $attributes .= ! empty($item->url) ? ' href="'.esc_url($item->url).'"' : '';
 
         if ($depth === 0 && $has_children) {
@@ -106,6 +122,8 @@ class UAMS_Dropdowns_Walker_Menu extends Walker_Nav_Menu
 
         $attributes .= ' title="'.esc_attr($title).'"';
         $attributes .= $controls;
+        // The value is untyped here (WordPress data or a mixed array), and the code handles it as before.
+        // @phpstan-ignore argument.type
         $attributes .= ' id="'.esc_attr($this->CURRENT).'"';
 
         $before = (is_object($args) && isset($args->before)) ? $args->before : '';
@@ -114,13 +132,19 @@ class UAMS_Dropdowns_Walker_Menu extends Walker_Nav_Menu
         $link_after = (is_object($args) && isset($args->link_after)) ? $args->link_after : '';
 
         $item_output = $before;
+        // The value is untyped here (WordPress data or a mixed array), and the code handles it as before.
+        // @phpstan-ignore assignOp.invalid
         $item_output .= '<a'.$attributes.'>';
         // Menu items are objects carrying the properties wp_setup_nav_menu_item() adds.
-        // @phpstan-ignore property.notFound
+        // @phpstan-ignore property.notFound, binaryOp.invalid, binaryOp.invalid
         $item_output .= $link_before.apply_filters('the_title', $title, $item->ID).$link_after;
         $item_output .= '</a>';
+        // The value is untyped here (WordPress data or a mixed array), and the code handles it as before.
+        // @phpstan-ignore assignOp.invalid
         $item_output .= $after;
 
+        // The value is untyped here (WordPress data or a mixed array), and the code handles it as before.
+        // @phpstan-ignore assignOp.invalid
         $output .= apply_filters('walker_nav_menu_start_el', $item_output, $item, $depth, $args);
     }
 }

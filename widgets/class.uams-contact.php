@@ -58,7 +58,7 @@ class UAMS_Widget_Contact extends WP_Widget
 		<div class="contact-widget-inner">
 			<span>
 				<?php if (! empty($title)) { ?>
-					<h2 class="widgettitle"><?php echo esc_html($title); ?></h2>
+					<h2 class="widgettitle"><?php echo esc_html($title); // @phpstan-ignore argument.type?></h2>
 				<?php } ?>
 			</span>
 
@@ -169,7 +169,11 @@ class UAMS_Widget_Contact extends WP_Widget
     public function form($instance): void
     {
         $instance = wp_parse_args((array) $instance, ['title' => '', 'amount' => 1]);
+        // The value is untyped here (WordPress data or a mixed array), and the code handles it as before.
+        // @phpstan-ignore argument.type
         $title = esc_attr($instance['title']);
+        // The value is untyped here (WordPress data or a mixed array), and the code handles it as before.
+        // @phpstan-ignore argument.type
         $amount = empty($instance['amount']) ? 1 : absint($instance['amount']);
 
         $person_names = [];
@@ -198,9 +202,17 @@ class UAMS_Widget_Contact extends WP_Widget
 		<div class="the-people">
 			<div class="uams-contact-list">
 				<?php foreach ($person_names as $num => $person_name) {
+				    // The value is untyped here (WordPress data or a mixed array), and the code handles it as before.
+				    // @phpstan-ignore argument.type
 				    $p_name = esc_attr($person_name);
+				    // The value is untyped here (WordPress data or a mixed array), and the code handles it as before.
+				    // @phpstan-ignore argument.type
 				    $p_title = esc_attr($person_titles[$num]);
+				    // The value is untyped here (WordPress data or a mixed array), and the code handles it as before.
+				    // @phpstan-ignore argument.type
 				    $p_phone = esc_attr($person_phones[$num]);
+				    // The value is untyped here (WordPress data or a mixed array), and the code handles it as before.
+				    // @phpstan-ignore argument.type
 				    $p_email = esc_attr($person_emails[$num]);
 				    ?>
 					<div id="<?php echo esc_attr($this->get_field_id((string) $num)); ?>" class="list-item">

@@ -66,7 +66,7 @@ function removeLintFixture(string $root): void
 
     foreach ($items as $item) {
         // The value is untyped here (WordPress data or a mixed array), and the code handles it as before.
-        // @phpstan-ignore method.nonObject, method.nonObject, method.nonObject
+        // @phpstan-ignore method.nonObject, method.nonObject, method.nonObject, argument.type, argument.type
         $item->isDir() ? rmdir($item->getPathname()) : unlink($item->getPathname());
     }
 

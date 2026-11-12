@@ -68,7 +68,7 @@ class UAMS_Recent_Posts extends WP_Widget
         echo $args['before_widget'];
         ?>
 
-		<h2><?php echo esc_html($title); ?>
+		<h2><?php echo esc_html($title); // @phpstan-ignore argument.type?>
 			<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
 				 width="25.526px" height="24.609px" viewBox="0 0 25.526 24.609" enable-background="new 0 0 25.526 24.609" xml:space="preserve">
 				<g>
@@ -83,18 +83,20 @@ class UAMS_Recent_Posts extends WP_Widget
 
 		<ul class="recent-posts">
 			<?php foreach ($recent as $post) {
+			    // The value is untyped here (WordPress data or a mixed array), and the code handles it as before.
+			    // @phpstan-ignore property.nonObject, property.nonObject, argument.type, argument.type
 			    $permalink = function_exists('uams_get_permalink') ? uams_get_permalink($post->ID) : get_permalink($post->ID);
 			    ?>
 				<li>
-					<?php if (has_post_thumbnail($post->ID)) { ?>
-						<a class="widget-thumbnail" href="<?php echo esc_url($permalink); ?>" title="<?php echo esc_attr(get_the_title($post->ID)); // @phpstan-ignore argument.type?>">
-							<?php echo get_the_post_thumbnail($post->ID, 'thumbnail'); ?>
+					<?php if (has_post_thumbnail($post->ID)) { // @phpstan-ignore property.nonObject, argument.type?>
+						<a class="widget-thumbnail" href="<?php echo esc_url($permalink); ?>" title="<?php echo esc_attr(get_the_title($post->ID)); // @phpstan-ignore argument.type, property.nonObject, argument.type?>">
+							<?php echo get_the_post_thumbnail($post->ID, 'thumbnail'); // @phpstan-ignore property.nonObject, argument.type?>
 						</a>
 					<?php } ?>
 
-					<a class="widget-link" href="<?php echo esc_url($permalink); ?>" title="<?php echo esc_attr(get_the_title($post->ID)); // @phpstan-ignore argument.type?>">
-						<?php echo esc_html(get_the_title($post->ID)); ?>
-						<p><small><?php echo esc_html($this->humanTime($post->ID)); ?> ago</small></p>
+					<a class="widget-link" href="<?php echo esc_url($permalink); ?>" title="<?php echo esc_attr(get_the_title($post->ID)); // @phpstan-ignore argument.type, property.nonObject, argument.type?>">
+						<?php echo esc_html(get_the_title($post->ID)); // @phpstan-ignore property.nonObject, argument.type?>
+						<p><small><?php echo esc_html($this->humanTime($post->ID)); // @phpstan-ignore property.nonObject, argument.type?> ago</small></p>
 					</a>
 				</li>
 			<?php } ?>

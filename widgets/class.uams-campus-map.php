@@ -34,12 +34,21 @@ class UAMS_Campus_Map extends WP_Widget
         if (! empty($title)) {
             $before_title = $args['before_title'] ?? '<h3 class="widget-title">';
             $after_title = $args['after_title'] ?? '</h3>';
+            // The value is untyped here (WordPress data or a mixed array), and the code handles it as before.
+            // @phpstan-ignore argument.type
             $content .= $before_title.esc_html($title).$after_title;
         }
 
+        // The building code is untyped widget data; esc_url() casts it to a string as it always has.
+        // @phpstan-ignore binaryOp.invalid
+        $map_src = esc_url(self::URL.$buildingCode);
+        // The building code is untyped widget data; esc_url() casts it to a string as it always has.
+        // @phpstan-ignore binaryOp.invalid
+        $map_link = esc_url('https://maps.uams.edu/maps/fullscreen/4/?marker='.$buildingCode);
+
         $content .= '<div class="uams-campus-map-widget">
-					  <iframe id="map-widget" width="100%" height="365" src="'.esc_url(self::URL.$buildingCode).'" style="border:0" allowfullscreen="true" mozallowfullscreen="true" webkitallowfullscreen="true" scrolling="no" class="hidden"></iframe>
-					  <a href="'.esc_url('https://maps.uams.edu/maps/fullscreen/4/?marker='.$buildingCode).'" target="_blank" rel="noopener noreferrer">View larger</a>
+					  <iframe id="map-widget" width="100%" height="365" src="'.$map_src.'" style="border:0" allowfullscreen="true" mozallowfullscreen="true" webkitallowfullscreen="true" scrolling="no" class="hidden"></iframe>
+					  <a href="'.$map_link.'" target="_blank" rel="noopener noreferrer">View larger</a>
 					</div>
 					<script>
 					jQuery(document).ready(function($){

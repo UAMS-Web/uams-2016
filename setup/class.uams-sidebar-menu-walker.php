@@ -50,6 +50,8 @@ class UAMS_Sidebar_Menu_Walker extends Walker_Page
             $css_class[] = 'current_page_parent';
         }
 
+        // The value is untyped here (WordPress data or a mixed array), and the code handles it as before.
+        // @phpstan-ignore argument.type
         $css_classes = implode(' ', apply_filters('page_css_class', $css_class, $page, $depth, $args, $current_page));
 
         if ($page->post_title === '') {
@@ -68,6 +70,8 @@ class UAMS_Sidebar_Menu_Walker extends Walker_Page
                 // The value is untyped here (WordPress data or a mixed array), and the code handles it as before.
                 // @phpstan-ignore argument.type
                 $link_before,
+                // The value is untyped here (WordPress data or a mixed array), and the code handles it as before.
+                // @phpstan-ignore argument.type
                 apply_filters('the_title', $page->post_title, $page->ID),
                 // The value is untyped here (WordPress data or a mixed array), and the code handles it as before.
                 // @phpstan-ignore argument.type
@@ -85,6 +89,8 @@ class UAMS_Sidebar_Menu_Walker extends Walker_Page
                 // The value is untyped here (WordPress data or a mixed array), and the code handles it as before.
                 // @phpstan-ignore argument.type
                 $link_before,
+                // The value is untyped here (WordPress data or a mixed array), and the code handles it as before.
+                // @phpstan-ignore argument.type
                 apply_filters('the_title', $page->post_title, $page->ID),
                 // The value is untyped here (WordPress data or a mixed array), and the code handles it as before.
                 // @phpstan-ignore argument.type

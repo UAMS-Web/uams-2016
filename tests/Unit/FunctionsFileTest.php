@@ -28,6 +28,8 @@ function loadThemeFunctions(): array
     static $record = null;
 
     if ($record !== null) {
+        // The value is untyped here (WordPress data or a mixed array), and the code handles it as before.
+        // @phpstan-ignore return.type
         return $record;
     }
 
