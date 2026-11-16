@@ -52,7 +52,7 @@ Download the [UAMS 2016 theme](https://github.com/UAMS-Web/uams-2016/archive/mas
 ## Running the tests ##
  - - - -
 
-The theme supports PHP 8.2 and later (`Requires PHP` in the style sheet header, `require.php` in `composer.json`). Development runs on PHP 8.4, pinned in `config.platform.php`. The tools in `composer.json` are for development only and are not part of the deployed theme.
+The theme supports WordPress 6.8 and later (`Requires at least` in the style sheet header, and the `php-stubs/wordpress-stubs` line locked at `6.8.x`). The theme supports PHP 8.2 and later (`Requires PHP` in the style sheet header, `require.php` in `composer.json`). Development runs on PHP 8.4, pinned in `config.platform.php`. The tools in `composer.json` are for development only and are not part of the deployed theme.
 
 There are two suites, each in its own process:
 

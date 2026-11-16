@@ -87,16 +87,17 @@ test.describe('less', () => {
   test('the stylesheet carries the theme header from less/style.less', () => {
     const css = read(dir, 'style.css');
     assert.match(css, /^\/\*!\nTheme Name: UAMS 2016\n/);
-    assert.match(css, /\nVersion: 0\.9\nRequires PHP: 8\.2\n \*\/\n/);
+    assert.match(css, /\nVersion: 0\.9\nRequires at least: 6\.8\nRequires PHP: 8\.2\n \*\/\n/);
   });
 
   // The committed stylesheets differ from a fresh build today. Each difference is written out
   // below as an exact edit to the fresh build, so any other change to a committed stylesheet
   // or to the build output fails, and fixing a difference means deleting its entry.
-  test('style.dev.css and uams.css lack only the Requires PHP header line', () => {
+  test('style.dev.css and uams.css lack only the Requires at least and Requires PHP header lines', () => {
     const built = read(dir, 'style.css');
     assert.equal(built.split('Requires PHP: 8.2\n').length, 2, 'one header line expected');
-    const expected = built.replace('Requires PHP: 8.2\n', '');
+    assert.equal(built.split('Requires at least: 6.8\n').length, 2, 'one minimum-version line expected');
+    const expected = built.replace('Requires at least: 6.8\n', '').replace('Requires PHP: 8.2\n', '');
     assert.equal(readCommitted('style.dev.css'), expected);
     assert.equal(readCommitted('uams.css'), expected);
   });
