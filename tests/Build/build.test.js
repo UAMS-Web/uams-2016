@@ -171,8 +171,8 @@ test.describe('concat and uglify', () => {
 
   test('concat.dist.src runs from the intro, libraries and theme modules to the outro', () => {
     const src = concatSources();
-    assert.equal(src[0], 'js/uams.intro.js');
-    assert.equal(src[src.length - 1], 'js/uams.outro.js');
+    assert.equal(src[0], 'js/uams.intro.part');
+    assert.equal(src[src.length - 1], 'js/uams.outro.part');
     assert.deepEqual(src.slice(1, -1), [...config.get('concat.dist.libraries'), ...config.get('concat.dist.theme')]);
   });
 
