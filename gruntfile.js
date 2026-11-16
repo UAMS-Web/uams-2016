@@ -40,7 +40,7 @@ module.exports = function(grunt) {
         components : [
           // todo: put just external components here for the uams.js we will give out
         ],
-        src: [ 'js/uams.intro.js', '<%= concat.dist.libraries %>', '<%= concat.dist.theme %>', 'js/uams.outro.js' ],
+        src: [ 'js/uams.intro.part', '<%= concat.dist.libraries %>', '<%= concat.dist.theme %>', 'js/uams.outro.part' ],
         dest: 'js/site.dev.js'
       }
     },

@@ -1786,11 +1786,11 @@
 		"outputStyle": 1,
 		"syntaxCheckerStyle": 1
 		},
-	"\/js\/uams.intro.js": {
+	"\/js\/uams.intro.part": {
 		"fileType": 64,
 		"ignore": 0,
 		"ignoreWasSetByUser": 0,
-		"inputAbbreviatedPath": "\/js\/uams.intro.js",
+		"inputAbbreviatedPath": "\/js\/uams.intro.part",
 		"outputAbbreviatedPath": "\/js\/min\/uams.intro-min.js",
 		"outputPathIsOutsideProject": 0,
 		"outputPathIsSetByUser": 0,
@@ -1819,11 +1819,11 @@
 		"outputStyle": 1,
 		"syntaxCheckerStyle": 1
 		},
-	"\/js\/uams.outro.js": {
+	"\/js\/uams.outro.part": {
 		"fileType": 64,
 		"ignore": 0,
 		"ignoreWasSetByUser": 0,
-		"inputAbbreviatedPath": "\/js\/uams.outro.js",
+		"inputAbbreviatedPath": "\/js\/uams.outro.part",
 		"outputAbbreviatedPath": "\/js\/min\/uams.outro-min.js",
 		"outputPathIsOutsideProject": 0,
 		"outputPathIsSetByUser": 0,

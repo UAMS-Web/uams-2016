@@ -3955,7 +3955,7 @@
 		"sC": 1,
 		"tS": 0
 		},
-	"\/js\/uams.intro.js": {
+	"\/js\/uams.intro.part": {
 		"ft": 64,
 		"mi": 1,
 		"oA": 0,
@@ -3982,7 +3982,7 @@
 		"sC": 1,
 		"tS": 0
 		},
-	"\/js\/uams.outro.js": {
+	"\/js\/uams.outro.part": {
 		"ft": 64,
 		"mi": 1,
 		"oA": 0,
