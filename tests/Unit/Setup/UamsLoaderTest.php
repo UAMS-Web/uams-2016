@@ -101,8 +101,7 @@ it('requires the optional files that exist after the setup files', function (): 
     $loaded = $GLOBALS['uams_test_loaded'];
     // The value is untyped here (WordPress data or a mixed array), and the code handles it as before.
     // @phpstan-ignore argument.type
-    expect(array_slice($loaded, 24, 5))->toBe([
-        'setup/class.uams-page-attributes-meta-box.php',
+    expect(array_slice($loaded, 26, 4))->toBe([
         'setup/custom-post-types.php',
         'setup/class.uams-acf.php',
         'inc/template-functions.php',

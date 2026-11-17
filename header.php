@@ -82,23 +82,8 @@ $gtmvalue = ! empty($gtm) ? esc_attr($gtm) : 'GTM-NGG4P7F';
         <![endif]-->
 
         <?php
-// The stubs type this value as possibly false; the call is unchanged.
-// @phpstan-ignore argument.type
-$page_js = get_post_meta(get_the_ID(), 'javascript', true);
-// The stubs type this value as possibly false; the call is unchanged.
-// @phpstan-ignore argument.type
-$page_css = get_post_meta(get_the_ID(), 'css', true);
-if (! empty($page_js)) {
-    // The value is untyped here (WordPress data or a mixed array), and the code handles it as before.
-    // @phpstan-ignore echo.nonString
-    echo $page_js;
-}
-if (! empty($page_css)) {
-    // The value is untyped here (WordPress data or a mixed array), and the code handles it as before.
-    // @phpstan-ignore echo.nonString
-    echo $page_css;
-}
-
+// Raw markup by design: the Custom CSS/JS field holds script and style tags. Only a user with
+// `unfiltered_html` can write it (setup/class.uams-page-scripts.php).
 // The stubs type this value as possibly false; the call is unchanged.
 // @phpstan-ignore argument.type
 $custom_header_script = get_post_meta(get_the_ID(), 'custom_header_script', true);

@@ -164,12 +164,17 @@ it('enqueues the admin styles and script', function (): void {
     when('wp_enqueue_script')->alias(static function (mixed ...$args) use (&$calls): void {
         $calls[] = ['script', ...$args];
     });
+    when('wp_create_nonce')->alias(static fn (string $action): string => "nonce:{$action}");
+    when('wp_localize_script')->alias(static function (mixed ...$args) use (&$calls): void {
+        $calls[] = ['localize', ...$args];
+    });
 
     UAMS_Widget_Conditions::widget_admin_setup();
 
     expect($calls)->toBe([
         ['style', 'widget-conditions', 'https://site.test/theme/assets/admin/css/uams.widget-conditions.css'],
         ['script', 'widget-conditions', 'https://site.test/theme/assets/admin/js/uams.widget-conditions.js', ['jquery', 'jquery-ui-core'], '20140422', true],
+        ['localize', 'widget-conditions', 'uamsWidgetConditions', ['nonce' => 'nonce:widget-conditions-options']],
         ['style', 'widget-cards', 'https://site.test/theme/assets/admin/css/uams.widgets-misc.css'],
     ]);
 });
@@ -671,7 +676,17 @@ describe('widget_conditions_options', function (): void {
         });
     });
 
+    it('checks the nonce before anything else', function (): void {
+        Brain\Monkey\Functions\expect('check_ajax_referer')->once()->with('widget-conditions-options')->andThrow(new RuntimeException('bad nonce'));
+        Brain\Monkey\Functions\expect('current_user_can')->never();
+
+        expect(static fn () => UAMS_Widget_Conditions::widget_conditions_options())->toThrow(RuntimeException::class, 'bad nonce');
+    });
+
     it('prints the options for the requested rule and ends the request', function (): void {
+        when('check_ajax_referer')->justReturn(1);
+        when('current_user_can')->justReturn(true);
+
         $_REQUEST = ['major' => 'date', 'minor' => 'day'];
 
         $html = squishWidgetHtml(render(fn () => UAMS_Widget_Conditions::widget_conditions_options()));
@@ -681,10 +696,25 @@ describe('widget_conditions_options', function (): void {
     });
 
     it('defaults to no rule', function (): void {
+        when('check_ajax_referer')->justReturn(1);
+        when('current_user_can')->justReturn(true);
+
         $html = render(fn () => UAMS_Widget_Conditions::widget_conditions_options());
 
         expect($html)->toBe('')
             ->and($this->died)->toBe(1);
+    });
+});
+
+describe('widget_conditions_options authorization', function (): void {
+    it('refuses a user who cannot manage widgets, before any option is read', function (): void {
+        when('check_ajax_referer')->justReturn(1);
+        $_REQUEST = ['major' => 'author'];
+        Brain\Monkey\Functions\expect('current_user_can')->once()->with('edit_theme_options')->andReturn(false);
+        Brain\Monkey\Functions\expect('wp_die')->once()->with('-1', 403)->andThrow(new RuntimeException('refused'));
+        Brain\Monkey\Functions\expect('get_users')->never();
+
+        expect(static fn () => UAMS_Widget_Conditions::widget_conditions_options())->toThrow(RuntimeException::class, 'refused');
     });
 });
 

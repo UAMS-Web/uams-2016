@@ -35,6 +35,7 @@ const UAMS_LOADER_CLASSES = [
     'Enclosure' => ['UAMS_Enclosure', 'class.uams-enclosure.php'],
     'Carousel' => ['UAMS_Carousel', 'class.uams-carousel.php'],
     'Settings' => ['UAMS_Settings', 'class.uams-settings.php'],
+    'PageScripts' => ['UAMS_Page_Scripts', 'class.uams-page-scripts.php'],
 ];
 
 /**
@@ -48,7 +49,7 @@ const UAMS_LOADER_FILES = [
     'class.uams-iframes.php', 'class.uams-shortcodes.php', 'class.uams-media-credit.php',
     'class.uams-media-caption.php', 'class.uams-replace-media.php', 'class.uams-tinymce.php',
     'class.uams-enclosure.php', 'class.uams-carousel.php', 'class.uams-settings.php',
-    'class.uams-page-attributes-meta-box.php',
+    'class.uams-page-attributes-meta-box.php', 'class.uams-page-scripts.php',
 ];
 
 /**
