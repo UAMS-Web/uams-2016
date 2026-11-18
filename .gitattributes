@@ -33,6 +33,8 @@
 /_includes -export-ignore
 /assets -export-ignore
 /docs -export-ignore
+# The wiki pages are published to the GitHub wiki, not run by the theme.
+/docs/wiki export-ignore
 /inc -export-ignore
 /js -export-ignore
 /plugins -export-ignore
