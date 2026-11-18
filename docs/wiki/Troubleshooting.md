@@ -18,13 +18,13 @@ Written against v1.3.0.8.
 
 **Cause:** the site has no YouTube API key, so the theme sends no request to YouTube and the space stays empty.
 
-**Fix:** define `UAMS_YOUTUBE_API_KEY` in `wp-config.php`, as [Setting the YouTube API key](Setting-the-YouTube-API-key.md) describes. Also check that `type` is `single` or `playlist` and that `id` is set; both are required.
+**Fix:** define `UAMS_YOUTUBE_API_KEY` in `wp-config.php`, as the [README's YouTube section](https://github.com/UAMS-Web/uams-2016/blob/master/README.md#youtube) describes. Also check that `type` is `single` or `playlist` and that `id` is set; both are required.
 
 ## An iframe shortcode shows nothing
 
 **Cause:** the address is not on the theme's list of allowed domains, or it is not `http` or `https`. The host must match an entry exactly, so `https://subdomain.example.com/` is refused when only `example.com` is listed.
 
-**Fix:** use an address on an allowed host. Adding a host is a change to the theme; see [Shortcodes: iFrame](Shortcodes.md#iframe) for where the list is kept.
+**Fix:** use an address on an allowed host. Adding a host is a change to the theme; the list is `get_iframe_domains()` in [`setup/class.uams-iframes.php`](https://github.com/UAMS-Web/uams-2016/blob/master/setup/class.uams-iframes.php).
 
 ## The map shortcode shows an error
 
@@ -32,7 +32,7 @@ The page shows `required attribute "building" missing` or `Building "<code>" is 
 
 **Cause:** `[map]` has no `building` attribute, or its code is not one the theme knows.
 
-**Fix:** set `building` to a code from the list linked under [Shortcodes: Map](Shortcodes.md#map).
+**Fix:** set `building` to a code from the list in [`setup/class.maps-shortcode.php`](https://github.com/UAMS-Web/uams-2016/blob/master/setup/class.maps-shortcode.php).
 
 ## A button reads "No text in this button"
 
@@ -56,16 +56,16 @@ The page shows `required attribute "building" missing` or `Building "<code>" is 
 
 **Cause:** the widget and the `[twitter]` shortcode exist only when `wp-config.php` defines the Twitter API credentials.
 
-**Fix:** see [Widgets: UAMS Twitter Feed](Widgets.md#uams-twitter-feed) for the constants it reads.
+**Fix:** define `TWITTER_OAUTH_TOKEN`, `TWITTER_OAUTH_TOKEN_SECRET`, `TWITTER_CONSUMER_KEY` and `TWITTER_CONSUMER_SECRET` in `wp-config.php`.
 
 ## An image credit did not change after editing it
 
 **Cause:** the image was inserted without a caption, so the credit was saved in a `[mediacredit]` shortcode at that moment.
 
-**Fix:** edit the `credit` attribute of the `[mediacredit]` shortcode in the content; see [Editor features: Image credits](Editor-features.md#image-credits).
+**Fix:** edit the `credit` attribute of the `[mediacredit]` shortcode in the content. A captioned image shows the credit from the media library each time the page loads, so only images inserted without a caption need this.
 
 ## A helper class has no effect
 
 **Cause:** the class name is not one the theme defines. Common cases: `padding-top-half` (paddings use `halve`), `margin-top-halve` (margins use `half`), `text-just` (the class is `text-justify`), and `left` or `right` (not defined).
 
-**Fix:** use a name from [Helper classes](Helper-classes.md).
+**Fix:** use a name defined in [`less/uams.helpers.less`](https://github.com/UAMS-Web/uams-2016/blob/master/less/uams.helpers.less), or Bootstrap's `text-left`, `text-right`, `text-center` and `text-justify`.

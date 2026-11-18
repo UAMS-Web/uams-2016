@@ -2,21 +2,20 @@
 
 <!-- cspell:ignore UAMS -->
 
-This wiki documents what the UAMS 2016 theme ("Back to the 5") gives site editors and administrators: its widgets, its shortcodes, its CSS helper classes and the editor features it adds to WordPress. The [README](https://github.com/UAMS-Web/uams-2016/blob/master/README.md) keeps the overview, installation, the development notes and how to run the tests.
+This wiki is the map to the documentation of the UAMS 2016 theme ("Back to the 5"). The [README](https://github.com/UAMS-Web/uams-2016/blob/master/README.md) holds the reference for the theme's widgets, shortcodes and features, because the dashboard's **Documentation** page shows the README to every logged-in user; the wiki links to it rather than keeping a second copy. Troubleshooting lives here.
 
 Written against v1.3.0.8.
 
 ## Getting started
 
 - [Installation (README)](https://github.com/UAMS-Web/uams-2016/blob/master/README.md#quick-start): download the theme into `wp-content/themes` and activate it.
-- [Setting the YouTube API key](Setting-the-YouTube-API-key.md): the one setting the `[youtube]` shortcode needs before it shows anything.
+- [YouTube API key (README)](https://github.com/UAMS-Web/uams-2016/blob/master/README.md#youtube): the setting the `[youtube]` shortcode needs before it shows anything.
 
 ## Reference
 
-- [Widgets](Widgets.md): every widget the theme registers, with its options and their defaults.
-- [Shortcodes](Shortcodes.md): every shortcode the theme registers, with its attributes, defaults and examples.
-- [Helper classes](Helper-classes.md): the CSS classes an editor can add to an element to adjust spacing, alignment and display.
-- [Editor features](Editor-features.md): widget visibility rules, image credits and the Documentation page in the dashboard.
+- [Widgets (README)](https://github.com/UAMS-Web/uams-2016/blob/master/README.md#widgets): the widgets the theme registers and their options.
+- [Shortcodes (README)](https://github.com/UAMS-Web/uams-2016/blob/master/README.md#shortcodes): the shortcodes the theme registers, with their attributes and examples.
+- [Features (README)](https://github.com/UAMS-Web/uams-2016/blob/master/README.md#features): widget visibility, media credits and the CSS helper classes.
 
 ## Troubleshooting
 

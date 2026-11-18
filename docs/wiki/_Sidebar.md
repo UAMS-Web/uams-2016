@@ -3,14 +3,13 @@
 **Getting started**
 
 - [Installation (README)](https://github.com/UAMS-Web/uams-2016/blob/master/README.md#quick-start)
-- [Setting the YouTube API key](Setting-the-YouTube-API-key.md)
+- [YouTube API key (README)](https://github.com/UAMS-Web/uams-2016/blob/master/README.md#youtube)
 
 **Reference**
 
-- [Widgets](Widgets.md)
-- [Shortcodes](Shortcodes.md)
-- [Helper classes](Helper-classes.md)
-- [Editor features](Editor-features.md)
+- [Widgets (README)](https://github.com/UAMS-Web/uams-2016/blob/master/README.md#widgets)
+- [Shortcodes (README)](https://github.com/UAMS-Web/uams-2016/blob/master/README.md#shortcodes)
+- [Features (README)](https://github.com/UAMS-Web/uams-2016/blob/master/README.md#features)
 
 **Troubleshooting**
 
