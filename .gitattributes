@@ -33,8 +33,7 @@
 /_includes -export-ignore
 /assets -export-ignore
 /docs -export-ignore
-# The wiki pages are published to the GitHub wiki, not run by the theme.
-/docs/wiki export-ignore
+# docs/wiki/ stays in: the admin Documentation page (docs/documentation.php) reads its pages.
 /inc -export-ignore
 /js -export-ignore
 /plugins -export-ignore

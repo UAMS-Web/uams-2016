@@ -18,7 +18,7 @@ Written against v1.3.0.8.
 
 **Cause:** the site has no YouTube API key, so the theme sends no request to YouTube and the space stays empty.
 
-**Fix:** define `UAMS_YOUTUBE_API_KEY` in `wp-config.php`, as the [README's YouTube section](https://github.com/UAMS-Web/uams-2016/blob/master/README.md#youtube) describes. Also check that `type` is `single` or `playlist` and that `id` is set; both are required.
+**Fix:** define `UAMS_YOUTUBE_API_KEY` in `wp-config.php`, as the [YouTube shortcode](Shortcodes.md#youtube) describes. Also check that `type` is `single` or `playlist` and that `id` is set; both are required.
 
 ## An iframe shortcode shows nothing
 
