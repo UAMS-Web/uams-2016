@@ -1,244 +1,298 @@
-## Shortcodes
- - - -
+# Shortcodes
 
-### Button ###
+<!-- cspell:ignore Blogroll custommenu googleapps multisite Hoffmann's tilebox titletag uams -->
 
->  Displays a branded call to action button. [See some examples](http://uamsonlinedev.com/uams-button-examples/). 
+Written against v1.3.0.8.
 
-> Attributes:  
+The theme registers these shortcodes for post and page content. Attribute values that are not listed as options are free text. Every URL in the examples is a placeholder.
 
-> - __color__ : The color of the button. Options: __red__, __gray__, __blue__, or __green__ (_Default: none_)
-> - __type__: Adjusts the image of the button. Options: __plus__, __go__, __external__, __play__, __pdf__ (_Default: go_)   
-> - __size__: Adjusts the size of the button. Options: __small__, __large__ (_Default: None_)
-> - __url__: The URL where the button links to (_Default: None_)
+The bundled Advanced Custom Fields Pro also registers `[acf]` when no ACF plugin is active; it is described in the ACF documentation, not here.
 
-> Examples:   
-```
-  [button color=red url="http://uams.edu"]Button Text[/button]
-  
-  [button color="red" type=plus size="small" url="http://uams.edu"]Button Text[/button]
-```
+## Accordion
 
-### Blogroll ###
+An accessible accordion, based on Nicolas Hoffmann's accessible jQuery accordion. `[accordion]` wraps one `[section]` per panel, and a section can hold `[subsection]` panels.
 
->  This is a shortcode that wraps the WordPress [get\_posts](https://codex.wordpress.org/Template_Tags/get_posts) function and templates out a blogroll. Any parameter you can pass to `get_posts` will be understood along with the following. 
-
-> Attributes:  
-
-> -  __excerpt__ : Choose whether to show the excerpt in the blogroll. Options: __show__, __hide__. (_Default: hide_)
-> - __trim__ : Whether or not to trim the words via WordPress [wp\_trim\_words](https://codex.wordpress.org/Function_Reference/wp_trim_words) function. Options: __true__, __false__. (_Default: false_)
-> - __image__:  Choose whether to show the featured image thumbnail. Options: __show__, __hide__. (_Default: hide_) _\[Ignored by card style\]_
-> - __author__: Choose whether to show the author. Options: __show__, __hide__. (_Default: show_)
-> - __date__:  Choose whether to show the publish date. Options: __show__, __hide__. (_Default: show_)
-> - __titletag__:  The html element for the post titles. (_Default: h2_)
-> - __post\_type__:  The post type to look for.(_Default: post_)
-> - __number__:  The maximum number of results to return (_Default: 5_)
-> - ~~__mini__:  Use the miniture template instead of the default one. (_Default: false_)~~ **_depreciated, use style_**
-> - __style__:  Use the template style. Options: __default__, __card__, __mini__ (_Default: default_)
-> - __category__:  The WordPress category ID to limit the results from. (_Default: None_)
-> - __category\_name__:  The WordPress category name to limit the results from. (_Default: None_)
-
-> Example:
-```
-  [blogroll number=3 trim=true style=card]
-```
-
-### iFrame ###
-
->  Embed iframes into your post or page content without adjusting WordPress privileges.  
-> The iframe url is tested against a list of allowed domains. If the domain is not in the list the iframe will not render.  
-
-> Attributes:  
-
-> - __src__ : The source URL of the embedded iframe (_Default: none_)
-> - __height__ : The width of the embedded iframe (_Default: WordPress's embed size width setting_)
-> - __width__ :  The height of the embedded iframe (_Default: WordPress's embed size height setting_)
-
-> Example:   
-```
-    [iframe src="https://www.youtube.com/embed/Bmb270rrRqQ" height="500" width="700"]
-```
-
-> Allowed domains:
-```
-    uams.edu,
-    uamshealth.com,
-    google.com,
-    youtube.com,
-    pgcalc.com,
-    docs.google.com,
-    vimeo.com,
-    facebook.com,
-```
-
-
-### Intro ###
-> This shortcode creates an italicized block of introduction text for the content.
-
-> No attributes.
-
-> Example:
+| Shortcode | Attribute | Default | Effect |
+| --- | --- | --- | --- |
+| `[accordion]` | `name` | empty | Heading shown above the accordion. |
+| `[section]`, `[subsection]` | `title` | empty | The panel's title. |
+| `[section]`, `[subsection]` | `active` | off | Opens the panel when the page loads. **Any value other than an empty one or `0` opens it, `active="false"` included**; leave the attribute out to keep a panel closed. |
 
 ```
-  [intro] A block on introductory text for the content. [/intro]
+[accordion name="Accessible Accordion"]
+  [section title="First"] Section text [/section]
+  [section title="Second" active="true"] Section text [/section]
+[/accordion]
 ```
 
-### Map ###
-> This shortcode embeds a map into the body content.
+## Blogroll
 
-> Attributes: 
+Lists posts, fetched with the WordPress `get_posts()` function. Only the attributes below are used; any other attribute is dropped, and the number of posts is always `number`.
 
-> - __building__ : The building [id\_number](https://maps.uams.edu/map-ids/) (_Default: None_)
-> - __width__ : The width of the embedded iframe (_Default: 100%_)
-> - __height__ :  The height of the embedded iframe (_Default: 480px_) 
-
-> Example:
-
-```
-  [map building='135' width='100%' height='480'][/map]
-```
-
-### RSS ###
-
->  This is a shortcode embeds an RSS blogroll into the body content. It behaves similarly to the UAMS RSS Widget.
-
-> Attributes:  
-
-> -  __url__ : The URL to parse for the RSS feed. (_Default: None_)
-> - __number__:  The maximum number of results to return (_Default: 5_)
-> - __title__:  The title for the RSS blogroll in the content (_Default: None_)
-> - __heading__:  The html element for the post titles. (_Default: h3_)
-> - __show_image__:  Choose whether to show the RSS thumbnail. Options: __true__, __false__. (_Default: true_)
-> - __show_date__:  Choose whether to show the publish date. Options: __true__, __false__. (_Default: true_)
-> - __show_more__: Choose whether to show the author. Options: __true__, __false__. (_Default: true_)
-
-> Example:
-```
-  [rss url="http://www.washington.edu/marketing/topic/wordpress/feed" number=3 title="Web Team Updates" heading="h2" show_image="false" show_date="false"]
-```
-
-### Tile box ###
-
->  Display branded tiles to structure content in elegantly. [See an example of tiles here](http://#/).  
-Each tile is setup as a series of shortcodes wrapped in `[box]` shortcode. 
-
-> Attributes:  
-
-> - __alignment__ : How the text is aligned in each tile. Options: __centered__ or __none__ (_Default: none_)
-> - __color__ : Background color of the tiles. Options: __tan__ (_Default: none_)
-
-> Example:   
-```
-[box alignment=centered]
-    [tile] Text for tile one [/tile]
-    [tile] Text for tile two [/tile]
-    [tile] Text for tile three [/tile]
-    [tile] Text for tile four [/tile]
-  [/box]
-```
-
-### YouTube ###
-
->  Embed a YouTube video or playlist into your post content.
-
-> Attributes:  
-
-> -  __type__ : Pick whether to display a single video or playlist. Options: __single__, __playlist__. (_Default: None_)   
-> - __id__ : The youtube video or playlist id  (_Default: None_)  
-> - __max-results__ (__OPTIONAL__):  The maximum number of results to return for a playlist (_Default: None_)
-
-> Examples: 
-
-> __Single:__
-```
-  [youtube type='single' id='6sjcltWIlkQ']
-``` 
-
-> __Playlist:__
-```
-  [youtube type='playlist' id='PLgNkGpnjFWo9CN_HeVtujhMnUXK05iwgZ' max-results='10']
-```
-
-> __API key:__ The shortcode's script asks the YouTube Data API for the video or playlist details, and the request needs an API key. The theme does not carry a key. Define it in the site's `wp-config.php`, above the line that says to stop editing:
+| Attribute | Default | Effect |
+| --- | --- | --- |
+| `number` | `5` | The most posts to list. |
+| `style` | `default` | `default`, `card` or `mini`. |
+| `excerpt` | shown | `show` or `true` shows the excerpt; any other value hides it. |
+| `trim` | `false` | `true` trims the excerpt with `wp_trim_words()`. |
+| `image` | `hide` | `show` shows the featured image. The card style always shows it. |
+| `author` | `show` | `hide` leaves the author out. |
+| `date` | `show` | `hide` leaves the date out. |
+| `titletag` | `h2` | The HTML element for each post title. |
+| `post_type` | `post` | The post type to list. |
+| `category` | empty | A category ID to limit the list to. |
+| `category_name` | empty | A category slug to limit the list to. |
+| `mini` | off | Deprecated; use `style="mini"`. Any value other than an empty one or `0` turns it on, `mini="false"` included. |
 
 ```
-  define( 'UAMS_YOUTUBE_API_KEY', 'the-key-from-google-cloud' );
+[blogroll number="3" trim="true" style="card"]
 ```
 
-> The theme passes the value to the browser as `uams_youtube.apiKey`, so it is a __browser key__ that every visitor can read, and it has to be restricted in Google Cloud:
->
-> - __API restrictions:__ allow only the YouTube Data API v3.
-> - __Application restrictions:__ HTTP referrers, listing the site's domains.
->
-> When the constant is not defined or is empty, the theme sends no request to YouTube and the shortcode's placeholder stays empty. To rotate the key, change the constant; no theme release is needed.
+## Box and tile
 
-### Subpage List ###
+Branded tiles that structure content. `[box]` wraps up to 12 `[tile]` shortcodes.
 
-> This shortcode lists out all the subpages relative to the current page. 
-> There are two views this shortcode can render: list or grid. 
-> The list view displays all the subpages as anchor tags in an HTML list element.
-> The grid view displays all the subpages as boxes, with their title, excerpt and author if available.
+| Shortcode | Attribute | Default | Effect |
+| --- | --- | --- | --- |
+| `[box]` | `alignment` | `none` | `centered` centers the text in each tile. |
+| `[box]` | `color` | empty | `tan` gives the tiles a tan background. |
+| `[box]` | `padding` | empty | Any value other than an empty one or `0` removes the tiles' padding. |
+| `[box]` | `shadow` | empty | Any value other than an empty one or `0` removes the tiles' shadow. |
+| `[box]` | `custom` | empty | An extra CSS class for the box. |
+| `[tile]` | `empty` | `false` | Marks the tile as empty. |
 
-> Attributes: 
-
-> - __link__ : The text in the anchor tag that will link to the subpage (_Default: Read more_)
-> - __tilebox__ : Enable the grid layout of the subpages ( _Default: false_ )
-
-
-> Example: 
 ```
- [subpage-list link="More information here" tilebox=true ]
+[box alignment="centered"]
+  [tile] Text for tile one [/tile]
+  [tile] Text for tile two [/tile]
+[/box]
 ```
 
-### Accordion ###
-> This is an accessible version of the accordion menu based off of Nicolas Hoffmann's [accessible jQuery accordion](http://a11y.nicolas-hoffmann.net/accordion/).
+## Button
 
-> Attributes: 
+A branded call-to-action button. The enclosed text is the button's label.
 
-> - __active__ : Open the accordion section by default (_Default: none_)
-> 
-> Example:   
-```
-  [accordion name='Accessible Accordion']
-    [section title='Example'] Section[/section]
-    [section title='Example' active='true'] Section[/section]
-    [section title='Example'] Section[/section]
-   [/accordion]
-```
+| Attribute | Default | Effect |
+| --- | --- | --- |
+| `url` | `#` | Where the button links to. |
+| `color` | none | `red`, `blue`, `green`, `yellow`, `gray` or `grey`. |
+| `type` | none | The icon: `plus`, `go`, `external` or `play`. Any other value is ignored. Without a type the button shows the default arrow; `go` has no style of its own, so it looks the same. |
+| `size` | none | `small` (or `sm`) or `large` (or `lg`). |
+| `small` | none | Any value makes the button small, the same as `size="small"`. |
+| `text` | empty | A label that replaces the enclosed text. |
 
-### Tabs ###
-> This is an accessible version of the accordion menu based off of Nicolas Hoffmann's [Accessible tab panel using ARIA](https://van11y.net/accessible-tab-panel/)
->The title is what appears in each tab across the top. The link is optional.  The link is the text that is used in the hashtag (Ex. #linkname1). The Tab Text is the content for each tab.
-> 
-> Example:   
+With no label at all the shortcode prints the text "No text in this button" in place of a button.
+
 ```
-  [tabs name='Accessible Tabs']
-    [tab title='Example'] Tab Text [/tab]
-    [tab title='Example'] Tab Text [/tab]
-    [tab title='Example'] Tab Text [/tab]
-   [/tabs]
+[button color="red" url="https://www.example.com/"]Button text[/button]
+[button color="blue" type="plus" size="small" url="https://www.example.com/"]Button text[/button]
 ```
 
-> Example with custom link names:   
+## Cards
+
+A group of cards. `[cards]` wraps one `[card]` per card.
+
+| Shortcode | Attribute | Default | Effect |
+| --- | --- | --- | --- |
+| `[cards]` | `name` | empty | Heading shown above the cards. |
+| `[card]` | `title` | empty | The card title. |
+| `[card]` | `image`, `alt` | empty | An image URL and its alternative text. |
+| `[card]` | `link` | empty | Where the card links to. |
+| `[card]` | `size`, `color`, `type` | empty | Each becomes a CSS class on the card. |
+| `[card]` | `action`, `footer` | empty | Text for the card's action and footer areas; limited HTML is allowed. |
+
 ```
-  [tabs name='Accessible Tabs']
-    [tab title='Example' link='linkname1'] Tab Text [/tab]
-    [tab title='Example' link='linkname2'] Tab Text [/tab]
-    [tab title='Example' link='linkname3'] Tab Text [/tab]
-   [/tabs]
+[cards name="Our services"]
+  [card title="First" link="https://www.example.com/"] Card text [/card]
+[/cards]
 ```
 
-<!-- ### Custom Menu ###
-> This shortcode pulls in a custom menu that can be created under _Dashboard > Appearance > Menus_. Icons can be added in the class field in the menu builder. View the [full set of icons](http://www.#.edu/brand/web-2/html-web-components/web-icons/) for more information.
-> 
-> Example:   
+## Custom menu
+
+Shows a menu built under *Appearance*, *Menus*. It wraps `wp_nav_menu()`, and its attributes are that function's arguments.
+
+| Attribute | Default | Effect |
+| --- | --- | --- |
+| `menu` | empty | The menu's name. |
+| `container` | `div` | The element around the menu. |
+| `container_class` | `icon-menu` | The container's CSS class. |
+| `menu_class` | `menu` | The list's CSS class. |
+| `depth` | `0` | How many levels to show; `0` shows all. |
+
+`theme_location`, `container_id`, `menu_id`, `before`, `after`, `link_before`, `link_after`, `fallback_cb` (default `wp_page_menu`) and `walker` are also passed through.
+
 ```
-  [custommenu menu=Menu-name-here]
+[custommenu menu="Menu name"]
 ```
-> Attributes:  
 
-> -  __menu__ : Enter the name of the menu found in _Dashboard > Appearance > Menus_. (_Default: Main menu_)   --> 
+## Google Calendar (googleapps)
 
+Embeds a Google Calendar with the `[googleapps]` shortcode. **For a user who may not post unfiltered HTML, pasting the embed code Google Calendar gives into the editor converts it to this shortcode** when the post is saved, with the width capped at 630. The conversion runs only where WordPress filters the content (authors and contributors, and on a multisite network everyone but super admins); an administrator or editor on a single site keeps the pasted iframe.
 
+| Attribute | Default | Effect |
+| --- | --- | --- |
+| `dir` | empty | Must be `calendar/embed`, or nothing is shown. |
+| `query` | empty | The calendar's query string from the embed code. |
+| `domain` | `www` | Accepted but has no effect; the calendar is always loaded from `www.google.com`. |
+| `width` | `620` | Width in pixels. |
+| `height` | `500` | Height in pixels. |
+| `app` | `calendar` | Becomes the CSS class `googleapps-<app>` on the wrapper; the embed is always a calendar. |
 
+## iFrame
 
+Embeds an iframe without giving the editor permission to post raw HTML. The address is checked against a list of allowed domains kept in the theme ([`get_iframe_domains()` in `setup/class.uams-iframes.php`](https://github.com/UAMS-Web/uams-2016/blob/master/setup/class.uams-iframes.php)). **The host must match an entry exactly**, so a subdomain of an allowed domain is refused unless it is listed itself. An address that is refused, or is not `http` or `https`, shows nothing. An address with no host, such as a path on the same site, is not checked against the list.
+
+| Attribute | Default | Effect |
+| --- | --- | --- |
+| `src` | empty | The address to embed. |
+| `width` | the site's embed width | Width of the iframe. |
+| `height` | the site's embed height | Height of the iframe. |
+
+The page's own query string is added to the iframe's address.
+
+```
+[iframe src="https://www.example.com/embed/page" width="700" height="500"]
+```
+
+## Intro
+
+A block of introduction text in a larger type. HTML and shortcodes inside it are shown as text.
+
+```
+[intro] A block of introductory text for the content. [/intro]
+```
+
+## Map
+
+Embeds the campus map with one building marked, and a "View full map" link.
+
+| Attribute | Default | Effect |
+| --- | --- | --- |
+| `building` | none | Required. A building code from the list in [`setup/class.maps-shortcode.php`](https://github.com/UAMS-Web/uams-2016/blob/master/setup/class.maps-shortcode.php). |
+| `width` | `100%` | Width of the map. |
+| `height` | `480px` | Height of the map. |
+
+Without a building, or with a code that is not in the list, the shortcode shows an error instead of a map; see [Troubleshooting](https://github.com/UAMS-Web/uams-2016/wiki/Troubleshooting#the-map-shortcode-shows-an-error).
+
+```
+[map building="135" width="100%" height="480"]
+```
+
+## Media credit
+
+Shows "Image by" and a credit under an image. The editor writes this shortcode itself when an image that has an **Image Credit** is inserted without a caption; see [Image credits](https://github.com/UAMS-Web/uams-2016/wiki/Features#image-credits).
+
+| Attribute | Default | Effect |
+| --- | --- | --- |
+| `credit` | empty | The credit text. |
+| `id` | empty | Required: the image's attachment ID. Without it the shortcode prints nothing, the image included. |
+| `align` | empty | The image's alignment. |
+| `size` | `full` | The image size. |
+
+## Row and column
+
+A grid. `[row]` wraps `[col]` shortcodes, and each `class` is a Bootstrap grid class.
+
+| Shortcode | Attribute | Default |
+| --- | --- | --- |
+| `[row]` | `class` | `row` |
+| `[col]` | `class` | `col-sm-1` |
+
+```
+[row]
+  [col class="col-sm-6"] Left half [/col]
+  [col class="col-sm-6"] Right half [/col]
+[/row]
+```
+
+## RSS
+
+Shows items from an RSS feed in the content, like the [UAMS RSS widget](https://github.com/UAMS-Web/uams-2016/wiki/Widgets#uams-rss).
+
+| Attribute | Default | Effect |
+| --- | --- | --- |
+| `url` | none | Required. The feed to show; without it the shortcode shows nothing. |
+| `number` | `5` | The most items to show. |
+| `show_image` | `true` | `false` hides each item's image. |
+| `show_date` | `true` | `false` hides each item's date. |
+| `show_desc` | `false` | `true` shows each item's description. |
+| `show_more` | `true` | `false` hides the "More" link to the feed. |
+| `more` | the feed's own link | Where the "More" link goes. |
+
+`title`, `heading`, `span` and `has_blurb` are accepted but have no visible effect.
+
+```
+[rss url="https://www.example.com/feed/" number="3" show_image="false"]
+```
+
+## Subpage list
+
+Lists the child pages of the current page.
+
+| Attribute | Default | Effect |
+| --- | --- | --- |
+| `link` | `Read more` | The text of the button that links to each child page. Empty leaves the button out. |
+| `tilebox` | `false` | `true` shows the child pages as two-column tiles with a thumbnail. |
+
+The default view shows each child page's title as a heading, its excerpt and the button, and its author when the site shows bylines on posts.
+
+```
+[subpage-list link="More information" tilebox="true"]
+```
+
+## Tabs
+
+An accessible tab panel, based on Nicolas Hoffmann's accessible tab panel using ARIA. `[tabs]` wraps one `[tab]` per tab.
+
+| Shortcode | Attribute | Default | Effect |
+| --- | --- | --- | --- |
+| `[tabs]` | `name` | empty | Used as a CSS class, with spaces removed; it is not shown. |
+| `[tab]` | `title` | empty | The tab's label. |
+| `[tab]` | `link` | `tab-1`, `tab-2` and so on | The tab's anchor, for linking to it as `#link`. |
+
+```
+[tabs name="Accessible Tabs"]
+  [tab title="First" link="first"] Tab text [/tab]
+  [tab title="Second" link="second"] Tab text [/tab]
+[/tabs]
+```
+
+## Twitter
+
+Shows recent posts from a Twitter account, like the [UAMS Twitter Feed widget](https://github.com/UAMS-Web/uams-2016/wiki/Widgets#uams-twitter-feed), and exists only where that widget does.
+
+| Attribute | Default |
+| --- | --- |
+| `title` | empty |
+| `name` | `twitter` |
+| `count` | `5` |
+
+## YouTube
+
+Embeds a YouTube video or playlist. **It needs a YouTube API key**; see **The API key** below.
+
+| Attribute | Default | Effect |
+| --- | --- | --- |
+| `type` | none | Required: `single` or `playlist`. |
+| `id` | none | Required: the video or playlist ID. |
+| `max-results` (or `max_results`) | 20 for a playlist | The most playlist items to show. |
+
+```
+[youtube type="single" id="VIDEO_ID"]
+[youtube type="playlist" id="PLAYLIST_ID" max-results="10"]
+```
+
+### The API key
+
+The shortcode's script asks the YouTube Data API for the video or playlist details, and the request needs an API key. The theme does not carry a key. Define it in the site's `wp-config.php`, above the line that says to stop editing:
+
+```
+define( 'UAMS_YOUTUBE_API_KEY', 'the-key-from-google-cloud' );
+```
+
+The theme passes the value to the browser as `uams_youtube.apiKey`, so it is a **browser key** that every visitor can read, and it has to be restricted in Google Cloud:
+
+- **API restrictions:** allow only the YouTube Data API v3.
+- **Application restrictions:** HTTP referrers, listing the site's domains.
+
+When the constant is not defined or is empty, the theme sends no request to YouTube and the shortcode's placeholder stays empty. To rotate the key, change the constant; no theme release is needed.

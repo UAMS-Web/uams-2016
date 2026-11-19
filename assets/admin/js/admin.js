@@ -6,7 +6,7 @@ jQuery(document).ready(function($){
     {
 
       var text = $('#markdown').text()
-          , converter = new showdown.Converter( {strikethrough: true} )
+          , converter = new showdown.Converter( {strikethrough: true, tables: true} )
           , html = converter.makeHtml( text )
 
       $('#uams-documentation').html( html )
