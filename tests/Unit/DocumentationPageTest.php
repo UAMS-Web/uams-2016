@@ -91,11 +91,11 @@ it('prints the reference the theme ships', function (): void {
 
     $html = renderTemplate('docs/documentation.php');
 
-    expect($html)->toContain('## Widgets ##')
-        ->and($html)->toContain('### UAMS Blogroll ###')
-        ->and($html)->toContain('## Shortcodes')
-        ->and($html)->toContain('### Tabs ###')
-        ->and($html)->toContain('## Features')
-        ->and($html)->toContain('### UAMS Helper Classes ###')
+    expect($html)->toContain('# Widgets')
+        ->and($html)->toContain('## UAMS Blogroll')
+        ->and($html)->toContain('# Shortcodes')
+        ->and($html)->toContain('## Tabs')
+        ->and($html)->toContain('# Features')
+        ->and($html)->toContain('## Helper classes')
         ->and($html)->not->toContain('## Running the tests');
 });

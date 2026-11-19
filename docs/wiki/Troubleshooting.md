@@ -48,7 +48,7 @@ The page shows `required attribute "building" missing` or `Building "<code>" is 
 
 ## An accordion section is open when it should be closed
 
-**Cause:** the section has an `active` attribute. Any value opens it, `active="false"` included.
+**Cause:** the section has an `active` attribute. Any value other than an empty one or `0` opens it, `active="false"` included.
 
 **Fix:** remove the `active` attribute from the section.
 

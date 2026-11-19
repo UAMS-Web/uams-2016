@@ -1,97 +1,102 @@
-## Widgets ##
- - - -
+# Widgets
 
-### UAMS Blogroll ###
+<!-- cspell:ignore Blogroll UAMS -->
 
-> Display the most recent posts on your blog.  
+Written against v1.3.0.8.
 
-> Options:  
+The theme registers the widgets below. Add them under *Appearance*, *Widgets*. The theme has one widget area, **Sidebar** ("Right column widgets"). Each widget also has a **Visibility** button that limits where it shows; see [Widget visibility](https://github.com/UAMS-Web/uams-2016/wiki/Features#widget-visibility).
 
-> - **Title** : The title of the widget (*Default: Blogroll*)   
-> - **Number of posts to display** : The number of post titles to show in the blogroll (*Default: 2*) 
-> - **Style** : Choose one of three styles (*Default: default*)    
+The names are the ones the widget list shows. Defaults are what a newly added widget starts with.
 
+## UAMS Blogroll
 
-### UAMS Recent Posts ###
+Lists the most recent posts. The widget renders the [`[blogroll]` shortcode](https://github.com/UAMS-Web/uams-2016/wiki/Shortcodes#blogroll) with the number and style chosen here.
 
->  Similar to the default WordPress widget Recent Posts but with different options and layout.
+| Option | Default | Effect |
+| --- | --- | --- |
+| Title | `UAMS Blogroll` | Heading above the list. |
+| Number of posts to show | `2` | How many posts to list. |
+| Style | Default style | Default style, Card style or Mini style. |
 
-> Options:  
+## UAMS Campus Map
 
-> - **Title** : The title of the widget (*Default: None*)   
-> - **Number of posts to display** : The number of posts to show (*Default: 1*)
-> - **Display more link** : Display an anchor tag that links to the blogroll page (*Default: false*)
+Shows an embedded campus map with one building marked, and a "View larger" link.
 
-### UAMS RSS ###
+| Option | Default | Effect |
+| --- | --- | --- |
+| Title | empty | Heading above the map. |
+| Building Code | none (Select ...) | The building to mark, chosen from a list of building names. |
 
-> Similar to the WordPress RSS widget except with a branded layout that displays RSS images.
+## UAMS Image Cards
 
-> Options:  
+A branded card with an image, a short text and a link.
 
-> - __Title__ : The title of the widget (_Default: None_)   
-> - __Blurb__ : A small blurb that is shown before the RSS feed (_Default: None_)    
-> - __RSS URL__ : The URL of the RSS feed to display (_Default: None_)    
-> - __Number of items to display__ : The number of items in the RSS feed to display (_Default: 10_)    
+| Option | Default | Effect |
+| --- | --- | --- |
+| Title | `Image Widget` | The card title. |
+| Select an Image | none | An image from the media library. |
+| Featured text | empty | A short text shown with the image. |
+| Link | empty | Where the card links to. |
+| Link text | `Read more` | The text of the link. Saved empty, the card shows `More`. |
+| Card style | Default card | Default card or Styled card. |
 
-### UAMS Single Image ###
+## Contact list
 
-> Displays a single image with a blurb of text below it.
+A list of contacts for a group or department. Add a row per person with **Add Item**, remove one with **Remove**, and drag rows to reorder them.
 
-> Options:  
+| Option | Default | Effect |
+| --- | --- | --- |
+| Title | empty | Heading above the list. Saved empty, the widget shows `List`. |
+| Name | empty | The person's name. |
+| Title (per person) | empty | The person's job title. |
+| Phone | empty | Shown as a link that dials the number. |
+| Email | empty | Shown as a mail link, encoded against address harvesting. |
 
-> - __Title__ : The title of the widget (_Default: Image Widget_)   
-> - __Select an image__ : Select an  image from the WordPress  media library (_Default: None_)    
-> - __Featured text__ : A small blurb that is shown below the image (_Default: None_)    
-> - __Link__ : A URL for the More link text (_Default: None_)    
-> - __More link__ : The text to display in the more link (_Default: Read more_)    
+## UAMS Intro Text
 
-### UAMS Contact Card ###
+A block of introduction text, the widget form of the [`[intro]` shortcode](https://github.com/UAMS-Web/uams-2016/wiki/Shortcodes#intro).
 
-> Displays a multiple list of contacts for the group/department.
+| Option | Default | Effect |
+| --- | --- | --- |
+| Intro text | empty | The text. HTML tags are removed when the widget is saved. With no text, the widget shows nothing. |
 
-> Options:  
+## UAMS Recent Posts
 
-> - __Title__ : The title of the widget (_Default: Contact us_)   
-> - __Name__ : The person's name (_Default: None_)   
-> - __Title__ : The person's job title (_Default: None_) 
-> - __Phone number__ : The person's phone number (_Default: None_) 
-> - __Email__ : The person's email (_Default: None_)   
+Like the WordPress Recent Posts widget, with the theme's layout.
 
+| Option | Default | Effect |
+| --- | --- | --- |
+| Title | `UAMS Recent Posts` | Heading above the list. |
+| Number of items to display | `5` | 1 to 5. |
+| Display more link | off | Adds a link to the posts page. It shows only when a posts page is set under *Settings*, *Reading*. |
 
-### UAMS Image Card ###
+## UAMS RSS
 
-> Displays one of three styles of branded card. Both text and image can be customized.
+Shows items from an RSS feed in the theme's layout, with the feed's images.
 
-> Options:  
+| Option | Default | Effect |
+| --- | --- | --- |
+| Give the feed a title (optional) | empty | Heading above the feed. |
+| Featured blurb | empty | A short text shown before the feed. Users who may post unfiltered HTML can use HTML here; for others it is filtered. |
+| Enter the RSS feed URL here | empty | The feed to show. |
+| Number of items to display | `10` | 1 to 20. |
+| Show the date? | on | Shows each item's date. |
 
-> - __Title__ : The title of the widget (_Default: Image Widget_)   
-> - __Select an image__ : Select an image from the WordPress  media library (_Default: None_)    
-> - __Featured text__ : A small blurb that is shown below or on top of the image (_Default: None_)    
-> - __Link__ : A URL for the More link text (_Default: None_)    
-> - __More link__ : The text to display in the more link (_Default: Read more_)  
-> - __Card style__ : Choose one of three styles (_Default: None_)  
+## UAMS Social Icons
 
-### UAMS Campus Map ###
+A row of links to the department's social accounts. Leave a field empty to leave its icon out.
 
-> Display a custom map with building selected.  
+| Option | Default | Effect |
+| --- | --- | --- |
+| Title ("Appears above the icons") | `Connect with us:` | Text above the icons. |
+| Facebook URI, Twitter URI, Instagram URI, YouTube URI, LinkedIn URI, Pinterest URI | empty | The account address for each icon. |
 
-> Options:  
+## UAMS Twitter Feed
 
-> - __Title__ : The title of the widget (_Default: Blogroll_)   
-> - __Building Code__ : Dropdown of the building names (_Default: none_) 
+Shows recent posts from a Twitter account. **This widget, and the `[twitter]` shortcode, exist only on a site whose `wp-config.php` defines `TWITTER_OAUTH_TOKEN`**; without it the widget is not in the widget list. The feed also needs `TWITTER_OAUTH_TOKEN_SECRET`, `TWITTER_CONSUMER_KEY` and `TWITTER_CONSUMER_SECRET`.
 
-### UAMS Social Icons ###
-
-> Display a list of social icons.  
-
-> Options:  
-
-> - __Title__ : The title of the widget (_Default: Connect with us:_)   
-> - __Facebook URI__ : URL of Facebook account (_Default: none_)
-> - __Twitter URI__ : URL of Twitter account (_Default: none_)
-> - __Instagram URI__ : URL of Instagram account (_Default: none_)
-> - __YouTube URI__ : URL of YouTube account (_Default: none_)
-> - __LinkedIn URI__ : URL of LinkedIn account (_Default: none_)
-> - __Pinterest URI__ : URL of Pinterest account (_Default: none_)
-
-
+| Option | Default | Effect |
+| --- | --- | --- |
+| Title | `UAMS Twitter Feed` | Heading above the feed. |
+| Twitter screen name | `twitter` | The account to show. |
+| Number of tweets to show | `5` | How many posts to show. |
